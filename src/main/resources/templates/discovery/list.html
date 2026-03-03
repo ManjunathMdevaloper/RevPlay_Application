@@ -1,0 +1,655 @@
+<!--
+  Discovery List View (Dashboard)
+  This is the primary discovery hub of RevPlay. It aggregates various media types 
+  including Songs, Artists, Albums, and Genres into a single interactive dashboard.
+  The view supports:
+  - Real-time client-side search and filtering.
+  - Media playback directly from the list.
+  - Detailed modal views for songs, albums, and artists.
+  The data displayed here is provided by the DiscoveryController, which populates the 
+  Model with lists named 'songs', 'artists', 'albums', and 'genres'.
+-->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <!-- Injects the standard head fragment from the layout template. -->
+    <div th:replace="~{fragments/layout :: head('Discover Music - RevPlay')}"></div>
+</head>
+
+<body>
+
+    <!-- Injects the global navigation bar. -->
+    <div th:replace="~{fragments/layout :: navbar}"></div>
+
+    <div id="main-content">
+        <!-- Hero Section as per img2 -->
+        <div class="mb-5 text-center">
+            <h2 class="fw-bold text-dark mb-4">Welcome to RevPlay</h2>
+            <div class="row g-2 justify-content-center mx-auto" style="max-width: 800px;">
+                <!-- Search Input -->
+                <div class="col-12 col-md-6">
+                    <div class="shadow-sm rounded-pill overflow-hidden border d-flex align-items-center bg-white position-relative"
+                        style="height: 48px;">
+                        <!-- <span class="ps-4 text-muted position-absolute"></span> -->
+                        <input type="text" id="globalSearchInput" class="form-control border-0 bg-transparent ps-5"
+                            placeholder="Search by name, artist, or album..." style="box-shadow: none;"
+                            onkeyup="filterDashboardSearch()">
+                    </div>
+                </div>
+                <!-- Advanced Filters -->
+                <div class="col-8 col-md-4">
+                    <div class="shadow-sm rounded-pill overflow-hidden border d-flex align-items-center bg-white px-3"
+                        style="height: 48px;">
+                        <select id="globalSearchFilter"
+                            class="form-select border-0 bg-transparent text-muted fw-bold shadow-none"
+                            style="cursor: pointer; box-shadow: none !important;" onchange="filterDashboardSearch()">
+                            <option value="all">All Categories</option>
+                            <option value="song">🎵 Songs</option>
+                            <option value="artist">🎤 Artists</option>
+                            <option value="album">📀 Albums</option>
+                            <option value="genre">🎸 Genres</option>
+                        </select>
+                    </div>
+                </div>
+                <!-- Search Button (Visual Only for UI completeness) -->
+                <div class="col-4 col-md-2">
+                    <button type="button" class="btn w-100 rounded-pill fw-bold text-white shadow"
+                        style="height: 48px; background: linear-gradient(45deg, #FF6600, #FF9900); border: none;"
+                        onclick="document.getElementById('globalSearchInput').focus()">
+                        SEARCH
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4 h-100">
+            <!-- Left Column: 1 (Songs) & 3 (Artists) -->
+            <div class="col-lg-6 d-flex flex-column gap-4">
+
+
+                <!-- Part 1: All Songs Section -->
+                <div class="card flex-grow-1 border-0 shadow-lg rounded-4 overflow-hidden dashboard-card">
+                    <div class="card-header bg-white py-3 border-0">
+                        <h5 class="mb-0 fw-bold" style="color: var(--primary-color);"><i class="me-2">🎵</i> Songs</h5>
+                    </div>
+                    <div class="card-body p-2 container-scroll">
+                        <!-- 
+                          th:if: Only renders the grid if the 'songs' list provided by the controller is not empty.
+                          Data Source: DiscoveryController -> List<Song> songs.
+                        -->
+                        <div class="row row-cols-3 row-cols-md-4 row-cols-lg-6 g-2"
+                            th:if="${not #lists.isEmpty(songs)}">
+                            <!-- 
+                              th:each: Iterates through every song in the 'songs' collection.
+                              Variables: 'song' refers to the current Song entity in the loop.
+                            -->
+                            <div th:each="song : ${songs}" class="col dashboard-search-item"
+                                data-search-category="song">
+                                <!-- 
+                                  Card attributes (th:data-*): 
+                                  - These attributes store metadata about the song for client-side JavaScript (modal popups).
+                                  - th:text: Dynamically displays the song title and artist name.
+                                  - th:src: Loads the album cover art or a default fallback.
+                                -->
+                                <div class="card h-100 border-0 shadow-sm glass-card rounded-4 overflow-hidden transition-all hover-lift"
+                                    style="cursor: pointer;" th:data-song-id="${song.id}" th:data-title="${song.title}"
+                                    th:data-artist="${song.artist != null ? (song.artist.displayName ?: song.artist.username) : 'Unknown Artist'}"
+                                    th:data-album="${song.album != null ? song.album.name : 'Private Song'}"
+                                    th:data-genre="${song.genre}" th:data-duration="${song.duration}"
+                                    th:data-cover="${song.coverArtUrl != null ? song.coverArtUrl : '/images/default-album.svg'}"
+                                    th:data-audio-url="${song.audioUrl}" onclick="showSongDetails(this)">
+                                    <div class="position-relative overflow-hidden">
+                                        <img th:src="${song.coverArtUrl != null ? song.coverArtUrl : '/images/default-album.svg'}"
+                                            class="card-img-top mx-auto d-block"
+                                            style="aspect-ratio: 1/1; object-fit: cover; height: auto;">
+                                    </div>
+                                    <div class="card-body p-2 text-center">
+                                        <h6 class="mb-0 text-truncate text-dark fw-bold" style="font-size: 0.7rem;"
+                                            th:text="${song.title}">Song Title</h6>
+                                        <small class="text-muted d-block text-truncate mb-2" style="font-size: 0.6rem;"
+                                            th:if="${song.artist != null}" th:text="${song.artist.displayName}"></small>
+
+                                        <!-- Play Button: Only shown if the song has an associated audio URL. -->
+                                        <button th:if="${song.audioUrl != null}"
+                                            class="btn btn-primary btn-sm rounded-pill w-100 py-0 fw-bold border-0"
+                                            style="font-size: 0.65rem; height: 18px;" th:data-song-id="${song.id}"
+                                            th:data-audio-url="${song.audioUrl}" th:data-title="${song.title}"
+                                            th:data-artist="${song.artist != null ? (song.artist.displayName ?: song.artist.username) : 'Unknown Artist'}"
+                                            th:data-cover="${song.coverArtUrl != null ? song.coverArtUrl : '/images/default-album.svg'}"
+                                            onclick="event.stopPropagation(); playGlobalAudio(this.getAttribute('data-song-id'), this.getAttribute('data-audio-url'), this.getAttribute('data-title'), this.getAttribute('data-artist'), this.getAttribute('data-cover'))">
+                                            Play
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center py-5 text-muted" th:if="${#lists.isEmpty(songs)}">
+                            <i class="opacity-50 fs-1 d-block mb-3">💿</i>
+                            <p>No tracks available yet.</p>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <!-- ####################################### Person2 CODE START ######################################### -->
+
+
+                    <!-- ######################################## Person2 CODE END ########################################## -->
+
+                </div>
+            </div>
+
+            <!-- Right Column: 2 (Albums) & 4 (Genres) -->
+            <div class="col-lg-6 d-flex flex-column gap-4">
+
+                <!-- ####################################### Person2 CODE START ######################################### -->
+
+
+                    <!-- ######################################## Person2 CODE END ########################################## -->
+
+                </div>
+
+                <!-- ####################################### Person2 CODE START ######################################### -->
+
+
+                    <!-- ######################################## Person2 CODE END ########################################## -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Community Playlists removed as requested -->
+
+        <!-- Song Details Modal -->
+        <div class="modal fade" id="songDetailsModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-md">
+                <div class="modal-content border-0 shadow-2xl rounded-5 overflow-hidden glass-card">
+                    <div class="modal-body p-0">
+                        <div class="row g-0">
+                            <div class="col-md-5">
+                                <img id="modalSongCover" src="" class="w-100 h-100"
+                                    style="object-fit: cover; aspect-ratio: 1/1;">
+                            </div>
+                            <div class="col-md-7 p-4">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div>
+                                        <h3 id="modalSongTitle" class="fw-bold text-dark mb-0 h5">Song Title</h3>
+                                        <p id="modalSongArtist" class="text-primary fw-bold mb-2 small">Artist Name</p>
+                                    </div>
+                                    <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="mb-4">
+                                    <p class="mb-1 small"><strong>Album:</strong> <span id="modalSongAlbum"
+                                            class="text-muted">N/A</span></p>
+                                    <p class="mb-1 small"><strong>Genre:</strong> <span id="modalSongGenre"
+                                            class="text-muted">N/A</span></p>
+                                    <p class="mb-1 small"><strong>Duration:</strong> <span id="modalSongDuration"
+                                            class="text-muted">0:00</span></p>
+                                </div>
+                                <div class="mt-auto">
+                                    <button id="modalPlayBtn"
+                                        class="btn btn-primary btn-sm rounded-pill w-100 fw-bold border-0 shadow-sm"
+                                        style="font-size: 0.8rem;">Play Now</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Artist Details Modal -->
+        <div class="modal fade" id="artistDetailsModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-md">
+                <div class="modal-content border-0 shadow-2xl rounded-5 overflow-hidden glass-card"
+                    style="height: 650px; max-height: 90vh;">
+                    <div class="modal-body p-0 d-flex flex-column h-100">
+                        <!-- Fixed Header Section -->
+                        <div class="flex-shrink-0">
+                            <!-- Banner Image -->
+                            <div class="position-relative w-100 bg-light" style="height: 140px;">
+                                <img id="modalArtistBanner" src="/images/default-banner.svg" class="w-100 h-100"
+                                    style="object-fit: cover;">
+                                <div class="position-absolute top-0 start-0 w-100 h-100"
+                                    style="background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, transparent 100%); pointer-events: none;">
+                                </div>
+                                <button type="button"
+                                    class="btn-close btn-close-white shadow-none position-absolute top-0 end-0 m-3"
+                                    data-bs-dismiss="modal" style="z-index: 10;" aria-label="Close"></button>
+                            </div>
+
+                            <div class="px-4 pt-0">
+                                <div class="d-flex justify-content-between align-items-end mb-3"
+                                    style="margin-top: -45px; position: relative; z-index: 5;">
+                                    <div class="d-flex align-items-end gap-3" style="max-width: 60%;">
+                                        <img id="modalArtistPfp" src=""
+                                            class="rounded-circle shadow flex-shrink-0 position-relative"
+                                            style="width: 90px; height: 90px; object-fit: cover; border: 4px solid white; background: white; z-index: 10;">
+                                        <div class="pb-1 text-truncate">
+                                            <h4 id="modalArtistName" class="fw-bold text-dark mb-0 text-truncate">
+                                                Artist Name</h4>
+                                            <span id="modalArtistGenre"
+                                                class="badge bg-white text-primary border border-primary mt-1 shadow-sm d-none">Genre</span>
+                                        </div>
+                                    </div>
+                                    <div class="pb-1 d-flex flex-column gap-2 align-items-end">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <button id="modalArtistPlayAll"
+                                                class="btn btn-primary btn-sm rounded-pill px-3 fw-bold border-0 shadow-sm"
+                                                style="font-size: 0.75rem; background: #FF6600;">Play All</button>
+                                            <button id="modalFollowBtn"
+                                                class="btn btn-light btn-sm rounded-pill px-3 fw-bold shadow-sm text-primary border border-primary"
+                                                onclick="toggleFollowArtist()"
+                                                style="font-size: 0.75rem;">Follow</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="artistSocialLinks" class="d-flex gap-3 mb-3 flex-wrap"></div>
+
+                                <p id="modalArtistBio" class="text-muted small mb-3 bg-light p-3 rounded-4 border"
+                                    style="line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-clamp: 2; overflow: hidden;">
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Scrollable Track List Section -->
+                        <div class="flex-grow-1 overflow-auto px-4 pb-4">
+                            <h6 class="fw-bold mb-3 sticky-top bg-white py-2" style="z-index: 1;">Popular Tracks</h6>
+                            <div id="modalArtistSongsList">
+                                <!-- Songs populated via JS -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Genre Details Modal -->
+        <div class="modal fade" id="genreDetailsModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-md">
+                <div class="modal-content border-0 shadow-2xl rounded-5 overflow-hidden">
+                    <div class="modal-body p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h2 class="h4 mb-0 fw-bold"><i class="me-2">🎸</i> <span id="modalGenreTitle">Genre</span>
+                            </h2>
+                            <div class="d-flex gap-2 align-items-center">
+                                <button id="modalGenrePlayAll"
+                                    class="btn btn-primary btn-sm rounded-pill px-3 shadow-none"
+                                    style="display: none;">▶ Play All</button>
+                                <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                        </div>
+
+                        <div id="modalGenreSongsList" class="container-scroll px-1" style="max-height: 400px;">
+                            <!-- Songs populated via JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Album Details Modal (Overhauled) -->
+    <div class="modal fade" id="albumDetailsModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 shadow-2xl rounded-5 overflow-hidden">
+                <div class="modal-body p-0">
+                    <div class="row g-0">
+                        <div class="col-md-4 bg-light d-none d-md-block">
+                            <img id="modalAlbumCover" src="" class="w-100 h-100"
+                                style="object-fit: cover; aspect-ratio: 1/1;">
+                        </div>
+                        <div class="col-md-8 p-4">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div>
+                                    <h2 id="modalAlbumName" class="fw-bold text-dark mb-0 h4">Album Name</h2>
+                                    <p class="mb-0"><span id="modalAlbumArtist"
+                                            class="text-primary fw-bold">Artist</span> • <span id="modalAlbumYear"
+                                            class="text-muted small">2024</span></p>
+                                </div>
+                                <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+
+                            <p id="modalAlbumDesc" class="text-muted small mb-4"
+                                style="line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-clamp: 2; overflow: hidden;">
+                            </p>
+
+                            <div class="mb-4">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h6 class="fw-bold mb-0">Tracks</h6>
+                                    <button id="modalAlbumPlayAll"
+                                        class="btn btn-primary btn-sm rounded-pill px-3 shadow-none">▶ Play
+                                        All</button>
+                                </div>
+                                <div id="modalAlbumSongsList" class="container-scroll px-1" style="max-height: 250px;">
+                                    <!-- Songs populated via JS -->
+                                </div>
+                            </div>
+
+                            <!-- Bottom section empty or reserved for other actions -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <script>
+        function formatTime(seconds) {
+            if (!seconds || seconds == 0) return "0:00";
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function showSongDetails(element) {
+            const id = element.getAttribute('data-song-id');
+            const title = element.getAttribute('data-title');
+            const artist = element.getAttribute('data-artist');
+            const cover = element.getAttribute('data-cover');
+            const audioUrl = element.getAttribute('data-audio-url');
+            const album = element.getAttribute('data-album');
+            const genre = element.getAttribute('data-genre');
+            const duration = element.getAttribute('data-duration');
+
+            document.getElementById('modalSongTitle').innerText = title;
+            document.getElementById('modalSongArtist').innerText = artist;
+            document.getElementById('modalSongCover').src = cover;
+            document.getElementById('modalSongAlbum').innerText = album;
+            document.getElementById('modalSongGenre').innerText = genre;
+            document.getElementById('modalSongDuration').innerText = formatTime(duration);
+
+            const playBtn = document.getElementById('modalPlayBtn');
+            if (audioUrl) {
+                playBtn.style.display = 'block';
+                playBtn.onclick = function () {
+                    playGlobalAudio(id, audioUrl, title, artist, cover);
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('songDetailsModal'));
+                    modal.hide();
+                };
+            } else {
+                playBtn.style.display = 'none';
+            }
+
+            const modal = new bootstrap.Modal(document.getElementById('songDetailsModal'));
+            modal.show();
+        }
+
+        function showAlbumDetails(element) {
+            const name = element.getAttribute('data-name');
+            const artist = element.getAttribute('data-artist');
+            const year = element.getAttribute('data-year');
+            const desc = element.getAttribute('data-desc');
+            const cover = element.getAttribute('data-cover');
+
+            document.getElementById('modalAlbumName').innerText = name;
+            document.getElementById('modalAlbumArtist').innerText = artist;
+            document.getElementById('modalAlbumYear').innerText = year;
+            document.getElementById('modalAlbumDesc').innerText = desc || "Feel the rhythms of this exclusive collection.";
+            document.getElementById('modalAlbumCover').src = cover;
+
+            const songsList = document.getElementById('modalAlbumSongsList');
+            songsList.innerHTML = '';
+
+            const songsData = element.querySelectorAll('.album-songs-data div');
+            const allSongs = [];
+
+            songsData.forEach((song, index) => {
+                const sId = song.getAttribute('data-song-id');
+                const sTitle = song.getAttribute('data-title');
+                const sArtist = song.getAttribute('data-artist');
+                const sUrl = song.getAttribute('data-url');
+                const sCover = song.getAttribute('data-cover');
+
+                allSongs.push({ id: sId, title: sTitle, artist: sArtist, url: sUrl, cover: sCover });
+
+                const songRow = document.createElement('div');
+                songRow.className = 'd-flex align-items-center justify-content-between p-2 mb-1 rounded hover-bg-light transition-all';
+                songRow.style.cursor = 'pointer';
+                songRow.innerHTML = `
+                    <div class="d-flex align-items-center flex-grow-1 overflow-hidden me-2">
+                        <span class="text-muted me-3 small" style="min-width: 20px;">${index + 1}</span>
+                        <div class="text-truncate">
+                            <h6 class="mb-0 fw-bold small text-dark">${sTitle}</h6>
+                            <small class="text-muted small">${sArtist}</small>
+                        </div>
+                    </div>
+                    ${sUrl ? `<button class="btn btn-primary btn-sm rounded-circle p-0 d-flex align-items-center justify-content-center shadow-none mx-2 flex-shrink-0" 
+                               style="width: 32px; height: 32px;" 
+                             onclick="playModalAudio('${sId}')">▶</button>`
+                        : '<span class="badge bg-light text-muted border-0 small mx-2 flex-shrink-0">N/A</span>'}
+                `;
+                songsList.appendChild(songRow);
+            });
+
+            window.currentModalSongs = allSongs;
+
+            document.getElementById('modalAlbumPlayAll').onclick = function () {
+                if (window.currentModalSongs.length > 0) {
+                    playModalAudio(window.currentModalSongs[0].id);
+                    bootstrap.Modal.getInstance(document.getElementById('albumDetailsModal')).hide();
+                }
+            };
+
+            const modal = new bootstrap.Modal(document.getElementById('albumDetailsModal'));
+            modal.show();
+        }
+        let currentArtistId = null;
+
+        function showArtistDetails(element) {
+            const name = element.getAttribute('data-name');
+            const id = element.getAttribute('data-id');
+            const bio = element.getAttribute('data-bio');
+            const pfp = element.getAttribute('data-pfp');
+            const banner = element.getAttribute('data-banner');
+            const genre = element.getAttribute('data-genre');
+
+            // Socials
+            const insta = element.getAttribute('data-insta');
+            const twitter = element.getAttribute('data-twitter');
+            const youtube = element.getAttribute('data-youtube');
+            const spotify = element.getAttribute('data-spotify');
+            const website = element.getAttribute('data-website');
+
+            currentArtistId = id;
+            document.getElementById('modalArtistName').innerText = name;
+            document.getElementById('modalArtistPfp').src = pfp;
+            document.getElementById('modalArtistBanner').src = banner || "/images/default-banner.svg";
+
+            const genreEl = document.getElementById('modalArtistGenre');
+            if (genre) {
+                genreEl.innerText = genre;
+                genreEl.classList.remove('d-none');
+            } else {
+                genreEl.classList.add('d-none');
+            }
+
+            document.getElementById('modalArtistBio').innerText = bio || "This artist is a rising star in the RevPlay community.";
+
+            const socialWrap = document.getElementById('artistSocialLinks');
+            socialWrap.innerHTML = '';
+
+            let hasSocials = false;
+            const linkStyle = "d-flex align-items-center mb-1 me-3";
+            const labelStyle = "text-muted small fw-bold me-1 text-uppercase";
+            const valueStyle = "text-dark small fw-medium text-truncate";
+
+            if (insta) { socialWrap.innerHTML += `<div class="${linkStyle}"><span class="${labelStyle}" style="font-size: 0.65rem;">Instagram:</span><span class="${valueStyle}" style="max-width: 150px;">${insta.replace(/^https?:\/\//, '')}</span></div>`; hasSocials = true; }
+            if (twitter) { socialWrap.innerHTML += `<div class="${linkStyle}"><span class="${labelStyle}" style="font-size: 0.65rem;">Twitter:</span><span class="${valueStyle}" style="max-width: 150px;">${twitter.replace(/^https?:\/\//, '')}</span></div>`; hasSocials = true; }
+            if (youtube) { socialWrap.innerHTML += `<div class="${linkStyle}"><span class="${labelStyle}" style="font-size: 0.65rem;">YouTube:</span><span class="${valueStyle}" style="max-width: 150px;">${youtube.replace(/^https?:\/\//, '')}</span></div>`; hasSocials = true; }
+            if (spotify) { socialWrap.innerHTML += `<div class="${linkStyle}"><span class="${labelStyle}" style="font-size: 0.65rem;">Spotify:</span><span class="${valueStyle}" style="max-width: 150px;">${spotify.replace(/^https?:\/\//, '')}</span></div>`; hasSocials = true; }
+            if (website) { socialWrap.innerHTML += `<div class="${linkStyle}"><span class="${labelStyle}" style="font-size: 0.65rem;">Website:</span><span class="${valueStyle}" style="max-width: 150px;">${website.replace(/^https?:\/\//, '')}</span></div>`; hasSocials = true; }
+
+            if (!hasSocials) {
+                socialWrap.innerHTML = `<span class="text-muted small w-100 py-1" style="font-size: 0.75rem;"><i class="me-1">🌐</i> No linked social accounts</span>`;
+            }
+
+            // Check follow status
+            fetch(`/social/follow/status/${id}`)
+                .then(res => {
+                    if (!res.ok) throw new Error("Server error");
+                    return res.json();
+                })
+                .then(isFollowing => {
+                    const btn = document.getElementById('modalFollowBtn');
+                    btn.innerText = isFollowing ? 'Following' : 'Follow';
+                    if (isFollowing) {
+                        btn.className = 'btn btn-primary btn-sm rounded-pill px-3 fw-bold border-0 shadow-sm';
+                    } else {
+                        btn.className = 'btn btn-outline-primary btn-sm rounded-pill px-3 fw-bold shadow-sm';
+                    }
+                })
+                .catch(err => {
+                    console.warn('Could not check follow status:', err);
+                });
+
+            const songsList = document.getElementById('modalArtistSongsList');
+            songsList.innerHTML = '';
+
+            const allArtistSongs = [];
+            const songsData = element.querySelectorAll('.artist-songs-data div');
+            songsData.forEach((song, index) => {
+                const sId = song.getAttribute('data-song-id');
+                const sTitle = song.getAttribute('data-title');
+                const sUrl = song.getAttribute('data-url');
+                const sCover = song.getAttribute('data-cover');
+
+                allArtistSongs.push({ id: sId, title: sTitle, artist: name, url: sUrl, cover: sCover });
+
+                const songRow = document.createElement('div');
+                songRow.className = 'd-flex align-items-center justify-content-between p-2 mb-1 rounded hover-bg-light transition-all';
+                songRow.innerHTML = `
+                    <div class="d-flex align-items-center">
+                        <span class="text-muted me-3 small" style="min-width: 20px;">${index + 1}</span>
+                        <h6 class="mb-0 fw-bold small text-dark">${sTitle}</h6>
+                    </div>
+                    <button class="btn btn-primary btn-sm rounded-circle p-0 d-flex align-items-center justify-content-center shadow-none" 
+                             style="width: 28px; height: 28px;" 
+                             onclick="playGlobalAudio('${sId}', '${sUrl}', '${sTitle}', '${name}', '${sCover}')">▶</button>
+                `;
+                songsList.appendChild(songRow);
+            });
+
+            window.currentModalSongs = allArtistSongs;
+
+            document.getElementById('modalArtistPlayAll').onclick = function () {
+                if (window.currentModalSongs.length > 0) {
+                    playModalAudio(window.currentModalSongs[0].id);
+                    bootstrap.Modal.getInstance(document.getElementById('artistDetailsModal')).hide();
+                }
+            };
+
+            new bootstrap.Modal(document.getElementById('artistDetailsModal')).show();
+        }
+
+        function toggleFollowArtist() {
+            if (!currentArtistId) return;
+            fetch(`/social/follow/${currentArtistId}`, { method: 'POST' })
+                .then(res => {
+                    if (!res.ok) throw new Error("Server error");
+                    return res.json();
+                })
+                .then(isNowFollowing => {
+                    const btn = document.getElementById('modalFollowBtn');
+                    btn.innerText = isNowFollowing ? 'Following' : 'Follow';
+                    if (isNowFollowing) {
+                        btn.className = 'btn btn-primary btn-sm rounded-pill px-3 fw-bold border-0 shadow-sm';
+                    } else {
+                        btn.className = 'btn btn-outline-primary btn-sm rounded-pill px-3 fw-bold shadow-sm';
+                    }
+                })
+                .catch(err => console.error("Toggle follow failed:", err));
+        }
+
+        function showGenreDetails(element) {
+            const genre = element.getAttribute('data-genre');
+            document.getElementById('modalGenreTitle').innerText = genre;
+            const targetList = document.getElementById('modalGenreSongsList');
+            targetList.innerHTML = '';
+
+            // Collect all songs on page that match genre (must have audio URL)
+            const allGenreSongs = [];
+            document.querySelectorAll('.card[data-audio-url][data-genre]').forEach(card => {
+                if (card.getAttribute('data-genre').toLowerCase() === genre.toLowerCase()) {
+                    const sId = card.getAttribute('data-song-id');
+                    const sTitle = card.getAttribute('data-title');
+                    const sUrl = card.getAttribute('data-audio-url');
+                    const sArtist = card.getAttribute('data-artist');
+                    const sCover = card.getAttribute('data-cover');
+
+                    allGenreSongs.push({ id: sId, title: sTitle, artist: sArtist, url: sUrl, cover: sCover });
+
+                    const songRow = document.createElement('div');
+                    songRow.className = 'd-flex align-items-center justify-content-between p-2 mb-2 rounded hover-bg-light border-bottom border-light pb-2';
+                    songRow.innerHTML = `
+                        <div class="d-flex align-items-center">
+                            <img src="${sCover}" class="rounded me-3" style="width: 40px; height: 40px; object-fit: cover;">
+                            <div>
+                                <h6 class="mb-0 fw-bold small text-dark">${sTitle}</h6>
+                                <small class="text-muted small">${sArtist}</small>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary btn-sm rounded-circle p-0 d-flex align-items-center justify-content-center shadow-none" 
+                                 style="width: 32px; height: 32px;" 
+                                 onclick="playModalAudio('${sId}')">▶</button>
+                    `;
+                    targetList.appendChild(songRow);
+                }
+            });
+
+            window.currentModalSongs = allGenreSongs;
+
+            // Set up Play All button
+            const playAllBtn = document.getElementById('modalGenrePlayAll');
+            if (allGenreSongs.length > 0) {
+                playAllBtn.style.display = 'block';
+                playAllBtn.onclick = function () {
+                    if (window.playModalAudio && allGenreSongs.length > 0) {
+                        window.playModalAudio(allGenreSongs[0].id);
+                        // Hide modal after starting playback
+                        const modalEl = document.getElementById('genreDetailsModal');
+                        const modal = bootstrap.Modal.getInstance(modalEl);
+                        if (modal) modal.hide();
+                    }
+                };
+            } else {
+                playAllBtn.style.display = 'none';
+            }
+
+            new bootstrap.Modal(document.getElementById('genreDetailsModal')).show();
+        }
+        // Global Client-Side Search
+        function filterDashboardSearch() {
+            const query = document.getElementById('globalSearchInput').value.toLowerCase();
+            const filterCategory = document.getElementById('globalSearchFilter').value;
+            const items = document.querySelectorAll('.dashboard-search-item');
+
+            items.forEach(item => {
+                const category = item.getAttribute('data-search-category');
+                const textContent = item.innerText.toLowerCase();
+
+                // Match category filter
+                const matchesCategory = (filterCategory === 'all' || filterCategory === category);
+                // Match text input
+                const matchesText = textContent.includes(query);
+
+                if (matchesCategory && matchesText) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+    </script>
+    </div><!-- /#main-content -->
+
+    <div th:replace="~{fragments/layout :: footer}"></div>
+</body>
+
+</html>

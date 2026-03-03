@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <div th:replace="~{fragments/layout :: head('Filter Songs - RevPlay')}"></div>
+</head>
+
+<body>
+
+    <div th:replace="~{fragments/layout :: navbar}"></div>
+
+    <div class="container mb-5 mt-4">
+        <div class="row">
+            <!-- Filter Controls -->
+            <div class="col-md-3">
+                <div class="card shadow-sm border-0 bg-light p-3 sticky-top" style="top: 20px;">
+                    <h4 class="text-primary mb-3">Filter Songs</h4>
+                    <form th:action="@{/search/filter}" method="get">
+
+                        <div class="mb-3">
+                            <label for="title" class="form-label text-secondary fw-bold">Title</label>
+                            <input type="text" class="form-control" id="title" name="title" th:value="${selectedTitle}"
+                                placeholder="Song name...">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="genre" class="form-label text-secondary fw-bold">Genre</label>
+                            <select class="form-select" id="genre" name="genre">
+                                <option value="">All Genres</option>
+                                <option th:each="g : ${genres}" th:value="${g}" th:text="${g}"
+                                    th:selected="${g == selectedGenre}"></option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="artistId" class="form-label text-secondary fw-bold">Artist</label>
+                            <select class="form-select" id="artistId" name="artistId">
+                                <option value="">All Artists</option>
+                                <option th:each="a : ${artists}" th:value="${a.id}" th:text="${a.displayName}"
+                                    th:selected="${a.id == selectedArtistId}"></option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="albumId" class="form-label text-secondary fw-bold">Album</label>
+                            <select class="form-select" id="albumId" name="albumId">
+                                <option value="">All Albums</option>
+                                <option th:each="al : ${albums}" th:value="${al.id}" th:text="${al.name}"
+                                    th:selected="${al.id == selectedAlbumId}"></option>
+                            </select>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="releaseYear" class="form-label text-secondary fw-bold">Release Year</label>
+                            <input type="number" class="form-control" id="releaseYear" name="releaseYear"
+                                th:value="${selectedReleaseYear}" min="1900" max="2030" placeholder="e.g. 2024">
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">Apply Filters</button>
+                            <a th:href="@{/search/filter}" class="btn btn-outline-secondary">Clear</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Filter Results -->
+            <div class="col-md-9 ps-md-4 mt-4 mt-md-0">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3 class="text-primary m-0">Filtered Results <span class="badge bg-secondary rounded-pill ms-2"
+                            th:text="${#lists.size(songs)}">0</span></h3>
+                </div>
+
+                <!-- Songs -->
+                <div th:if="${not #lists.isEmpty(songs)}" class="list-group shadow-sm">
+                    <a th:each="song : ${songs}" th:href="@{/song/{id}(id=${song.id})}"
+                        class="list-group-item list-group-item-action border-0 mb-1 rounded d-flex justify-content-between align-items-center py-3">
+                        <div class="d-flex align-items-center">
+                            <img th:if="${song.coverArtUrl != null}" th:src="@{${song.coverArtUrl}}"
+                                style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;"
+                                class="me-3 shadow-sm">
+                            <img th:unless="${song.coverArtUrl != null}" th:src="@{/images/default-album.svg}"
+                                style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;"
+                                class="me-3 shadow-sm border border-light">
+                            <div>
+                                <h5 class="mb-1 text-dark fw-bold" th:text="${song.title}">Song Title</h5>
+                                <small class="text-muted"><span
+                                        th:text="${song.artist.displayName}">Artist</span></small>
+                                <small class="text-muted ms-2" th:if="${song.releaseDate != null}">• <span
+                                        th:text="${#temporals.format(song.releaseDate, 'yyyy')}">Year</span></small>
+                            </div>
+                        </div>
+                        <div>
+                            <span class="badge bg-primary text-light px-3 py-2 rounded-pill shadow-sm"
+                                th:text="${song.genre}">Genre</span>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- No Results -->
+                <div th:if="${#lists.isEmpty(songs)}" class="alert alert-warning text-center py-5 shadow-sm">
+                    <h4>No songs found for these filters</h4>
+                    <p class="mb-0">Try clearing the filters or making them less restrictive.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="~{fragments/layout :: footer}"></div>
+
+</body>
+
+</html>

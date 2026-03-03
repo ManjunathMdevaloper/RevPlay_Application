@@ -1,0 +1,115 @@
+<!--
+  Album Management / Publication Form
+  This page allows artists to define a new multi-track collection or update an existing one.
+  Key Features:
+  - Contextual UI: Dynamically adjusts labels and actions based on 'albumId' presence.
+  - Data Capture: Binds to 'AlbumDto' via 'th:object' for standardized server-side processing.
+  - Media Handling: Supports direct cover art file uploads using 'multipart/form-data'.
+  - Validation: Requires at least a name for the collection to be registered in the system.
+  Data Source: ArtistController -> AlbumDto albumDto, Long albumId (null for new).
+-->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <!-- Injects the standard head fragment for page-specific metadata. -->
+    <div th:replace="~{fragments/layout :: head('Create Album - RevPlay')}"></div>
+</head>
+
+<body>
+    <!-- Injects the global navigation bar. -->
+    <div th:replace="~{fragments/layout :: navbar}"></div>
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            min-height: 100vh;
+        }
+
+        .pop-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 1.5rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+        }
+    </style>
+
+    <div class="container d-flex align-items-center justify-content-center py-5" style="min-height: 90vh;">
+        <div class="row w-100 justify-content-center">
+            <div class="col-md-8 col-lg-7">
+                <div class="card border-0 pop-card p-2">
+                    <div class="card-body p-4 p-md-5">
+                        <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+                            <div>
+                                <!-- Dynamic Title: Adjusts text according to whether we are Editing or Creating. -->
+                                <h2 class="fw-bold mb-0 text-primary"
+                                    th:text="${albumId != null ? 'Edit Album' : 'Publish New Album'}">Publish New Album
+                                </h2>
+                                <p class="text-muted small mb-0">Curate your collection for the world to hear</p>
+                            </div>
+                            <a th:href="@{/artist/dashboard}"
+                                class="btn btn-outline-secondary rounded-pill px-3 shadow-sm fw-bold small">✕ Cancel</a>
+                        </div>
+
+                        <!-- 
+                          Album Form:
+                          - th:action: Resolves the target endpoint dynamically based on albumId.
+                          - th:object: Binds input fields to the 'albumDto' model attribute.
+                          - method="post": Required for state-changing operations.
+                          - enctype: Allows binary data (images) to be sent via the 'coverFile' input.
+                        -->
+                        <form
+                            th:action="@{${albumId != null ? '/artist/dashboard/albums/' + albumId + '/edit' : '/artist/dashboard/albums/create'}}"
+                            th:object="${albumDto}" method="post" enctype="multipart/form-data">
+
+                            <div class="mb-4">
+                                <label for="name" class="form-label fw-bold small text-muted">Album Title <span
+                                        class="text-danger">*</span></label>
+                                <!-- th:field: Linked to albumDto.name -->
+                                <input type="text" th:field="*{name}"
+                                    class="form-control rounded-3 border-light shadow-sm" id="name"
+                                    placeholder="E.g. Midnight Melodies" required>
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="description" class="form-label fw-bold small text-muted">Description</label>
+                                <textarea th:field="*{description}"
+                                    class="form-control rounded-3 border-light shadow-sm" id="description" rows="3"
+                                    placeholder="Tell your fans about this collection..."></textarea>
+                            </div>
+
+                            <div class="row mb-4">
+                                <div class="col-md-6 mb-3 mb-md-0">
+                                    <label for="releaseDate" class="form-label fw-bold small text-muted">Release
+                                        Date</label>
+                                    <input type="date" th:field="*{releaseDate}"
+                                        class="form-control rounded-3 border-light shadow-sm" id="releaseDate">
+                                </div>
+                                <div class="col-md-6">
+                                    <!-- Cover Art: Binds to a MultipartFile parameter in the Controller. -->
+                                    <label for="coverFile" class="form-label fw-bold small text-muted">Album Cover
+                                        Art</label>
+                                    <input type="file" name="coverFile"
+                                        class="form-control rounded-3 border-light shadow-sm" id="coverFile"
+                                        accept="image/*">
+                                </div>
+                            </div>
+
+                            <div class="d-grid mt-5">
+                                <button type="submit" class="btn btn-primary btn-lg fw-bold rounded-pill shadow"
+                                    th:text="${albumId != null ? 'Save Changes' : 'Create Album'}">Action</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Injects the global layout footer. -->
+    <div th:replace="~{fragments/layout :: footer}"></div>
+</body>
+
+</html>
+

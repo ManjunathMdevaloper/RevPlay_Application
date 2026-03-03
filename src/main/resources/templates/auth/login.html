@@ -1,0 +1,103 @@
+<!--
+  Login View Template
+  This page provides the entry point for existing users to authenticate with the platform.
+  It is styled as a centered card with a focus on ease of use and modern aesthetics.
+  The form integrates directly with Spring Security's filter chain to process 'username' and 'password'
+  credentials via the '/login' endpoint. It also handles various status messages using URL parameters.
+-->
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <!-- 
+      th:replace="~{fragments/layout :: head(...)}":
+      - Pulls the global <head> configuration from the layout fragment.
+      - Passes 'Login - RevPlay' as the title parameter to be displayed in the browser tab.
+    -->
+    <div th:replace="~{fragments/layout :: head('Login - RevPlay')}"></div>
+</head>
+
+<body class="auth-body">
+    <div class="container">
+        <div class="row w-100 justify-content-center">
+            <div class="col-md-6 col-lg-5">
+                <div class="card overflow-hidden border-0 auth-card p-2">
+                    <div class="card-body p-4 p-md-5">
+
+                        <div class="text-center mb-4">
+                            <!-- th:src="@{/images/logo.png}": Resolves the absolute path to the platform logo. -->
+                            <img th:src="@{/images/logo.png}" alt="RevPlay Logo" class="mb-3"
+                                style="height: 80px; width: auto;">
+                            <h2 class="fw-bold mb-1" style="color: var(--primary-color);">Welcome Back</h2>
+                            <p class="text-muted small">Login to continue your RevPlay experience</p>
+                        </div>
+
+                        <!-- 
+                          Status Alerts (th:if="${param.X}"):
+                          - These blocks only appear if a specific query parameter exists in the URL.
+                          - param.error: Triggered by Spring Security if authentication fails (failureUrl).
+                          - param.logout: Triggered after a successful logout sequence.
+                          - param.resetSuccess: Triggered after a user successfully resets their password.
+                          - param.registerSuccess: Triggered after a fresh account is created.
+                        -->
+                        <div th:if="${param.error}"
+                            class="alert alert-danger py-2 text-center small border-0 shadow-sm mb-4">
+                            Invalid username or password.
+                        </div>
+                        <div th:if="${param.logout}"
+                            class="alert alert-success py-2 text-center small border-0 shadow-sm mb-4">
+                            Logged out successfully.
+                        </div>
+                        <div th:if="${param.resetSuccess}"
+                            class="alert alert-success py-2 text-center small border-0 shadow-sm mb-4">
+                            Password updated successfully!
+                        </div>
+                        <div th:if="${param.registerSuccess}"
+                            class="alert alert-success py-2 text-center small border-0 shadow-sm mb-4">
+                            Registration successful! Please login.
+                        </div>
+
+                        <!-- 
+                          Login Form:
+                          - method="post": Securely sends credentials in the request body.
+                          - th:action="@{/login}": Submits the form to the URL managed by SecurityConfig for authentication.
+                        -->
+                        <form method="post" th:action="@{/login}">
+                            <div class="mb-3">
+                                <label for="username" class="form-label fw-bold small text-muted">Username</label>
+                                <!-- name="username": Must match the expected field name in Spring Security config. -->
+                                <input type="text" id="username" name="username"
+                                    class="form-control rounded-2 border-light shadow-sm" required autofocus />
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label fw-bold small text-muted">Password</label>
+                                <!-- name="password": Must match the expected field name in Spring Security config. -->
+                                <input type="password" id="password" name="password"
+                                    class="form-control rounded-2 border-light shadow-sm" required />
+                                <div class="text-end mt-2">
+                                    <!-- th:href="@{/forgot-password}": Link to the password recovery workflow. -->
+                                    <a th:href="@{/forgot-password}" class="text-decoration-none small fw-bold"
+                                        style="color: var(--primary-color);">Forgot?</a>
+                                </div>
+                            </div>
+                            <div class="d-grid mt-4">
+                                <button type="submit" class="btn btn-primary btn-lg rounded-2 fw-bold shadow">Sign
+                                    In</button>
+                            </div>
+                            <div class="text-center mt-4 pt-2">
+                                <span class="small text-muted">New to RevPlay?</span>
+                                <!-- th:href="@{/register}": Directs new users to the sign-up page. -->
+                                <a th:href="@{/register}" class="small fw-bold text-decoration-none ms-1"
+                                    style="color: var(--primary-color);">Register Now</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

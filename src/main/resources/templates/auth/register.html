@@ -1,0 +1,100 @@
+<!--
+  Registration View Template
+  This page allows new visitors to create a RevPlay account.
+  It uses a form-backing bean (UserRegistrationDto) to capture user input and perform
+  server-side validation. The design is identical to the login page for consistency,
+  using a centered card layout. It also includes an optional toggle for users to
+  register as an 'Artist', which unlocks specialized music upload features.
+-->
+
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <!--
+      th:replace: Injects the shared head fragment.
+      The parameter 'Register - RevPlay' ensures the correct metadata is set for this page.
+    -->
+    <div th:replace="~{fragments/layout :: head('Register - RevPlay')}"></div>
+</head>
+
+<body class="auth-body">
+
+    <div class="container">
+        <div class="row w-100 justify-content-center">
+            <div class="col-md-8 col-lg-7">
+                <div class="card border-0 auth-card overflow-hidden">
+                    <div class="card-body p-4 p-md-5">
+
+                        <div class="text-center mb-4">
+                            <!-- th:src: Link to the platform logo for branding. -->
+                            <img th:src="@{/images/logo.png}" alt="RevPlay Logo" class="mb-3"
+                                style="height: 80px; width: auto;">
+                            <h2 class="fw-bold mb-1" style="color: var(--primary-color);">Create Account</h2>
+                            <p class="text-muted small">Join the RevPlay music community</p>
+                        </div>
+
+                        <!-- 
+                          Registration Form:
+                          - th:action="@{/register/save}": Submits to the AuthController's 'register' method.
+                          - th:object="${user}": Binds the form to the UserRegistrationDto object passed from the controller.
+                        -->
+                        <form method="post" th:action="@{/register/save}" th:object="${user}">
+                            <div class="mb-3">
+                                <label for="username" class="form-label fw-bold small text-muted">Username</label>
+                                <!-- th:field="*{username}": Binds the input to the 'username' property of the 'user' object. -->
+                                <input type="text" id="username" th:field="*{username}"
+                                    class="form-control rounded-2 border-light shadow-sm" placeholder="your_handle"
+                                    required />
+                                <!-- th:if="${#fields.hasErrors('username')}": Shows error message only if validation for username fails. -->
+                                <!-- th:errors="*{username}": Injects the actual validation error text (e.g., "Username already exists"). -->
+                                <p th:if="${#fields.hasErrors('username')}" class="text-danger small mt-1"
+                                    th:errors="*{username}"></p>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label fw-bold small text-muted">Email Address</label>
+                                <!-- th:field="*{email}": Binds to the 'email' property of the DTO. -->
+                                <input type="email" id="email" th:field="*{email}"
+                                    class="form-control rounded-2 border-light shadow-sm" placeholder="name@example.com"
+                                    required />
+                                <p th:if="${#fields.hasErrors('email')}" class="text-danger small mt-1"
+                                    th:errors="*{email}"></p>
+                            </div>
+                            <div class="mb-4">
+                                <label for="password" class="form-label fw-bold small text-muted">Password</label>
+                                <!-- th:field="*{password}": Binds to the 'password' property; input is masked for security. -->
+                                <input type="password" id="password" th:field="*{password}"
+                                    class="form-control rounded-2 border-light shadow-sm" placeholder="••••••••"
+                                    required />
+                                <p th:if="${#fields.hasErrors('password')}" class="text-danger small mt-1"
+                                    th:errors="*{password}"></p>
+                            </div>
+                            <div
+                                class="mb-4 form-check bg-light p-3 rounded-4 d-flex align-items-center justify-content-center gap-2 border border-white">
+                                <!-- th:field="*{artist}": Binds to the boolean flag that determines the user's role (USER vs ARTIST). -->
+                                <input type="checkbox" class="form-check-input mt-0 ms-0" id="isArtist"
+                                    th:field="*{artist}">
+                                <label class="form-check-label fw-bold small text-dark" for="isArtist">I am an Artist /
+                                    Musician</label>
+                            </div>
+                            <div class="d-grid shadow-sm mt-4">
+                                <button type="submit" class="btn btn-primary btn-lg rounded-2 fw-bold">Register</button>
+                            </div>
+                            <div class="text-center mt-4">
+                                <span class="small text-muted">Already have an account?</span>
+                                <!-- th:href: Direct link back to the login page. -->
+                                <a th:href="@{/login}" class="small fw-bold text-decoration-none ms-1"
+                                    style="color: var(--primary-color);">Sign In</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+
+</html>

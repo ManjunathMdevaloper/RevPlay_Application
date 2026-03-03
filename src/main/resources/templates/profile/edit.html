@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <div th:replace="~{fragments/layout :: head('Edit Profile - RevPlay')}"></div>
+</head>
+
+<body>
+
+    <div th:replace="~{fragments/layout :: navbar}"></div>
+
+    <main id="main-content" class="container d-flex align-items-center justify-content-center"
+        style="min-height: calc(100vh - 120px); padding-bottom: 2rem;">
+        <div class="row w-100 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <div class="card shadow-2xl glass-card border-0 rounded-4 overflow-hidden">
+                    <div class="card-header bg-white py-4 border-0 text-center position-relative">
+                        <h3 class="mb-0 fw-bold" style="color: var(--primary-color);">Edit Profile</h3>
+                    </div>
+                    <div class="card-body p-0 container-scroll"
+                        style="max-height: 65vh; overflow-y: auto; overflow-x: hidden; background: rgba(255,255,255,0.7);">
+                        <div class="p-4 p-md-5 pt-0">
+                            <form method="post" th:action="@{/profile/edit}" th:object="${userProfile}"
+                                enctype="multipart/form-data">
+                                <div class="mb-3" th:if="${userProfile.role == 'USER'}">
+                                    <label for="displayName" class="form-label">Display Name</label>
+                                    <input type="text" id="displayName" th:field="*{displayName}"
+                                        class="form-control" />
+                                </div>
+
+                                <div class="mb-3" th:if="${userProfile.role == 'ARTIST'}">
+                                    <label for="artistName" class="form-label">Artist Name</label>
+                                    <input type="text" id="artistName" th:field="*{artistName}" class="form-control" />
+                                </div>
+
+                                <div class="mb-3" th:if="${userProfile.role == 'ARTIST'}">
+                                    <label for="genre" class="form-label">Genre</label>
+                                    <input type="text" id="genre" th:field="*{genre}" class="form-control" />
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="bio" class="form-label">Biography</label>
+                                    <textarea id="bio" th:field="*{bio}" class="form-control" rows="4"></textarea>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="profilePic" class="form-label">Profile Picture</label>
+                                    <input type="file" id="profilePic" name="profilePic" class="form-control"
+                                        accept="image/*" />
+                                </div>
+
+                                <div class="mb-4" th:if="${userProfile.role == 'ARTIST'}">
+                                    <label for="bannerPic" class="form-label">Banner Image</label>
+                                    <input type="file" id="bannerPic" name="bannerPic" class="form-control"
+                                        accept="image/*" />
+                                </div>
+
+                                <div class="card bg-light mb-4 border-light shadow-sm"
+                                    th:if="${userProfile.role == 'ARTIST'}">
+                                    <div class="card-header border-0 bg-transparent text-primary fw-bold">Social Media
+                                        Links
+                                    </div>
+                                    <div class="card-body py-2">
+                                        <div class="mb-3 input-group">
+                                            <span class="input-group-text bg-white border-end-0"><i
+                                                    class="text-secondary">#</i></span>
+                                            <input type="text" class="form-control border-start-0 ps-0"
+                                                th:field="*{instagramUrl}" placeholder="Instagram username or link">
+                                        </div>
+                                        <div class="mb-3 input-group">
+                                            <span class="input-group-text bg-white border-end-0"><i
+                                                    class="text-secondary">#</i></span>
+                                            <input type="text" class="form-control border-start-0 ps-0"
+                                                th:field="*{twitterUrl}" placeholder="X (Twitter) username or link">
+                                        </div>
+                                        <div class="mb-3 input-group">
+                                            <span class="input-group-text bg-white border-end-0"><i
+                                                    class="text-secondary">#</i></span>
+                                            <input type="text" class="form-control border-start-0 ps-0"
+                                                th:field="*{youtubeUrl}" placeholder="YouTube channel or link">
+                                        </div>
+                                        <div class="mb-3 input-group">
+                                            <span class="input-group-text bg-white border-end-0"><i
+                                                    class="text-secondary">#</i></span>
+                                            <input type="text" class="form-control border-start-0 ps-0"
+                                                th:field="*{spotifyUrl}" placeholder="Spotify URI or link">
+                                        </div>
+                                        <div class="mb-3 input-group">
+                                            <span class="input-group-text bg-white border-end-0"><i
+                                                    class="text-secondary">#</i></span>
+                                            <input type="text" class="form-control border-start-0 ps-0"
+                                                th:field="*{websiteUrl}" placeholder="Website domain or link">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <a th:href="@{/profile}" class="btn btn-outline-secondary px-4">Cancel</a>
+                                    <button type="submit" class="btn btn-primary px-4">Save Changes</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div th:replace="~{fragments/layout :: footer}"></div>
+
+</body>
+
+</html>
+

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <div th:replace="~{fragments/layout :: head('Access Denied - RevPlay')}"></div>
+</head>
+
+<body>
+
+    <div th:replace="~{fragments/layout :: navbar}"></div>
+
+    <div class="container text-center mb-5 mt-5">
+        <h1 class="display-1 text-danger fw-bold">403</h1>
+        <h2 class="mb-4 text-dark">Access Denied</h2>
+        <p class="lead text-muted mb-5">You do not have permission to view this page. If you believe this is an error,
+            please contact support.</p>
+        <a th:href="@{/}" class="btn btn-primary btn-lg">Return to Home</a>
+    </div>
+
+    <div th:replace="~{fragments/layout :: footer}"></div>
+
+</body>
+
+</html>
+
+

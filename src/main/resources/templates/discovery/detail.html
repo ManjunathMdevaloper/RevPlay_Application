@@ -1,0 +1,172 @@
+<!--
+  Song Detail Template
+  This page provides an in-depth view of a specific track, including metadata, social sharing, and interactive actions.
+  Features:
+  - Action Suite: Includes 'Like', 'Add to Playlist', and 'Play' triggers.
+  - AJAX Interactivity: Uses internal scripts to handle Favorites/Likes without page reloads.
+  - Social Integration: Injects sharing fragments for external platform distribution.
+  - Dynamic Formatting: Uses T(java.lang.String).format for duration and #temporals for dates.
+  Data Source: SongController -> Song song, List<Playlist> userPlaylists.
+-->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <!-- Injects the head fragment with page-specific title metadata. -->
+    <div th:replace="~{fragments/layout :: head('Song Details - RevPlay')}"></div>
+</head>
+
+<body>
+
+    <!-- Injects the global navigation bar. -->
+    <div th:replace="~{fragments/layout :: navbar}"></div>
+
+    <div class="container mb-5 mt-5">
+        <div class="row align-items-center bg-light p-4 rounded shadow-sm border border-light">
+            <div class="col-md-4 text-center">
+                <!-- Cover Art: Displays the primary artwork or a generic fallback. -->
+                <img th:if="${song.coverArtUrl != null}" th:src="@{${song.coverArtUrl}}" alt="Album Cover"
+                    class="img-fluid rounded border border-light shadow" style="max-height: 350px;">
+                <img th:unless="${song.coverArtUrl != null}" th:src="@{/images/default-album.svg}"
+                    alt="Default Album Cover" class="img-fluid rounded border border-light shadow"
+                    style="max-height: 350px;">
+            </div>
+            <div class="col-md-8 ps-md-5 mt-4 mt-md-0">
+                <!-- Metadata Display -->
+                <h1 class="text-primary fw-bold mb-1" th:text="${song.title}">Song Title</h1>
+                <h4 class="text-muted mb-3">by
+                    <a th:href="@{/artists/{username}(username=${song.artist.username})}"
+                        th:text="${song.artist.displayName}" class="text-decoration-none text-muted">Artist Name</a>
+                </h4>
+
+                <div class="mb-4">
+                    <span class="badge bg-secondary me-2 fs-6" th:text="${song.genre}">Genre</span>
+                    <!-- Duration Calculation: MM:SS format via direct math and String.format utility. -->
+                    <span class="badge bg-info text-dark fs-6"
+                        th:text="${song.duration / 60} + ':' + ${T(java.lang.String).format('%02d', song.duration % 60)}">00:00</span>
+                </div>
+
+                <hr class="my-4">
+
+                <div class="row g-3">
+                    <div class="col-sm-6">
+                        <p class="mb-1 text-muted text-uppercase small">Release Date</p>
+                        <p class="fw-medium" th:text="${song.releaseDate != null ? song.releaseDate : 'Unknown'}">
+                            YYYY-MM-DD</p>
+                    </div>
+                    <div class="col-sm-6">
+                        <p class="mb-1 text-muted text-uppercase small">Total Plays</p>
+                        <p class="fw-medium" th:text="${song.playCount}">0</p>
+                    </div>
+                </div>
+
+                <!-- Social Share Fragment: Reusable UI for copying links or sending to social networks. -->
+                <div th:replace="~{fragments/social-share :: share('/song/' + ${song.id}, ${song.title})}"></div>
+
+                <!-- Playlists & Likes (Authorized Users Only) -->
+                <div class="mt-4 pt-3 d-flex gap-3 align-items-center flex-wrap" sec:authorize="isAuthenticated()">
+                    <!-- Like Trigger: Managed by the JS fetch logic below for seamless state updates. -->
+                    <button class="btn btn-outline-danger btn-lg like-btn" th:data-id="${song.id}"
+                        th:id="'like-btn-' + ${song.id}">
+                        <span class="like-text">Like Track 🤍</span>
+                    </button>
+
+                    <!-- Playlists Dropdown: Populated from the user's personal collection of playlists. -->
+                    <div class="dropdown" th:if="${userPlaylists != null && !#lists.isEmpty(userPlaylists)}">
+                        <button class="btn btn-outline-secondary btn-lg dropdown-toggle" type="button"
+                            id="playlistDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            Add to Playlist...
+                        </button>
+                        <ul class="dropdown-menu shadow-sm" aria-labelledby="playlistDropdown">
+                            <li th:each="p : ${userPlaylists}">
+                                <!-- th:data-*: Data attributes facilitate the AJAX 'Add to Playlist' POST. -->
+                                <button class="dropdown-item add-playlist-btn" th:data-playlist="${p.id}"
+                                    th:data-song="${song.id}" th:text="${p.name}">Playlist</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="mt-4 pt-3 d-flex gap-3">
+                    <!-- 
+                      Global Audio Integration:
+                      Uses the playGlobalAudio() function to trigger the site-wide mini-player.
+                    -->
+                    <button class="btn btn-primary btn-lg fw-bold px-4 shadow" th:if="${song.audioUrl != null}"
+                        th:data-song-id="${song.id}" th:data-audio-url="${song.audioUrl}" th:data-title="${song.title}"
+                        th:data-artist="${song.artist != null ? (song.artist.displayName ?: song.artist.username) : 'Unknown Artist'}"
+                        th:data-cover="${song.coverArtUrl != null ? song.coverArtUrl : '/images/default-album.svg'}"
+                        onclick="playGlobalAudio(this.getAttribute('data-song-id'), this.getAttribute('data-audio-url'), this.getAttribute('data-title'), this.getAttribute('data-artist'), this.getAttribute('data-cover'))">
+                        ▶ Play Track
+                    </button>
+                    <button class="btn btn-primary btn-lg fw-bold px-4 shadow" th:unless="${song.audioUrl != null}"
+                        disabled>No Audio File</button>
+                    <a th:if="${song.albumId != null}" th:href="@{/album/{id}(id=${song.albumId})}"
+                        class="btn btn-outline-primary btn-lg">View Album</a>
+                    <a th:href="@{/discovery}" class="btn btn-outline-secondary btn-lg">Back to Discovery</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Global Footer -->
+    <div th:replace="~{fragments/layout :: footer}"></div>
+
+    <!-- Social Scripts Fragment -->
+    <div th:replace="~{fragments/social-share :: share-scripts}"></div>
+
+    <script th:inline="javascript">
+        /**
+         * Client-side Logic for Likes and Library Management
+         * Uses the standard Fetch API to interact with Library REST endpoints.
+         */
+        document.addEventListener('DOMContentLoaded', function () {
+            // Check initial like status
+            const likeBtn = document.querySelector('.like-btn');
+            if (likeBtn) {
+                const songId = likeBtn.getAttribute('data-id');
+                const textSpan = likeBtn.querySelector('.like-text');
+
+                // Initial fetch to sync button UI with backend state.
+                fetch(`/library/like/status/${songId}`)
+                    .then(res => res.json())
+                    .then(isLiked => {
+                        if (isLiked) {
+                            textSpan.innerText = 'Unlike Track 💔';
+                            likeBtn.classList.replace('btn-outline-danger', 'btn-danger');
+                        }
+                    });
+
+                // Toggle handler for 'Like' button.
+                likeBtn.addEventListener('click', function () {
+                    fetch(`/library/like/${songId}`, { method: 'POST' })
+                        .then(res => res.json())
+                        .then(isLiked => {
+                            if (isLiked) {
+                                textSpan.innerText = 'Unlike Track 💔';
+                                likeBtn.classList.replace('btn-outline-danger', 'btn-danger');
+                            } else {
+                                textSpan.innerText = 'Like Track 🤍';
+                                likeBtn.classList.replace('btn-danger', 'btn-outline-danger');
+                            }
+                        });
+                });
+            }
+
+            // Playlist AJAX Logic (Bulk binding for dropdown items)
+            const addBtns = document.querySelectorAll('.add-playlist-btn');
+            addBtns.forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const pId = this.getAttribute('data-playlist');
+                    const sId = this.getAttribute('data-song');
+                    fetch(`/library/api/playlists/${pId}/add/${sId}`, { method: 'POST' })
+                        .then(res => {
+                            if (res.ok) alert('Successfully added to your playlist!');
+                        });
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <div th:replace="~{fragments/layout :: head('Browse Categories - RevPlay')}"></div>
+</head>
+
+<body>
+
+    <div th:replace="~{fragments/layout :: navbar}"></div>
+
+    <div class="container mb-5 mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="text-primary fw-bold">Browse Content</h2>
+            <a th:href="@{/search/filter}" class="btn btn-outline-primary shadow-sm border-2">Advanced Filters</a>
+        </div>
+
+        <!-- Genres Section -->
+        <div class="mb-5">
+            <h3 class="mb-3 text-secondary border-bottom pb-2">Browse By Genre</h3>
+            <div class="row row-cols-2 row-cols-md-4 g-4" th:if="${not #lists.isEmpty(genres)}">
+                <div class="col" th:each="genre : ${genres}">
+                    <a th:href="@{/search/filter(genre=${genre})}" class="text-decoration-none">
+                        <div class="card h-100 shadow-sm border-0 border-start border-primary border-4 genre-card">
+                            <div class="card-body text-center py-4 bg-light text-dark fw-bold fs-5 text-uppercase">
+                                <span th:text="${genre}">Genre Name</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <p class="text-muted" th:if="${#lists.isEmpty(genres)}">No genres found.</p>
+        </div>
+
+        <!-- Artists Section -->
+        <div class="mb-5">
+            <h3 class="mb-3 text-secondary border-bottom pb-2">Browse Top Artists</h3>
+            <div class="row row-cols-2 row-cols-md-4 g-4" th:if="${not #lists.isEmpty(artists)}">
+                <div class="col" th:each="artist : ${artists}">
+                    <a th:href="@{/artists/{username}(username=${artist.username})}"
+                        class="text-decoration-none text-dark card h-100 shadow-sm border-0 text-center py-3 genre-card">
+                        <div class="card-body">
+                            <img th:if="${artist.profilePictureUrl != null}" th:src="@{${artist.profilePictureUrl}}"
+                                style="width: 80px; height: 80px; object-fit: cover;"
+                                class="rounded-circle mb-3 border border-2 border-primary">
+                            <img th:unless="${artist.profilePictureUrl != null}" th:src="@{/images/default-profile.svg}"
+                                style="width: 80px; height: 80px; object-fit: cover;"
+                                class="rounded-circle mb-3 shadow-sm border border-2 border-light">
+                            <h5 class="card-title fw-bold" th:text="${artist.displayName}">Artist Name</h5>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Albums Section -->
+        <div class="mb-5">
+            <h3 class="mb-3 text-secondary border-bottom pb-2">Browse Top Albums</h3>
+            <div class="row row-cols-2 row-cols-md-4 g-4" th:if="${not #lists.isEmpty(albums)}">
+                <div class="col" th:each="album : ${albums}">
+                    <a th:href="@{/album/{id}(id=${album.id})}"
+                        class="text-decoration-none text-dark card h-100 shadow-sm border-0 genre-card">
+                        <img th:if="${album.coverArtUrl != null}" th:src="@{${album.coverArtUrl}}" class="card-img-top"
+                            th:alt="${album.name}" style="height: 150px; object-fit: cover;">
+                        <img th:unless="${album.coverArtUrl != null}" th:src="@{/images/default-album.svg}"
+                            class="card-img-top" th:alt="${album.name}" style="height: 150px; object-fit: cover;">
+                        <div class="card-body bg-light text-center py-2 px-1">
+                            <h6 class="card-title text-truncate mb-0 fw-bold" th:text="${album.name}">Album Name</h6>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <style>
+        .genre-card {
+            transition: all 0.2s ease-in-out;
+        }
+
+        .genre-card:hover {
+            transform: scale(1.05);
+        }
+    </style>
+
+    <div th:replace="~{fragments/layout :: footer}"></div>
+
+</body>
+
+</html>

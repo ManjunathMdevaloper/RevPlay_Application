@@ -1,0 +1,27 @@
+<!--
+  Listening History Template
+  This page displays a chronological record of tracks played by the logged-in user.
+  Key Features:
+  - Play History: Iterates through 'HistoryEntry' entities to show cover art, artist, and timestamps.
+  - History Management: Allows users to clear their entire listening log via a POST form.
+  - 'Play Again' Quick Action: Triggers global audio playback directly from the history table.
+  - Timestamp Formatting: Uses #temporals.format for readable date/time display.
+  Data Source: HistoryController -> List<HistoryEntry> history.
+-->
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <!-- Injects the standard head fragment for page-specific metadata. -->
+    <div th:replace="~{fragments/layout :: head('Listening History - RevPlay')}"></div>
+</head>
+
+<body>
+ <!-- ####################################### Person3 CODE START ######################################### -->
+
+
+    <!-- ######################################## Person3 CODE END ########################################## -->
+</body>
+
+</html>

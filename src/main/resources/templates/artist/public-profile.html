@@ -1,0 +1,249 @@
+<!--
+  Artist Public Profile Template
+  This page serves as the official landing page for any performer or creator on RevPlay.
+  Key Features:
+  - Branding Suite: Displays artist banners, profile pictures, and verified badges.
+  - Social Graph: Integration with the follow system to build community relationships.
+  - Media Portfolio: Showcases the artist's 'Top Songs' and published 'Albums' in a grid/list hybrid.
+  - External Reach: Links out to Instagram, Twitter, YouTube, and Spotify.
+  Data Source: ArtistController -> Artist artist, ArtistProfile profile, List<Song> songs, List<Album> albums, Long followerCount.
+-->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <!-- Injects the standard head fragment for consistent styling. -->
+    <div th:replace="~{fragments/layout :: head('Artist Profile - RevPlay')}"></div>
+    <style>
+        .artist-header {
+            background-color: var(--light-bg);
+            padding: 40px 0;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .artist-img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid var(--primary-color);
+        }
+
+        .banner-img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            margin-bottom: -100px;
+        }
+
+        .social-link {
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            margin: 0 10px;
+            transition: color 0.2s;
+        }
+
+        .social-link:hover {
+            color: var(--primary-hover);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Injects the global navigation bar. -->
+    <div th:replace="~{fragments/layout :: navbar}"></div>
+
+    <!-- Artist Banner: Conditioned on the existence of a high-res branding image. -->
+    <div th:if="${profile.bannerImageUrl != null}">
+        <img th:src="@{${profile.bannerImageUrl}}" alt="Artist Banner" class="banner-img">
+    </div>
+
+    <div class="artist-header text-center position-relative mt-5">
+        <div class="container">
+            <!-- Profile Picture Display with Dynamic URL Fetching. -->
+            <img th:if="${artist.profilePictureUrl != null}" th:src="@{${artist.profilePictureUrl}}"
+                alt="Artist Picture" class="artist-img shadow mb-3">
+            <img th:unless="${artist.profilePictureUrl != null}" th:src="@{/images/default-profile.svg}"
+                alt="Default Profile Picture" class="artist-img shadow mb-3">
+
+            <h2 class="mb-0 fw-bold text-dark" th:text="${profile.artistName}">Artist Name</h2>
+
+            <div class="mb-3 d-flex justify-content-center align-items-center gap-2">
+                <span class="badge bg-primary fs-6">Verified Artist</span>
+                <span th:if="${profile.genre != null}" class="badge bg-secondary fs-6"
+                    th:text="${profile.genre}">Genre</span>
+            </div>
+
+            <!-- Artist Bio: Fetches the 'bio' field from the ArtistProfile DTO. -->
+            <p class="lead mb-4 mx-auto w-75 text-secondary" th:text="${profile.bio}">Artist biography...</p>
+
+            <!-- 
+              Follow Interface (Logged In):
+              Uses 'isFollowing' boolean flag to determine button state and label.
+            -->
+            <div class="mb-4 d-flex justify-content-center align-items-center gap-3" sec:authorize="isAuthenticated()">
+                <div class="text-center me-3">
+                    <h5 class="mb-0 fw-bold text-primary" th:text="${followerCount}">0</h5>
+                    <small class="text-muted text-uppercase fw-bold">Followers</small>
+                </div>
+                <button class="btn btn-lg follow-btn px-4 shadow-sm fw-bold" th:data-id="${artist.id}"
+                    th:classappend="${isFollowing ? 'btn-outline-primary' : 'btn-primary'}"
+                    th:text="${isFollowing ? 'Following ✅' : 'Follow Artist'}">Follow Artist</button>
+            </div>
+
+            <!-- Follow Interface (Anonymous): Redirects to login. -->
+            <div class="mb-4 d-flex justify-content-center align-items-center gap-3" sec:authorize="!isAuthenticated()">
+                <div class="text-center">
+                    <h5 class="mb-0 fw-bold text-primary" th:text="${followerCount}">0</h5>
+                    <small class="text-muted text-uppercase fw-bold">Followers</small>
+                </div>
+                <a th:href="@{/login}" class="btn btn-primary btn-lg px-4 shadow-sm fw-bold">Follow Artist</a>
+            </div>
+
+            <!-- Social Sharing Fragment for Profile Distribution. -->
+            <div class="d-flex justify-content-center">
+                <div
+                    th:replace="~{fragments/social-share :: share('/artists/' + ${artist.username}, ${profile.artistName})}">
+                </div>
+            </div>
+
+            <!-- 
+              External Links Suite:
+              Dynamically renders icons/text only for fields that have been populated in the profile editor.
+            -->
+            <div class="d-flex justify-content-center align-items-center mb-0 mt-3 gap-3 flex-wrap">
+                <div th:if="${profile.instagramUrl != null and !profile.instagramUrl.isEmpty()}"
+                    class="small text-muted">
+                    <span class="fw-bold">Instagram:</span>
+                    <a th:href="${profile.instagramUrl}" target="_blank" class="text-primary text-decoration-none"
+                        th:text="${profile.instagramUrl}"></a>
+                </div>
+                <div th:if="${profile.twitterUrl != null and !profile.twitterUrl.isEmpty()}" class="small text-muted">
+                    <span class="fw-bold">Twitter:</span>
+                    <a th:href="${profile.twitterUrl}" target="_blank" class="text-primary text-decoration-none"
+                        th:text="${profile.twitterUrl}"></a>
+                </div>
+                <div th:if="${profile.youtubeUrl != null and !profile.youtubeUrl.isEmpty()}" class="small text-muted">
+                    <span class="fw-bold">YouTube:</span>
+                    <a th:href="${profile.youtubeUrl}" target="_blank" class="text-primary text-decoration-none"
+                        th:text="${profile.youtubeUrl}"></a>
+                </div>
+                <div th:if="${profile.spotifyUrl != null and !profile.spotifyUrl.isEmpty()}" class="small text-muted">
+                    <span class="fw-bold">Spotify:</span>
+                    <a th:href="${profile.spotifyUrl}" target="_blank" class="text-primary text-decoration-none"
+                        th:text="${profile.spotifyUrl}"></a>
+                </div>
+                <div th:if="${profile.websiteUrl != null and !profile.websiteUrl.isEmpty()}" class="small text-muted">
+                    <span class="fw-bold">Website:</span>
+                    <a th:href="${profile.websiteUrl}" target="_blank" class="text-primary text-decoration-none"
+                        th:text="${profile.websiteUrl}"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mb-5">
+        <div class="row">
+            <!-- Top Songs: A vertically stacked list of the artist's most popular uploads. -->
+            <div class="col-md-7 border-end pe-md-4">
+                <h3 class="mb-4 text-primary fw-bold">Top Songs</h3>
+                <div class="list-group list-group-flush" th:if="${not #lists.isEmpty(songs)}">
+                    <a th:each="song : ${songs}" th:href="@{/song/{id}(id=${song.id})}"
+                        class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-3 px-2 rounded hover-item mb-1">
+                        <div class="d-flex align-items-center">
+                            <img th:src="${song.coverArtUrl != null ? song.coverArtUrl : '/images/default-album.svg'}"
+                                style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;"
+                                class="me-3 shadow-sm border border-light">
+                            <div class="flex-column">
+                                <h6 class="mb-0 fw-bold text-dark" th:text="${song.title}">Song Title</h6>
+                                <small class="text-muted"><span th:text="${song.playCount}">0</span> plays • <span
+                                        th:text="${song.genre}">Genre</span></small>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div th:if="${#lists.isEmpty(songs)}" class="alert alert-light text-center">
+                    <p class="text-muted mb-0">No songs uploaded yet.</p>
+                </div>
+            </div>
+
+            <!-- Albums: A grid-based showcase of multi-track collections. -->
+            <div class="col-md-5 ps-md-4 mt-5 mt-md-0">
+                <h3 class="mb-4 text-primary fw-bold">Albums</h3>
+                <div class="row row-cols-2 g-3" th:if="${not #lists.isEmpty(albums)}">
+                    <div class="col" th:each="album : ${albums}">
+                        <a th:href="@{/album/{id}(id=${album.id})}"
+                            class="text-decoration-none text-dark card h-100 shadow-sm border-0 album-card">
+                            <img th:src="${album.coverArtUrl != null ? album.coverArtUrl : '/images/default-album.svg'}"
+                                class="card-img-top" th:alt="${album.name}" style="height: 150px; object-fit: cover;">
+                            <div class="card-body py-2 px-3 bg-light">
+                                <h6 class="card-title text-truncate mb-0 fw-bold" th:text="${album.name}">Album Name
+                                </h6>
+                                <!-- #temporals: Extracts and formats the release year ONLY for high-level display. -->
+                                <small class="text-muted" th:if="${album.releaseDate != null}"
+                                    th:text="${#temporals.format(album.releaseDate, 'yyyy')}">Year</small>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div th:if="${#lists.isEmpty(albums)}" class="alert alert-light text-center">
+                    <p class="text-muted mb-0">No albums published yet.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .hover-item:hover {
+            background-color: #f8f9fa;
+            transform: translateX(5px);
+            transition: all 0.2s;
+        }
+
+        .album-card:hover {
+            transform: translateY(-5px);
+            transition: all 0.2s ease;
+            box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15) !important;
+        }
+    </style>
+
+    <!-- Global Footer -->
+    <div th:replace="~{fragments/layout :: footer}"></div>
+
+    <!-- Social Scripts -->
+    <div th:replace="~{fragments/social-share :: share-scripts}"></div>
+
+    <script th:inline="javascript">
+        /**
+         * Artist Follow System
+         * Handles the community interaction logic (Following/Unfollowing) via Fetch API.
+         */
+        document.addEventListener('DOMContentLoaded', function () {
+            const followBtn = document.querySelector('.follow-btn');
+            if (followBtn) {
+                followBtn.addEventListener('click', function () {
+                    const artistId = this.getAttribute('data-id');
+                    fetch(`/social/follow/${artistId}`, { method: 'POST' })
+                        .then(res => res.json())
+                        .then(isFollowing => {
+                            if (isFollowing) {
+                                this.innerText = 'Following ✅';
+                                this.classList.replace('btn-primary', 'btn-outline-primary');
+                            } else {
+                                this.innerText = 'Follow Artist';
+                                this.classList.replace('btn-outline-primary', 'btn-primary');
+                            }
+                            // Refresh for automated follower count sync and state consistency.
+                            location.reload();
+                        });
+                });
+            }
+        });
+    </script>
+
+</body>
+
+</html>
+

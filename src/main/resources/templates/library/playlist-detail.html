@@ -1,0 +1,132 @@
+<!--
+  Playlist Detail View Template
+  This page displays the contents of a specific user-created playlist.
+  Key Features:
+  - Track Listing: Shows all songs added to the collection with metadata.
+  - Playlist Management: Allows owners to remove songs via POST requests.
+  - Playback Integration: Direct 'Play' button for each track using the global audio system.
+  - Secure Access: Uses #authentication checks to ensure only the owner sees 'Remove' actions.
+  Data Source: PlaylistController -> Playlist playlist.
+-->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <!-- Injects the head fragment with the specific page title. -->
+    <div th:replace="~{fragments/layout :: head('Playlist Detail - RevPlay')}"></div>
+</head>
+
+<body>
+    <!-- Injects the global navigation bar. -->
+    <div th:replace="~{fragments/layout :: navbar}"></div>
+
+    <div id="main-content">
+
+        <div class="container mb-5 mt-4">
+            <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2">
+                <div>
+                    <!-- th:text: Dynamically displays the custom name and description of the playlist entity. -->
+                    <h2 class="text-primary fw-bold mb-1" th:text="${playlist.name}">Playlist Title</h2>
+                    <p class="text-muted mb-0" th:text="${playlist.description}">Playlist Description</p>
+                </div>
+                <div>
+                    <a th:href="@{/library/playlists}" class="btn btn-outline-secondary">Back to Library</a>
+                </div>
+            </div>
+
+            <!-- th:if: Feedback alert for successful removal of tracks. -->
+            <div th:if="${successMessage}" class="alert alert-success mt-3 shadow-sm" th:text="${successMessage}">
+                Success!
+            </div>
+
+            <!-- Empty State UI: Displayed if the songs collection is empty. -->
+            <div th:if="${#lists.isEmpty(playlist.songs)}" class="alert alert-light text-center py-5 border">
+                <h4 class="text-secondary fw-bold mb-3">No Tracks Added</h4>
+                <p class="text-muted">Explore the discovery portal and dynamically click 'Add' to send tracks straight
+                    here.
+                </p>
+                <a th:href="@{/discovery}" class="btn btn-primary mt-3 px-4">Browse Music</a>
+            </div>
+
+            <!-- Track Table: Rendered ONLY if the playlist contains songs. -->
+            <div th:unless="${#lists.isEmpty(playlist.songs)}" class="card shadow-sm border-light">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="bg-light text-muted small text-uppercase">
+                                <tr>
+                                    <th class="ps-4">Cover</th>
+                                    <th>Title</th>
+                                    <th>Artist</th>
+                                    <th>Genre</th>
+                                    <th class="text-end pe-4">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Iterates through each song in the playlist's many-to-many collection. -->
+                                <tr th:each="song : ${playlist.songs}">
+                                    <td class="ps-4">
+                                        <!-- Image Rendering with Dynamic Fallback. -->
+                                        <img th:if="${song.coverArtUrl != null}" th:src="@{${song.coverArtUrl}}"
+                                            style="width: 45px; height: 45px; object-fit: cover;"
+                                            class="rounded border">
+                                        <img th:unless="${song.coverArtUrl != null}"
+                                            th:src="@{/images/default-album.svg}"
+                                            style="width: 45px; height: 45px; object-fit: cover;"
+                                            class="rounded border bg-light">
+                                    </td>
+                                    <td>
+                                        <h6 class="mb-0 fw-bold text-dark" th:text="${song.title}">Song Title</h6>
+                                        <small class="text-muted" th:if="${song.albumId != null}">Album Included</small>
+                                    </td>
+                                    <td>
+                                        <a th:href="@{/artists/{username}(username=${song.artist.username})}"
+                                            class="text-decoration-none text-primary fw-bold"
+                                            th:text="${song.artist.displayName}">Artist Name</a>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-secondary" th:text="${song.genre}">Genre</span>
+                                    </td>
+                                    <td class="text-end pe-4 d-flex justify-content-end align-items-center">
+                                        <!-- 
+                                          Security Check:
+                                          - th:if: Compares the logged-in user's name with the playlist owner's username 
+                                            to decide whether to show the 'Remove' option.
+                                        -->
+                                        <form
+                                            th:if="${#authentication != null and #authentication.name == playlist.user.username}"
+                                            th:action="@{/library/api/playlists/{playlistId}/remove/{songId}(playlistId=${playlist.id}, songId=${song.id})}"
+                                            method="post" class="me-2 mb-0"
+                                            onsubmit="return confirmAction('Remove this song from your playlist?', this);">
+                                            <button type="submit" class="btn btn-outline-danger btn-sm">Remove</button>
+                                        </form>
+
+                                        <!-- 
+                                          Global Play Button:
+                                          - th:data-*: Binds track metadata to attributes for JavaScript access.
+                                          - onclick: Calls the client-side playGlobalAudio() function for instant playback.
+                                        -->
+                                        <button th:if="${song.audioUrl != null}"
+                                            class="btn btn-sm btn-primary fw-bold me-1 text-white shadow"
+                                            th:data-song-id="${song.id}" th:data-audio-url="${song.audioUrl}"
+                                            th:data-title="${song.title}"
+                                            th:data-artist="${song.artist != null ? (song.artist.displayName ?: song.artist.username) : 'Unknown Artist'}"
+                                            th:data-cover="${song.coverArtUrl != null ? song.coverArtUrl : '/images/default-album.svg'}"
+                                            onclick="playGlobalAudio(this.getAttribute('data-song-id'), this.getAttribute('data-audio-url'), this.getAttribute('data-title'), this.getAttribute('data-artist'), this.getAttribute('data-cover'))">
+                                            ▶
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- /#main-content -->
+
+    <!-- Injects the layout's global footer. -->
+    <div th:replace="~{fragments/layout :: footer}"></div>
+</body>
+
+</html>

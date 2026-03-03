@@ -1,187 +1,440 @@
+/* RevPlay - Global Design System & Responsive Framework */
+
 :root {
-    --primary-orange: #FF8C00;
-    --bg-white: #FFFFFF;
-    --bg-snow: #F8F9FA;
-    --text-charcoal: #1A1A1A;
-    --text-gray: #6C757D;
-    --border-light: #E9ECEF;
-    --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    --primary-color: #FF6600;
+    /* Revature Orange */
+    --primary-hover: #E55D00;
+    --primary-soft: rgba(255, 102, 0, 0.1);
+    --background-color: #FFFFFF;
+    --text-color: #1A1A1A;
+    --text-muted: #6B7280;
+    --border-color: #E5E7EB;
+    --light-bg: #F9FAFB;
+    --player-height: 90px;
+    --player-height-mobile: 130px;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+    /* Bootstrap Primary Overrides */
+    --bs-primary: #FF6600;
+    --bs-primary-rgb: 255, 102, 0;
+    --bs-link-color: #FF6600;
+    --bs-link-hover-color: #E55D00;
 }
 
-/* ============================================================
-   Bootstrap Button Overrides
-   ============================================================ */
-.btn-orange {
-    background-color: var(--primary-orange);
-    color: white;
-    border: none;
-    border-radius: 50px;
-    padding: 0.8rem 1.8rem;
-    font-weight: 600;
-}
-
-.btn-orange:hover {
-    background-color: #e67e22;
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(255, 140, 0, 0.4);
-}
-
-.btn-outline-orange {
-    background: transparent;
-    color: var(--primary-orange);
-    border: 2px solid var(--primary-orange);
-    border-radius: 50px;
-    padding: 0.8rem 1.8rem;
-    font-weight: 600;
-}
-
-.btn-outline-orange:hover {
-    background: var(--primary-orange);
-    color: white;
-}
-
-/* ============================================================
-   Base / Global
-   ============================================================ */
+/* Base resets & eager typography */
 body {
-    font-family: 'Trebuchet MS', sans-serif;
-    background-color: var(--bg-snow);
-    color: var(--text-charcoal);
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
     margin: 0;
+    padding: 0;
+    padding-bottom: var(--player-height);
+    /* Prevent content overlap by player */
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
 }
 
-a {
-    text-decoration: none;
-    color: inherit;
+@media (max-width: 768px) {
+    body {
+        padding-bottom: var(--player-height-mobile);
+    }
 }
 
-.orange-text {
-    color: var(--primary-orange);
+/* Global Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
 }
 
-/* ============================================================
-   Navigation
-   ============================================================ */
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 102, 0, 0.4);
+    border-radius: 10px;
+    transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 102, 0, 0.8);
+}
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 102, 0, 0.6) transparent;
+}
+
+/* Smooth transitions for all interactive elements */
+a,
+button,
+input,
+.card,
+.nav-link {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* --- Layout --- */
+#main-content {
+    min-height: calc(100vh - 70px - var(--player-height));
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+/* --- Range Sliders (Seek/Volume) Fix & Polish --- */
+.player-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 6px;
+    background: #e9ecef;
+    border-radius: 5px;
+    outline: none;
+    cursor: pointer;
+}
+
+.player-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    cursor: grab;
+    transition: transform 0.1s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.player-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.3);
+}
+
+.player-slider::-webkit-slider-thumb:active {
+    cursor: grabbing;
+    transform: scale(1.5);
+    background: var(--primary-hover);
+}
+
+.player-slider::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    cursor: grab;
+    border: none;
+}
+
+/* --- Navigation --- */
 .navbar {
-    background: var(--bg-white);
-    border-bottom: 2px solid var(--primary-orange);
-    z-index: 1000;
-    padding-top: 0.25rem !important;
-    padding-bottom: 0.25rem !important;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.7) !important;
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 0.75rem 0;
+    z-index: 1050;
 }
 
-.logo {
-    font-size: 1.4rem;
+#main-content {
+    margin-top: 70px;
+    /* Offset for fixed navbar */
+}
+
+.navbar-brand {
     font-weight: 800;
-    color: var(--primary-orange);
-    letter-spacing: -1px;
-}
-
-.logo span {
-    color: var(--text-charcoal);
+    letter-spacing: -0.5px;
+    color: var(--text-color) !important;
 }
 
 .nav-link {
-    transition: 0.2s;
+    color: var(--text-color) !important;
+    font-weight: 500;
+    font-size: 0.95rem;
+    padding: 0.5rem 1rem !important;
 }
 
-.nav-link:hover {
-    color: var(--primary-orange) !important;
+.nav-link:hover,
+.nav-link.active {
+    color: var(--primary-color) !important;
 }
 
-/* ============================================================
-   Hero Section
-   ============================================================ */
-.hero {
-    padding: 1.5rem 1rem;
-    text-align: center;
-    background: linear-gradient(180deg, var(--bg-white) 0%, var(--bg-snow) 100%);
+/* --- Cards & Containers --- */
+.card {
+    border: 1px solid rgba(0, 0, 0, 0.05) !important;
+    border-radius: 0.75rem !important;
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    background: #fff;
+    transition: all 0.3s ease;
 }
 
-.hero h1 {
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
+.card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
 }
 
-/* ============================================================
-   Auth Pages (Login / Register)
-   ============================================================ */
-.auth-container {
-    max-width: 450px;
-    margin: 5rem auto;
-    background: var(--bg-white);
-    padding: 3rem;
-    border-radius: 30px;
-    box-shadow: var(--card-shadow);
-    border: 1px solid var(--border-light);
+.card-header {
+    background-color: white;
+    border-bottom: 1px solid var(--border-color);
+    font-weight: 700;
+    padding: 1.25rem;
 }
 
-/* ============================================================
-   Artist Banner
-   ============================================================ */
-.banner-container {
-    height: 250px;
+/* Glass & Modal Effects */
+.modal-content {
+    background: rgba(255, 255, 255, 0.7) !important;
+    backdrop-filter: blur(25px) saturate(200%);
+    -webkit-backdrop-filter: blur(25px) saturate(200%);
+    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    border-radius: 0.5rem !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
 }
 
-/* ============================================================
-   Toast Notification
-   ============================================================ */
-.toast {
-    position: fixed;
-    bottom: 2rem;
-    right: 2rem;
-    background: var(--primary-orange);
-    color: white;
-    padding: 1rem 2rem;
+.modal-backdrop {
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    background-color: rgba(0, 0, 0, 0.4) !important;
+}
+
+.hover-bg-light:hover {
+    background-color: rgba(255, 102, 0, 0.08) !important;
+    border-radius: 0.5rem;
+}
+
+/* --- Buttons --- */
+.btn {
+    border-radius: 0.625rem;
+    font-weight: 600;
+    padding: 0.6rem 1.25rem;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 10px rgba(255, 102, 0, 0.2);
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 15px rgba(255, 102, 0, 0.3);
+}
+
+/* --- Tables --- */
+.table {
+    margin-bottom: 0;
+}
+
+.table thead th {
+    background-color: var(--light-bg);
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--border-color);
+    padding: 1rem;
+}
+
+.table tbody td {
+    padding: 1rem;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* --- Player Specific (Moved from Inline for Eager Loading) --- */
+#global-music-player {
+    height: var(--player-height);
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(15px);
+    border-top: 1px solid var(--border-color) !important;
+    z-index: 2000;
+}
+
+@media (max-width: 768px) {
+    #global-music-player {
+        height: auto;
+        padding-top: 0.5rem;
+    }
+
+    .player-controls-row {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
+
+.player-middle-column {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+@media (min-width: 1200px) {
+    .player-middle-column {
+        max-width: 700px;
+    }
+}
+
+.player-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 4px;
+    background: #E5E7EB;
+    border-radius: 999px;
+    cursor: pointer;
+}
+
+.player-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 12px;
+    height: 12px;
+    background: var(--primary-color);
+    border-radius: 50%;
+    border: 2px solid white;
+    box-shadow: var(--shadow-sm);
+}
+
+/* --- Player Responsive Utilities --- */
+.player-img-container img {
+    width: 45px;
+    height: 45px;
+}
+
+@media (min-width: 768px) {
+    .player-img-container img {
+        width: 55px;
+        height: 55px;
+    }
+}
+
+.player-title {
+    font-size: 0.85rem;
+}
+
+@media (min-width: 768px) {
+    .player-title {
+        font-size: 0.95rem;
+    }
+}
+
+.player-play-btn {
+    width: 40px;
+    height: 40px;
+}
+
+@media (min-width: 768px) {
+    .player-play-btn {
+        width: 45px;
+        height: 45px;
+    }
+}
+
+.player-icon-sm {
+    font-size: 1.1rem;
+}
+
+@media (min-width: 768px) {
+    .player-icon-sm {
+        font-size: 1.25rem;
+    }
+}
+
+.player-action-icon {
+    font-size: 1.2rem;
+}
+
+@media (min-width: 768px) {
+    .player-action-icon {
+        font-size: 1.4rem;
+    }
+}
+
+.player-secondary-icon {
+    font-size: 1.4rem;
+}
+
+@media (min-width: 768px) {
+    .player-secondary-icon {
+        font-size: 1.6rem;
+    }
+}
+
+.player-dropdown-header {
+    font-size: 0.7rem;
+}
+
+@media (min-width: 768px) {
+    .player-dropdown-header {
+        font-size: 0.75rem;
+    }
+}
+
+.song-card-small {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.song-card-small:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md) !important;
+}
+
+.container-scroll {
+    max-height: 500px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.container-scroll::-webkit-scrollbar {
+    width: 6px;
+}
+
+.container-scroll::-webkit-scrollbar-thumb {
+    background: #e5e7eb;
     border-radius: 10px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-    animation: slideIn 0.5s forwards;
 }
 
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.glass-card {
+    background: rgba(255, 255, 255, 0.8) !important;
+    backdrop-filter: blur(12px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(12px) saturate(180%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.45) !important;
 }
 
-/* ============================================================
-   Responsive — Tablet (max 991.98px)
-   ============================================================ */
-@media (max-width: 991.98px) {
-    .navbar {
-        padding: 0.2rem 0.5rem !important;
-    }
-
-    .hero h1 {
-        font-size: 2.5rem;
-    }
+.hover-lift {
+    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
-/* ============================================================
-   Responsive — Mobile (max 767.98px)
-   ============================================================ */
-@media (max-width: 767.98px) {
-    .hero h1 {
-        font-size: 2rem;
-    }
+.hover-lift:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08) !important;
+}
 
-    .hero p {
-        font-size: 1rem !important;
-    }
+/* --- Auth Pages Specific --- */
+.auth-body {
+    background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%) !important;
+    height: 100vh !important;
+    overflow: hidden !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding-bottom: 0 !important;
+}
 
-    .auth-container {
-        margin: 2rem 1rem;
-        padding: 2rem !important;
-    }
+.auth-card {
+    background: rgba(255, 255, 255, 0.85) !important;
+    backdrop-filter: blur(15px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    border-radius: 1rem !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1) !important;
+    transition: none !important;
+    transform: none !important;
+}
 
-    .banner-container {
-        height: 140px;
-    }
+.auth-card:hover {
+    transform: none !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1) !important;
 }

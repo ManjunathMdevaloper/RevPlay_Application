@@ -1,0 +1,162 @@
+<!--
+  Top Charts / Trending Template
+  This page showcases the highest-performing content on the platform.
+  Sections:
+  - Trending Tracks: A ranked table of songs sorted by lifetime play counts.
+  - Hottest Artists: A curated list of artists with the highest engagement or follower growth.
+  Features:
+  - Play All: A JavaScript-driven action that aggregates all trending tracks into the global player.
+  - Dynamic Ranking: Uses Thymeleaf iteration status for automated numbering (1, 2, 3...).
+  Data Source: DiscoveryController -> List<Song> topSongs, List<User> topArtists.
+-->
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <!-- Injects the standard head fragment for consistent styling and SEO. -->
+    <div th:replace="~{fragments/layout :: head('Top Charts - RevPlay')}"></div>
+</head>
+
+<body>
+
+
+    <!-- Injects the global navigation bar. -->
+    <div th:replace="~{fragments/layout :: navbar}"></div>
+
+    <div id="main-content">
+
+        <div class="container mb-5 mt-4">
+            <div class="text-center mb-5">
+                <h1 class="text-primary fw-bold display-4">Top Charts</h1>
+                <p class="lead text-muted">The most popular tracks and artists on RevPlay today.</p>
+            </div>
+
+            <div class="row g-5">
+                <!-- Top Songs Section -->
+                <div class="col-lg-8">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h3 class="mb-0 text-dark fw-bold border-start border-primary border-4 ps-3">Trending Tracks
+                        </h3>
+                        <!-- th:if: Only shows the play button if songs actually exist in the chart. -->
+                        <button id="playAllTrending" class="btn btn-primary btn-sm rounded-pill px-3 shadow-sm"
+                            th:if="${not #lists.isEmpty(topSongs)}">▶ Play All</button>
+                    </div>
+                    <div class="card shadow-sm border-light">
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle mb-0">
+                                    <thead class="bg-light text-muted small text-uppercase">
+                                        <tr>
+                                            <th class="ps-4">Rank</th>
+                                            <th>Track</th>
+                                            <th class="d-none d-md-table-cell">Genre</th>
+                                            <th>Streams</th>
+                                            <th class="text-end pe-4">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- 
+                                          Trending Songs Loop:
+                                          - th:each="song, iter : ${topSongs}":
+                                          - iter: Status variable used for rank calculation.
+                                          - th:text="${iter.count}": Automatically generates the 1-based rank number.
+                                        -->
+                                        <tr th:each="song, iter : ${topSongs}">
+                                            <td class="ps-4 fw-bold text-primary" th:text="${iter.count}">1</td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <img th:if="${song.coverArtUrl != null}"
+                                                        th:src="@{${song.coverArtUrl}}"
+                                                        style="width: 45px; height: 45px; object-fit: cover;"
+                                                        class="rounded border me-3">
+                                                    <img th:unless="${song.coverArtUrl != null}"
+                                                        th:src="@{/images/default-album.svg}"
+                                                        style="width: 45px; height: 45px; object-fit: cover;"
+                                                        class="rounded border me-3 bg-light">
+                                                    <div class="text-truncate" style="max-width: 200px;">
+                                                        <h6 class="mb-0 fw-bold" th:text="${song.title}">Title</h6>
+                                                        <!-- Uses artist's username for profile routing. -->
+                                                        <small class="text-muted"><a
+                                                                th:href="@{/artists/{user}(user=${song.artist.username})}"
+                                                                th:text="${song.artist.displayName}">Artist</a></small>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="d-none d-md-table-cell">
+                                                <span class="badge bg-secondary" th:text="${song.genre}">Pop</span>
+                                            </td>
+                                            <!-- th:text="${song.playCount}": Directly reflects the database stream count. -->
+                                            <td class="fw-bold" th:text="${song.playCount}">25,000</td>
+                                            <td class="text-end pe-4">
+                                                <!-- Global Play Integration. Metadata is passed to JS via data attributes. -->
+                                                <button class="btn btn-primary btn-sm rounded-circle shadow-sm"
+                                                    th:if="${song.audioUrl != null}" th:data-song-id="${song.id}"
+                                                    th:data-audio-url="${song.audioUrl}" th:data-title="${song.title}"
+                                                    th:data-artist="${song.artist != null ? song.artist.displayName : 'Unknown'}"
+                                                    th:data-cover="${song.coverArtUrl != null ? song.coverArtUrl : '/images/default-album.svg'}"
+                                                    onclick="playGlobalAudio(this.getAttribute('data-song-id'), this.getAttribute('data-audio-url'), this.getAttribute('data-title'), this.getAttribute('data-artist'), this.getAttribute('data-cover'))">
+                                                    ▶
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Top Artists Section -->
+                <div class="col-lg-4">
+                    <h3 class="mb-4 text-dark fw-bold border-start border-primary border-4 ps-3">Hottest Artists</h3>
+                    <div class="list-group shadow-sm">
+                        <!-- Iterates through the top artists list. -->
+                        <div th:each="artist, iter : ${topArtists}"
+                            class="list-group-item list-group-item-action d-flex align-items-center py-3">
+                            <span class="fw-bold text-muted me-3" th:text="${iter.count}">1</span>
+                            <img th:if="${artist.profilePictureUrl != null}" th:src="@{${artist.profilePictureUrl}}"
+                                style="width: 50px; height: 50px; object-fit: cover;"
+                                class="rounded-circle border me-3">
+                            <img th:unless="${artist.profilePictureUrl != null}" th:src="@{/images/default-profile.svg}"
+                                style="width: 50px; height: 50px; object-fit: cover;"
+                                class="rounded-circle border me-3">
+                            <div class="text-truncate">
+                                <h6 class="mb-0 fw-bold" th:text="${artist.displayName}">Name</h6>
+                                <a th:href="@{/artists/{u}(u=${artist.username})}"
+                                    class="small text-primary text-decoration-none fw-medium">View Profile</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        /            * Play All Trending Logi            * Scans the table for all playable tracks and sends the collection to the Global Player componen            */
+        document.getElementById('playAllTrending')?.addEventListener('click', function () {
+            const songs = [];
+            document.querySelectorAll('table tbody tr').forEach(tr => {
+                const btn = tr.querySelector('button[onclick^="playGlobalAudio"]');
+                if (btn) {
+                    songs.push({
+                        id: btn.getAttribute('data-song-id'),
+                        url: btn.getAttribute('data-audio-url'),
+                        title: btn.getAttribute('data-title'),
+                        artist: btn.getAttribute('data-artist'),
+                        cover: btn.getAttribute('data-cover')
+                    });
+                }
+            });
+            if (songs.length > 0 && window.Player) {
+                window.Player.playSong(songs[0].id, songs);
+            }
+        });
+    </script>
+    </div><!-- /#main-content -->
+
+    <div th:replace="~{fragments/layout :: footer}"></div>
+
+</body>
+
+</html>

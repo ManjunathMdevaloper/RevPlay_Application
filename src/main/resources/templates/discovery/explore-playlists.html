@@ -1,0 +1,259 @@
+<!--
+  Explore Community Playlists Template
+  This page serves as a discovery hub for public playlists shared by the community.
+  Features:
+  - Search/Filter: Real-time search for public collections via keywords.
+  - Playlist Grid: Card-based layout displaying owner details and track counts.
+  - Eager Loading: Track data is pre-populated in hidden divs by Thymeleaf for instant modal rendering.
+  - Interactive Modal: Populates dynamically using JS to show song lists and 'Play All' functionality.
+  Data Source: PlaylistController -> List<Playlist> publicPlaylists.
+-->
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <!-- Injects head fragment with the specific page title. -->
+    <div th:replace="~{fragments/layout :: head('Explore Playlists - RevPlay')}"></div>
+</head>
+
+<body>
+
+
+    <!-- Injects global navigation bar. -->
+    <div th:replace="~{fragments/layout :: navbar}"></div>
+
+    <div id="main-content">
+        <div class="container py-5">
+            <!-- Header & Search -->
+            <div class="mb-5 text-center">
+                <h2 class="fw-bold text-dark mb-4">Discover Community Playlists</h2>
+                <form th:action="@{/discovery}" method="get" class="row g-2 justify-content-center">
+                    <div class="col-md-8">
+                        <div class="shadow-sm rounded-pill overflow-hidden border d-flex align-items-center px-4 bg-white"
+                            style="height: 50px;">
+                            <!-- th:value="${query}": Retains the search term in the input box after submission. -->
+                            <input type="text" name="q" class="form-control border-0 bg-white" th:value="${query}"
+                                placeholder="Search for playlists..." style="box-shadow: none;">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn w-100 rounded-pill fw-bold text-white shadow"
+                            style="height: 50px; background: linear-gradient(45deg, #FF6600, #FF9900); border: none;">
+                            SEARCH
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Public Playlists Grid -->
+            <div>
+                <!-- th:if/th:unless: Changes the heading based on whether the user is searching or just browsing. -->
+                <h4 class="fw-bold mb-4 text-dark" th:if="${query == null}"><i class="me-2 text-primary">📂</i> Trending
+                    Community Playlists</h4>
+                <h4 class="fw-bold mb-4 text-dark" th:unless="${query == null}">
+                    <i class="me-2 text-primary">🔍</i> Search Results for "<span th:text="${query}">query</span>"
+                </h4>
+
+                <!-- th:if: Wraps the grid to handle cases with no results. -->
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4"
+                    th:if="${not #lists.isEmpty(publicPlaylists)}">
+                    <!-- th:each: Iterates through the list of public Playlist entities. -->
+                    <div class="col" th:each="playlist : ${publicPlaylists}">
+                        <!-- 
+                          Playlist Card:
+                          - th:data-*: Binds metadata (id, name, owner) for the showPlaylistDetails() JS function.
+                          - onclick: Triggers the modal view for this specific playlist.
+                        -->
+                        <div class="card h-100 border-0 shadow-sm rounded-4 playlist-card overflow-hidden transition-all hover-transform"
+                            style="cursor: pointer;" th:data-id="${playlist.id}" th:data-name="${playlist.name}"
+                            th:data-desc="${playlist.description}" th:data-owner="${playlist.user.displayName}"
+                            th:data-owner-pfp="${playlist.user.profilePictureUrl != null ? playlist.user.profilePictureUrl : '/images/default-profile.svg'}"
+                            onclick="showPlaylistDetails(this)">
+                            <div class="card-body p-4 d-flex flex-column">
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <h5 class="fw-bold text-dark mb-0 text-truncate" th:text="${playlist.name}">Playlist
+                                        Name</h5>
+                                    <!-- Displays the number of tracks directly in a badge. -->
+                                    <span class="badge bg-light text-primary border rounded-pill small"
+                                        th:text="${playlist.songs.size()}">0</span>
+                                </div>
+                                <p class="text-muted small flex-grow-1 mb-3 text-clamp-2"
+                                    th:text="${playlist.description}">Description</p>
+                                <div class="d-flex align-items-center justify-content-between mt-auto">
+                                    <div class="d-flex align-items-center">
+                                        <!-- Displays the curator's profile picture or default. -->
+                                        <img th:src="${playlist.user.profilePictureUrl != null ? playlist.user.profilePictureUrl : '/images/default-profile.svg'}"
+                                            class="rounded-circle me-2 border" width="24" height="24">
+                                        <small class="text-secondary fw-bold"
+                                            th:text="${playlist.user.displayName}">User</small>
+                                    </div>
+                                    <span class="badge rounded-pill px-3 py-2 shadow-sm"
+                                        style="background: #FF6600; font-size: 0.75rem;">Explore</span>
+                                </div>
+
+                                <!-- 
+                                  Hidden Data Storage:
+                                  - Why: Eagerly loads track details into the DOM so the modal can populate instantly.
+                                  - This avoids secondary fetch calls for every playlist clicked.
+                                -->
+                                <div class="playlist-songs-data d-none">
+                                    <div th:each="song : ${playlist.songs}" th:data-song-id="${song.id}"
+                                        th:data-title="${song.title}"
+                                        th:data-artist="${song.artist != null ? (song.artist.displayName ?: song.artist.username) : 'Unknown'}"
+                                        th:data-url="${song.audioUrl}"
+                                        th:data-cover="${song.coverArtUrl != null ? song.coverArtUrl : '/images/default-album.svg'}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fallback UI for empty results or empty catalog. -->
+                <div class="text-center py-5" th:if="${#lists.isEmpty(publicPlaylists)}">
+                    <div class="display-1 opacity-25 mb-4">📂</div>
+                    <h3 class="text-dark fw-bold">No public playlists found</h3>
+                    <p class="text-muted" th:if="${query != null}">Try a different search term or browse existing ones.
+                    </p>
+                    <p class="text-muted" th:unless="${query != null}">Be the first to create and share a collection!
+                    </p>
+                    <a th:href="@{/discovery}" th:if="${query != null}"
+                        class="btn btn-outline-primary rounded-pill px-4 mt-3">View All</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Details Modal: Content is managed via vanilla JS based on the attributes of the clicked card. -->
+        <div class="modal fade" id="playlistDetailsModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-md">
+                <div class="modal-content border-0 shadow-2xl rounded-5 overflow-hidden glass-card">
+                    <div class="modal-header border-0 pb-0 pt-4 px-4 d-flex justify-content-between align-items-start">
+                        <div class="d-flex align-items-center gap-3">
+                            <img id="modalPlaylistOwnerPfp" src="/images/default-profile.svg"
+                                class="rounded-circle shadow-sm border"
+                                style="width: 50px; height: 50px; object-fit: cover;">
+                            <div>
+                                <h4 id="modalPlaylistName" class="fw-bold text-dark mb-0">Playlist Name</h4>
+                                <small class="text-muted fw-bold">Curated by <span id="modalPlaylistOwner"
+                                        class="text-primary">Owner</span></small>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body px-4 pb-4 pt-3">
+                        <p id="modalPlaylistDesc" class="text-muted small mb-4 bg-light p-3 rounded-4 border"
+                            style="line-height: 1.5;"></p>
+                        <div class="d-flex justify-content-between align-items-end mb-3">
+                            <h6 class="fw-bold mb-0 text-dark">Included Tracks</h6>
+                            <button id="modalPlaylistPlayAll"
+                                class="btn btn-primary btn-sm rounded-pill px-3 fw-bold border-0 shadow-sm"
+                                style="font-size: 0.75rem; background: #FF6600;">Play All Tracks</button>
+                        </div>
+                        <div id="modalPlaylistSongsList" class="container-scroll pe-2"
+                            style="max-height: 280px; overflow-y: auto;">
+                            <!-- Populated dynamically via showPlaylistDetails() script below. -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <style>
+            .hover-transform:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+            }
+
+            .text-clamp-2 {
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+            }
+        </style>
+
+        <script>
+            /**
+             * Populates and triggers the Playlist details modal.
+             * Reads data from the clicked card's data attributes and the hidden eager-loaded track storage.
+             */
+            function showPlaylistDetails(element) {
+                const name = element.getAttribute('data-name');
+                const desc = element.getAttribute('data-desc');
+                const owner = element.getAttribute('data-owner');
+                const ownerPfp = element.getAttribute('data-owner-pfp');
+
+                document.getElementById('modalPlaylistName').innerText = name;
+                document.getElementById('modalPlaylistOwner').innerText = owner;
+                document.getElementById('modalPlaylistOwnerPfp').src = ownerPfp;
+
+                const descEl = document.getElementById('modalPlaylistDesc');
+                if (desc && desc.trim() !== '') {
+                    descEl.innerText = desc;
+                    descEl.classList.remove('d-none');
+                } else {
+                    descEl.classList.add('d-none');
+                }
+
+                const songsList = document.getElementById('modalPlaylistSongsList');
+                songsList.innerHTML = '';
+
+                const allSongs = [];
+                const songsData = element.querySelectorAll('.playlist-songs-data div');
+
+                if (songsData.length === 0) {
+                    songsList.innerHTML = '<p class="text-muted text-center small py-4">No tracks have been added to this playlist yet.</p>';
+                    document.getElementById('modalPlaylistPlayAll').style.display = 'none';
+                } else {
+                    document.getElementById('modalPlaylistPlayAll').style.display = 'block';
+                    songsData.forEach((song, index) => {
+                        const sId = song.getAttribute('data-song-id');
+                        const sTitle = song.getAttribute('data-title');
+                        const sArtist = song.getAttribute('data-artist');
+                        const sUrl = song.getAttribute('data-url');
+                        const sCover = song.getAttribute('data-cover');
+
+                        if (sUrl) allSongs.push({ id: sId, url: sUrl, title: sTitle, artist: sArtist, cover: sCover });
+
+                        const songRow = document.createElement('div');
+                        songRow.className = "d-flex align-items-center justify-content-between p-2 mb-2 bg-white rounded-3 border transition-all hover-transform shadow-sm";
+                        songRow.innerHTML = `
+                            <div class="d-flex align-items-center overflow-hidden">
+                                <span class="text-muted mx-2 small fw-bold" style="min-width: 20px;">${index + 1}</span>
+                                <div class="text-truncate">
+                                    <h6 class="mb-0 fw-bold small text-dark text-truncate">${sTitle}</h6>
+                                    <small class="text-muted small text-truncate" style="font-size: 0.7rem;">${sArtist}</small>
+                                </div>
+                            </div>
+                            ${sUrl ? `<button class="btn btn-sm rounded-circle p-0 d-flex align-items-center justify-content-center shadow-none flex-shrink-0 mx-2" style="width: 32px; height: 32px; background: #FF6600; color: white; border: none;" onclick="event.stopPropagation(); playModalAudio('${sId}')">▶</button>` : '<span class="badge bg-light text-muted border-0 small">N/A</span>'}
+                        `;
+                        songsList.appendChild(songRow);
+                    });
+                }
+
+                window.currentModalSongs = allSongs;
+
+                document.getElementById('modalPlaylistPlayAll').onclick = function (e) {
+                    e.stopPropagation();
+                    if (allSongs.length > 0) {
+                        playModalAudio(allSongs[0].id);
+                        bootstrap.Modal.getInstance(document.getElementById('playlistDetailsModal')).hide();
+                    }
+                };
+
+                const modal = new bootstrap.Modal(document.getElementById('playlistDetailsModal'));
+                modal.show();
+            }
+        </script>
+
+    </div><!-- /#main-content -->
+
+    <div th:replace="~{fragments/layout :: footer}"></div>
+
+
+</body>
+
+</html>

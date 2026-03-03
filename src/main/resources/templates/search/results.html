@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <div th:replace="~{fragments/layout :: head('Search Results - RevPlay')}"></div>
+</head>
+
+<body>
+
+    <div th:replace="~{fragments/layout :: navbar}"></div>
+
+    <div id="main-content">
+
+    <div class="container mb-5 mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="text-primary fw-bold">Search Results for "<span th:text="${keyword}"></span>"</h2>
+            <a th:href="@{/search/filter}" class="btn btn-outline-primary">Advanced Filter</a>
+        </div>
+
+        <!-- No Results -->
+        <div th:if="${results.isEmpty()}" class="alert alert-warning text-center py-5">
+            <h4>No results found</h4>
+            <p class="mb-0">Try searching for something else or browse categories.</p>
+        </div>
+
+        <!-- Songs -->
+        <div th:if="${not #lists.isEmpty(results.songs)}" class="mb-5">
+            <h4 class="mb-3 text-secondary border-bottom pb-2">Songs</h4>
+            <div class="list-group">
+                <a th:each="song : ${results.songs}" th:href="@{/song/{id}(id=${song.id})}"
+                    class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-3">
+                    <div class="d-flex align-items-center">
+                        <img th:if="${song.coverArtUrl != null}" th:src="@{${song.coverArtUrl}}"
+                            style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;" class="me-3">
+                        <img th:unless="${song.coverArtUrl != null}" th:src="@{/images/default-album.svg}"
+                            style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;" class="me-3">
+                        <div>
+                            <h5 class="mb-1 text-dark" th:text="${song.title}">Song Title</h5>
+                            <small class="text-muted" th:text="${song.artist.displayName}">Artist</small>
+                        </div>
+                    </div>
+                    <span class="badge bg-primary rounded-pill" th:text="${song.genre}">Genre</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Artists -->
+        <div th:if="${not #lists.isEmpty(results.artists)}" class="mb-5">
+            <h4 class="mb-3 text-secondary border-bottom pb-2">Artists</h4>
+            <div class="row row-cols-2 row-cols-md-4 g-4">
+                <div class="col" th:each="artist : ${results.artists}">
+                    <a th:href="@{/artists/{username}(username=${artist.username})}"
+                        class="text-decoration-none text-dark card h-100 shadow-sm border-0 text-center py-3 hover-card">
+                        <div class="card-body">
+                            <img th:if="${artist.profilePictureUrl != null}" th:src="@{${artist.profilePictureUrl}}"
+                                style="width: 100px; height: 100px; object-fit: cover;"
+                                class="rounded-circle mb-3 border border-3 border-primary">
+                            <img th:unless="${artist.profilePictureUrl != null}" th:src="@{/images/default-profile.svg}"
+                                style="width: 100px; height: 100px; object-fit: cover;"
+                                class="rounded-circle mb-3 border border-3 border-light shadow-sm">
+                            <h5 class="card-title fw-bold" th:text="${artist.displayName}">Artist Name</h5>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Albums -->
+        <div th:if="${not #lists.isEmpty(results.albums)}" class="mb-5">
+            <h4 class="mb-3 text-secondary border-bottom pb-2">Albums</h4>
+            <div class="row row-cols-2 row-cols-md-4 g-4">
+                <div class="col" th:each="album : ${results.albums}">
+                    <a th:href="@{/album/{id}(id=${album.id})}"
+                        class="text-decoration-none text-dark card h-100 shadow-sm border-0 hover-card">
+                        <img th:if="${album.coverArtUrl != null}" th:src="@{${album.coverArtUrl}}" class="card-img-top"
+                            th:alt="${album.name}" style="height: 200px; object-fit: cover;">
+                        <img th:unless="${album.coverArtUrl != null}" th:src="@{/images/default-album.svg}"
+                            class="card-img-top" th:alt="${album.name}" style="height: 200px; object-fit: cover;">
+                        <div class="card-body bg-light">
+                            <h5 class="card-title text-truncate mb-1" th:text="${album.name}">Album Name</h5>
+                            <p class="card-text text-muted small mb-0" th:text="${album.artist.displayName}">Artist Name
+                            </p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <style>
+        .hover-card:hover {
+            transform: translateY(-5px);
+            transition: all 0.3s ease;
+            box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15) !important;
+        }
+    </style>
+</div><!-- /#main-content -->
+
+    </div><!-- /#main-content -->
+
+<div th:replace="~{fragments/layout :: footer}"></div>
+
+</body>
+
+</html>
