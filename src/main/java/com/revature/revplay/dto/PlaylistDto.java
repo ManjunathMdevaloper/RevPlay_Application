@@ -22,9 +22,29 @@ import lombok.Builder;
 @AllArgsConstructor
 @Builder
 
-// ####################################### Person4 CODE START #########################################
 public class PlaylistDto {
+    /**
+     * Unique identifier for the collection, used mainly during update and delete
+     * actions.
+     */
+    private Long id;
 
+    /**
+     * The public-facing name of the playlist, chosen by the creator.
+     */
+    private String name;
+
+    /**
+     * A creative brief or summary of the music theme within this specific
+     * collection.
+     */
+    private String description;
+
+    /**
+     * A flag determining if other users on the platform can discover and listen to
+     * this list.
+     * If true, it will appear in global discovery; if false, it remains strictly
+     * private.
+     */
+    private boolean isPublic;
 }
-
-// ######################################## Person4 CODE END ##########################################
