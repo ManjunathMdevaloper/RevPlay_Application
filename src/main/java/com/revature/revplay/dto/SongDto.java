@@ -1,3 +1,4 @@
+// ####################################### Person1 CODE START #########################################
 package com.revature.revplay.dto;
 
 import lombok.Data;
@@ -22,9 +23,24 @@ import lombok.Builder;
 @AllArgsConstructor
 @Builder
 
-// ####################################### Person5 CODE START #########################################
+
 public class SongDto {
+    /**
+     * Unique track identification and descriptive naming fields.
+     * These identify the song within the global library and define its public
+     * title.
+     */
+    private Long id;
+    private String title;
 
+    /**
+     * Categorization fields that help the discovery and search engines.
+     * This links the track to its parental project (Album) and its musical style
+     * (Genre).
+     * The duration field ensures the user knows the length of the listening
+     * experience.
+     */
+    private Long albumId;
+    private String genre;
+    private Integer duration;
 }
-
-// ######################################## Person5 CODE END ##########################################
