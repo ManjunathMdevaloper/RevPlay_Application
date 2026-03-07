@@ -1,3 +1,4 @@
+
 package com.revature.revplay.dto;
 
 import lombok.Data;
@@ -22,8 +23,24 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 
-// ####################################### Person5 CODE START #########################################
 public class AlbumDto {
+    /**
+     * The official title of the musical project as it will appear in searches and
+     * on artist pages.
+     */
+    private String name;
+
+    /**
+     * A creative biography or summary providing context for the musical theme of
+     * the album.
+     */
+    private String description;
+
+    /**
+     * The chronological milestone representing when this collection was first
+     * introduced to the public.
+     */
+    private LocalDate releaseDate;
 }
 
-// ######################################## Person5 CODE END ##########################################
+
