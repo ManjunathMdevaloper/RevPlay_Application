@@ -27,7 +27,7 @@ public interface SongRepository extends JpaRepository<Song, Long> {
          */
 
 // ####################################### Person2 CODE START #########################################
-
+        List<Song> findByGenreIgnoreCase(String genre);
         
 // ######################################## Person2 CODE END ##########################################
 /**
@@ -37,7 +37,11 @@ public interface SongRepository extends JpaRepository<Song, Long> {
         
 
 // ####################################### Person2 CODE START #########################################
-
+        List<Song> findByTitleContainingIgnoreCase(String title);
+        
+        List<Song> findByArtist(com.revature.revplay.entity.User artist);
+        
+        List<Song> findByAlbumId(Long albumId);
 // ######################################## Person2 CODE END ##########################################
 
 /**
@@ -46,8 +50,6 @@ public interface SongRepository extends JpaRepository<Song, Long> {
          * This single numeric value is the primary "Impact" metric used on professional
          * dashboards.
          */
-        @org.springframework.data.jpa.repository.Query("SELECT SUM(s.playCount) FROM Song s WHERE s.artist.id = :artistId")
-        
 
 // ####################################### Person5 CODE START #########################################
 
@@ -81,6 +83,16 @@ List<Song> findTopTrendingSongs(org.springframework.data.domain.Pageable pageabl
 //                        "(:releaseYear IS NULL OR EXTRACT(YEAR FROM s.releaseDate) = :releaseYear)")
 
 // ####################################### Person2 CODE START #########################################
-
+        @org.springframework.data.jpa.repository.Query("SELECT s FROM Song s WHERE " +
+                        "(:title IS NULL OR LOWER(s.title) LIKE LOWER(CONCAT('%', :title, '%'))) AND " +
+                        "(:genre IS NULL OR LOWER(s.genre) = LOWER(:genre)) AND " +
+                        "(:artistId IS NULL OR s.artist.id = :artistId) AND " +
+                        "(:albumId IS NULL OR s.albumId = :albumId) AND " +
+                        "(:releaseYear IS NULL OR EXTRACT(YEAR FROM s.releaseDate) = :releaseYear)")
+        List<Song> filterSongs(@org.springframework.data.repository.query.Param("title") String title,
+                              @org.springframework.data.repository.query.Param("genre") String genre,
+                              @org.springframework.data.repository.query.Param("artistId") Long artistId,
+                              @org.springframework.data.repository.query.Param("albumId") Long albumId,
+                              @org.springframework.data.repository.query.Param("releaseYear") Integer releaseYear);
 // ######################################## Person2 CODE END ##########################################
 }
