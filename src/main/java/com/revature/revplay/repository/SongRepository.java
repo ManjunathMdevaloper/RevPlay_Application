@@ -17,6 +17,25 @@ public interface SongRepository extends JpaRepository<Song, Long> {
     /**
      * Pulls all tracks belonging to a specific genre.
      */
+    List<Song> findByGenre(String genre);
+
+    /**
+     * Pulls all tracks belonging to a specific artist.
+     */
+
+    /**
+     * Pulls all tracks belonging to a specific album project.
+     */
+
+    /**
+     * Pulls all unique genre tags currently assigned to tracks in the database.
+     * This data powers the category filters in the "Explore" dashboard, ensuring
+     * users see only available musical styles.
+     */
+    @org.springframework.data.jpa.repository.Query("SELECT DISTINCT s.genre FROM Song s WHERE s.genre IS NOT NULL")
+    List<String> findAllGenres();
+
+
     List<Song> findByGenreIgnoreCase(String genre);
 
     /**
@@ -52,4 +71,11 @@ public interface SongRepository extends JpaRepository<Song, Long> {
             @Param("albumId") Long albumId,
             @Param("releaseYear") Integer releaseYear
     );
+    List<Song> searchAndFilterSongs(
+            @org.springframework.data.repository.query.Param("title") String title,
+            @org.springframework.data.repository.query.Param("genre") String genre,
+            @org.springframework.data.repository.query.Param("artist") com.revature.revplay.entity.User artist,
+            @org.springframework.data.repository.query.Param("albumId") Long albumId,
+            @org.springframework.data.repository.query.Param("releaseYear") Integer releaseYear);
+
 }
