@@ -159,8 +159,27 @@ public class MediaController {
                                 : "image/jpeg")
                 .body(user.getProfilePictureData());
     }
-
-// ####################################### Person2 CODE START #########################################
-
-// ######################################## Person2 CODE END ##########################################
+    /**
+     * Retrieves the large background banner for an artist's profile page.
+     *
+     * Banners are high-impact visual elements handled through:
+     * 1. Searching the ArtistProfile records for the matching artist ID.
+     * 2. Pulling the high-resolution banner image data stored in the database.
+     * 3. Serving the data with high-performance headers like Content-Type.
+     * 4. This gives each artist a unique "home base" look on the platform.
+     * 5. It automatically scales and delivers the artist's chosen aesthetic to the
+     * browser.
+     */
+    @GetMapping("/artist/{id}/banner")
+    public ResponseEntity<byte[]> getArtistBanner(@PathVariable("id") Long id) {
+        ArtistProfile profile = artistProfileRepository.findById(id).orElse(null);
+        if (profile == null || profile.getBannerImageData() == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_TYPE,
+                        profile.getBannerImageContentType() != null ? profile.getBannerImageContentType()
+                                : "image/jpeg")
+                .body(profile.getBannerImageData());
+    }
 }

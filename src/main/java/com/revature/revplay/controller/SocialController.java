@@ -67,9 +67,51 @@ public class SocialController {
      * 5. This is the primary driver of artist-fan engagement on the platform.
      */
 
-// ####################################### Person2 CODE START #########################################
+    @PostMapping("/follow/{artistId}")
+    @ResponseBody
+    public ResponseEntity<Boolean> toggleFollow(@PathVariable("artistId") Long artistId,
+                                                Authentication authentication) {
+        try {
+            if (authentication == null || !authentication.isAuthenticated()) {
+                return ResponseEntity.status(401).build();
+            }
+            boolean isNowFollowing = socialService.toggleFollowArtist(artistId, authentication.getName());
+            return ResponseEntity.ok(isNowFollowing);
+        } catch (Exception e) {
+            log.error("Toggle follow failed for artistId {}: ", artistId, e);
+            return ResponseEntity.status(500).body(false);
+        }
+    }
 
-// ######################################## Person2 CODE END ##########################################
+    /**
+     * Retrieves the current relationship status between a viewer and an artist.
+     *
+     * The status check handles:
+     * 1. Identifying the authenticated user from the Spring Security context.
+     * 2. querying the social graph to see if a 'FOLLOW' record exists for this
+     * artist pairing.
+     * 3. returning a raw boolean result to help the detail page render the correct
+     * button state.
+     * 4. This ensures that the user interface always reflects the true state of the
+     * user's network.
+     * 5. It is used frequently during page loads to personalize the artist
+     * discovery experience.
+     */
+    @GetMapping("/follow/status/{artistId}")
+    @ResponseBody
+    public ResponseEntity<Boolean> getFollowStatus(@PathVariable("artistId") Long artistId,
+                                                   Authentication authentication) {
+        try {
+            if (authentication == null || !authentication.isAuthenticated()) {
+                return ResponseEntity.ok(false);
+            }
+            boolean isFollowing = socialService.isFollowing(artistId, authentication.getName());
+            return ResponseEntity.ok(isFollowing);
+        } catch (Exception e) {
+            log.error("Follow status check failed for artistId {}: ", artistId, e);
+            return ResponseEntity.status(500).body(false);
+        }
+    }
 /**
      * Renders a dashboard of the most popular content currently on the platform.
      * 
