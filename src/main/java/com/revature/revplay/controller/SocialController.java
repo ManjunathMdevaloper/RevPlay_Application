@@ -108,10 +108,31 @@ public class SocialController {
      * 5. This adds a layer of personalization and convenience to the RevPlay
      * experience.
      */
+
+
+@GetMapping("/history")
+public String viewHistory(Authentication authentication, Model model) {
+    if (authentication == null)
+        return "redirect:/login";
+
+    com.revature.revplay.entity.User user = userRepository.findByUsername(authentication.getName()).orElseThrow();
+    java.util.List<com.revature.revplay.entity.History> allHistory = historyRepository
+            .findByUserOrderByPlayedAtDesc(user);
+
+    // Recent history: last 50 songs
+    java.util.List<com.revature.revplay.entity.History> recentHistory = allHistory.stream()
+            .limit(50)
+            .collect(java.util.stream.Collectors.toList());
+
+    model.addAttribute("recentHistory", recentHistory);
+    model.addAttribute("completeHistory", allHistory);
+    // Keep 'history' for backward compatibility if any other fragment uses it
+    model.addAttribute("history", recentHistory);
+
+    return "discovery/history";
+}
     
-// ####################################### Person3 CODE START #########################################
-    
-// ######################################## Person3 CODE END ##########################################
+
 /**
      * Performs a complete reset of the user's listening chronological records.
      * 
@@ -126,7 +147,17 @@ public class SocialController {
      * account data.
      */
 
-// ####################################### Person3 CODE START #########################################
-// ######################################## Person3 CODE END ##########################################
+
+@PostMapping("/history/clear")
+@org.springframework.transaction.annotation.Transactional
+public String clearHistory(Authentication authentication) {
+    if (authentication == null)
+        return "redirect:/login";
+    com.revature.revplay.entity.User user = userRepository.findByUsername(authentication.getName()).orElseThrow();
+    historyRepository.deleteByUser(user);
+    return "redirect:/social/history";
+}
+
+
 
 }

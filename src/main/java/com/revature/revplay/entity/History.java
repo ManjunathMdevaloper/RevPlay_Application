@@ -22,8 +22,44 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 
-// ####################################### Person3 CODE START #########################################
+
 public class History {
+    /**
+     * The unique database primary key for the history event, managed via sequence.
+     */
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "history_seq")
+    @SequenceGenerator(name = "history_seq", sequenceName = "HISTORY_SEQ", allocationSize = 1)
+    private Long id;
+
+    /**
+     * The listener who initiated the playback session.
+     */
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    /**
+     * The specific musical track that was engaged with by the user.
+     */
+    @ManyToOne
+    @JoinColumn(name = "song_id", nullable = false)
+    private Song song;
+
+    /**
+     * The precise calendar date and time when the song playback occurred.
+     */
+    @Column(name = "played_at")
+    private LocalDateTime playedAt;
+
+    /**
+     * Lifecycle hook that automatically captures the playback time before the
+     * record is saved.
+     */
+    @PrePersist
+    protected void onCreate() {
+        playedAt = LocalDateTime.now();
+    }
 }
 
-// ######################################## Person3 CODE END ##########################################
+

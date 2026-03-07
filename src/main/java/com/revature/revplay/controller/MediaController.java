@@ -74,8 +74,19 @@ public class MediaController {
      */
     
 
-// ####################################### Person3 CODE START #########################################
-// ######################################## Person3 CODE END ##########################################
+
+    @GetMapping("/song/{id}/audio")
+    public ResponseEntity<Resource> getSongAudio(@PathVariable("id") Long id) {
+        Song song = songRepository.findById(id).orElse(null);
+        if (song == null || song.getAudioData() == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_TYPE,
+                        song.getAudioContentType() != null ? song.getAudioContentType() : "audio/mpeg")
+                .body(new ByteArrayResource(song.getAudioData()));
+    }
+
 /**
      * Fetches and returns the cover art image for a specific song.
      * 
