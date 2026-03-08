@@ -21,9 +21,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-
-// ######################################## Person1 CODE END ##########################################
-// ####################################### Person2 CODE START #########################################
 public class ArtistProfile {
 
     /**
