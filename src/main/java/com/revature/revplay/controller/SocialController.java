@@ -199,7 +199,4 @@ public String clearHistory(Authentication authentication) {
     historyRepository.deleteByUser(user);
     return "redirect:/social/history";
 }
-
-
-
 }
