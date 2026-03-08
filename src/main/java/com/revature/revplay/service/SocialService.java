@@ -1,6 +1,5 @@
 package com.revature.revplay.service;
 
-import com.revature.revplay.dto.SearchResultDto;
 import com.revature.revplay.entity.Song;
 import com.revature.revplay.entity.User;
 
@@ -32,60 +31,21 @@ public interface SocialService {
      * 5. This atomicity ensures the social graph remains synchronized with UI
      * buttons.
      */
+    
+boolean toggleFollowArtist(Long artistId, String username);
 
-    public interface SearchService {
-
-        /**
-         * Performs a comprehensive search across all major entity types in the RevPlay
-         * system.
-         *
-         * The searching logic includes:
-         * 1. Accepting a raw keyword string from the user's search entry.
-         * 2. checking multiple fields simultaneously, such as names, titles, and
-         * descriptions.
-         * 3. Aggregating those broad matches into a single SearchResultDto for easy
-         * display.
-         * 4. Ensuring that common search terms return the most relevant entities first.
-         * 5. This method is the primary driver of the "Explore" functionality for
-         * discovery.
-         */
-        SearchResultDto searchAll(String keyword);
-
-        /**
-         * Applies a specialized filter set to the global song catalog for refined
-         * finding.
-         *
-         * The filtering implementation handles:
-         * 1. Combining multiple optional criteria like artist identity, genre, and
-         * album links.
-         * 2. Narrowing down the song list based on chronological clues like release
-         * years.
-         * 3. performing dynamic queries that build themselves based on only the
-         * provided inputs.
-         * 4. enabling artists or listeners to find specific sub-sections of a large
-         * library.
-         * 5. This ensures that the music catalog remains manageable and navigable as it
-         * grows.
-         */
-        List<Song> filterSongs(String title, String genre, Long artistId, Long albumId, Integer releaseYear);
-
-        /**
-         * Retrieves a curated list of every unique genre currently present in the
-         * system.
-         *
-         * This metadata retrieval process:
-         * 1. Scans the entire song database for distinct genre tags.
-         * 2. returns a clean list of categorizeable strings to populate filter
-         * dropdowns.
-         * 3. helps users browse the collection by their preferred musical styles.
-         * 4. This list is essential for building the "Category" or "Mood" sections of
-         * the UI.
-         * 5. ensuring that the browsing experience is always based on actual available
-         * content.
-         */
-        List<String> getAllGenres();
-    }
-
+    /**
+     * Checks the real-time social connection status between two accounts.
+     * 
+     * The relationship check handles:
+     * 1. Querying the join table to see if the listener currently follows the
+     * artist.
+     * 2. returning a boolean flag that determines the state of the "Follow" button.
+     * 3. This is essential for personalizing the artist's public profile page.
+     * 4. It ensures users have immediate visual feedback on their social status.
+     */
+    boolean isFollowing(Long artistId, String username);
+    
 /**
      * Aggregates the total audience size for a specific music creator.
      * 
@@ -97,10 +57,23 @@ public interface SocialService {
      * reach.
      * 4. Used for both public profile displays and internal ranking algorithms.
      */
-
-// ####################################### Person5 CODE START #########################################
     
-// ######################################## Person5 CODE END ##########################################
+long getFollowerCount(Long artistId);
+
+    /**
+     * Retrieves a detailed list of the users who comprise an artist's audience.
+     * 
+     * The audience lookup entails:
+     * 1. Fetching all User entities that have a 'FOLLOW' relationship with target
+     * ID.
+     * 2. help the platform build community-focused views like "Top Fans" or
+     * follower lists.
+     * 3. allowing artists to see exactly who is engaging with their musical output.
+     * 4. This drives networking and social transparency across the RevPlay
+     * ecosystem.
+     */
+    List<User> getFollowers(Long artistId);
+    
 /**
      * Calculates and returns the most popular tracks on the platform within a
      * limit.
@@ -112,7 +85,7 @@ public interface SocialService {
      * 3. Limiting the result set to the top 'n' items to keep charts concise and
      * relevant.
      * 4. This powers the "Trending Today" and platforms-wide hit lists for users.
-     */
+     */   
 List<Song> getTopTrendingSongs(int limit);
 
     /**
@@ -128,7 +101,6 @@ List<Song> getTopTrendingSongs(int limit);
      */
     List<User> getTopArtists(int limit);
     
-
 /**
      * Calculates the total lifetime listening reach of an artist's entire catalog.
      * 
@@ -140,7 +112,7 @@ List<Song> getTopTrendingSongs(int limit);
      * charts.
      * 4. It ensures creators can track their cumulative progress over time.
      */
-
+    
 long getTotalArtistStreams(Long artistId);
-
+    
 }
