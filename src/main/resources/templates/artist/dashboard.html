@@ -245,8 +245,11 @@
                                     <td class="fw-bold text-dark" th:text="${song.playCount}">0</td>
                                     <td class="text-end pe-4">
                                         <!-- Action Buttons: Edit leads to the edit form, Delete triggers a safety confirmation. -->
-                                        <a th:href="@{/artist/dashboard/songs/{id}/edit(id=${song.id})}"
-                                            class="btn btn-sm btn-outline-primary">Edit</a>
+                                        <button type="button" class="btn btn-sm btn-outline-primary"
+                                            onclick="openEditSongModal(this)" th:data-id="${song.id}"
+                                            th:data-title="${song.title}" th:data-genre="${song.genre}"
+                                            th:data-album="${song.albumId}"
+                                            th:data-duration="${song.duration}">Edit</button>
                                         <form th:action="@{/artist/dashboard/songs/{id}/delete(id=${song.id})}"
                                             method="post" class="d-inline"
                                             onsubmit="return confirmAction('WARNING: Are you sure you want to completely erase this track from your catalog?', this);">
@@ -340,10 +343,11 @@
                                                 Missing</span>
                                         </td>
                                         <td class="text-end pe-4">
-                                            <a th:href="@{/artist/dashboard/songs/{id}/edit(id=${song.id})}"
-                                                class="btn btn-sm btn-outline-primary fw-bold me-1"
-                                                onclick="event.preventDefault(); var m=bootstrap.Modal.getInstance(this.closest('.modal')); if(m) m.hide(); window.App.navigate(this.href);">✏️
-                                                Edit</a>
+                                            <button type="button" class="btn btn-sm btn-outline-primary fw-bold me-1"
+                                                onclick="openEditSongModal(this)" th:data-id="${song.id}"
+                                                th:data-title="${song.title}" th:data-genre="${song.genre}"
+                                                th:data-album="${song.albumId}" th:data-duration="${song.duration}">✏️
+                                                Edit</button>
                                             <form th:action="@{/artist/dashboard/songs/{id}/delete(id=${song.id})}"
                                                 method="post" class="d-inline"
                                                 onsubmit="return confirmAction('WARNING: Are you sure you want to completely erase this track?', this);">
@@ -356,9 +360,9 @@
                                         <td colspan="8" class="text-center py-5 text-muted">
                                             <div style="font-size:3rem;">🎵</div>
                                             <h5 class="mt-2">No songs yet!</h5>
-                                            <a th:href="@{/artist/dashboard/songs/create}"
-                                                class="btn btn-primary rounded-pill px-4 mt-2"
-                                                data-bs-dismiss="modal">Upload your first track</a>
+                                            <button type="button" class="btn btn-primary rounded-pill px-4 mt-2"
+                                                data-bs-toggle="modal" data-bs-target="#uploadSongModal">Upload your
+                                                first track</button>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -366,8 +370,8 @@
                         </div>
                     </div>
                     <div class="modal-footer border-0 bg-light">
-                        <a th:href="@{/artist/dashboard/songs/create}" class="btn btn-primary rounded-pill fw-bold px-4"
-                            data-bs-dismiss="modal">+ Upload New Track</a>
+                        <button type="button" class="btn btn-primary rounded-pill fw-bold px-4" data-bs-toggle="modal"
+                            data-bs-target="#uploadSongModal">+ Upload New Track</button>
                         <button type="button" class="btn btn-outline-secondary rounded-pill"
                             data-bs-dismiss="modal">Close</button>
                     </div>
@@ -426,10 +430,10 @@
                                                 th:text="${album.songs != null ? album.songs.size() : 0} + ' tracks'">0</span>
                                         </td>
                                         <td class="text-end pe-4">
-                                            <a th:href="@{/artist/dashboard/albums/{id}/edit(id=${album.id})}"
-                                                class="btn btn-sm btn-outline-primary fw-bold me-1"
-                                                onclick="event.preventDefault(); var m=bootstrap.Modal.getInstance(this.closest('.modal')); if(m) m.hide(); window.App.navigate(this.href);">✏️
-                                                Edit</a>
+                                            <button type="button" class="btn btn-sm btn-outline-primary fw-bold me-1"
+                                                onclick="openEditAlbumModal(this)" th:data-id="${album.id}"
+                                                th:data-name="${album.name}" th:data-desc="${album.description}"
+                                                th:data-date="${album.releaseDate}">✏️ Edit</button>
                                             <form th:action="@{/artist/dashboard/albums/{id}/delete(id=${album.id})}"
                                                 method="post" class="d-inline"
                                                 onsubmit="return confirmAction('WARNING: Deleting this album will remove it. Songs will remain as fast tracks.', this);">
@@ -442,9 +446,9 @@
                                         <td colspan="5" class="text-center py-5 text-muted">
                                             <div style="font-size:3rem;">📀</div>
                                             <h5 class="mt-2">No albums yet!</h5>
-                                            <a th:href="@{/artist/dashboard/albums/create}"
-                                                class="btn btn-primary rounded-pill px-4 mt-2"
-                                                data-bs-dismiss="modal">Create your first album</a>
+                                            <button type="button" class="btn btn-primary rounded-pill px-4 mt-2"
+                                                data-bs-toggle="modal" data-bs-target="#createAlbumModal">Create your
+                                                first album</button>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -452,9 +456,8 @@
                         </div>
                     </div>
                     <div class="modal-footer border-0 bg-light">
-                        <a th:href="@{/artist/dashboard/albums/create}"
-                            class="btn btn-primary rounded-pill fw-bold px-4" data-bs-dismiss="modal">+ Create New
-                            Album</a>
+                        <button type="button" class="btn btn-primary rounded-pill fw-bold px-4" data-bs-toggle="modal"
+                            data-bs-target="#createAlbumModal">+ Create New Album</button>
                         <button type="button" class="btn btn-outline-secondary rounded-pill"
                             data-bs-dismiss="modal">Close</button>
                     </div>
@@ -619,7 +622,151 @@
             </div>
         </div>
 
+        <!-- =========================================================== -->
+        <!-- MODAL 5: Edit Song Modal -->
+        <!-- =========================================================== -->
+        <div class="modal fade" id="editSongModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+                    <div class="modal-header bg-primary text-white border-0 py-3">
+                        <h5 class="modal-title fw-bold">✏️ Edit Track Details</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body p-4">
+                        <form id="editSongForm" method="post" enctype="multipart/form-data">
+                            <div class="row mb-3">
+                                <div class="col-md-8">
+                                    <label for="esTitle" class="form-label fw-bold">Track Title</label>
+                                    <input type="text" id="esTitle" name="title" class="form-control" required
+                                        placeholder="Name your masterpiece" />
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="esGenre" class="form-label fw-bold">Genre</label>
+                                    <input type="text" id="esGenre" name="genre" class="form-control" required
+                                        placeholder="Pop, Rock, etc." />
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="esAlbum" class="form-label fw-bold">Assign to Album (Optional)</label>
+                                    <select id="esAlbum" name="albumId" class="form-select">
+                                        <option value="">-- Standalone Single --</option>
+                                        <option th:each="album : ${albums}" th:value="${album.id}"
+                                            th:text="${album.name}"></option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="esDur" class="form-label fw-bold">Duration (Seconds)</label>
+                                    <input type="number" id="esDur" name="duration" class="form-control"
+                                        placeholder="180 for 3:00" />
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="esCover" class="form-label fw-bold">Update Cover Art (Optional)</label>
+                                <input type="file" id="esCover" name="coverFile" class="form-control"
+                                    accept="image/*" />
+                                <small class="text-muted">Leave empty to keep existing artwork.</small>
+                            </div>
+                            <div class="d-grid mt-4">
+                                <button type="submit" class="btn btn-primary btn-lg fw-bold shadow">Save
+                                    Changes</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- =========================================================== -->
+        <!-- MODAL 6: Edit Album Modal -->
+        <!-- =========================================================== -->
+        <div class="modal fade" id="editAlbumModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+                    <div class="modal-header bg-primary text-white border-0 py-3">
+                        <h5 class="modal-title fw-bold">✏️ Edit Album Details</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body p-4">
+                        <form id="editAlbumForm" method="post" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label for="eaName" class="form-label fw-bold">Album Title</label>
+                                <input type="text" name="name" class="form-control" id="eaName"
+                                    placeholder="E.g. Midnight Melodies" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="eaDesc" class="form-label fw-bold">Description</label>
+                                <textarea name="description" class="form-control" id="eaDesc" rows="2"
+                                    placeholder="Tell your fans about this collection..."></textarea>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="eaDate" class="form-label fw-bold font-sm">Release Date</label>
+                                    <input type="date" name="releaseDate" class="form-control" id="eaDate">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="eaCover" class="form-label fw-bold font-sm">Update Cover Art</label>
+                                    <input type="file" name="coverFile" class="form-control" id="eaCover"
+                                        accept="image/*">
+                                </div>
+                            </div>
+                            <div class="d-grid mt-4">
+                                <button type="submit" class="btn btn-primary btn-lg fw-bold shadow">Save
+                                    Progress</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <script>
+            function openEditSongModal(btn) {
+                const id = btn.getAttribute('data-id');
+                const title = btn.getAttribute('data-title');
+                const genre = btn.getAttribute('data-genre');
+                const albumId = btn.getAttribute('data-album');
+                const duration = btn.getAttribute('data-duration');
+
+                const form = document.getElementById('editSongForm');
+                form.action = '/artist/dashboard/songs/' + id + '/edit';
+
+                document.getElementById('esTitle').value = title;
+                document.getElementById('esGenre').value = genre;
+                document.getElementById('esAlbum').value = albumId || '';
+                document.getElementById('esDur').value = duration;
+
+                // Close parent modal if open (for the "My Songs" list)
+                const songsModalEl = document.getElementById('songsModal');
+                const songsModal = bootstrap.Modal.getInstance(songsModalEl);
+                if (songsModal) songsModal.hide();
+
+                const editModal = new bootstrap.Modal(document.getElementById('editSongModal'));
+                editModal.show();
+            }
+
+            function openEditAlbumModal(btn) {
+                const id = btn.getAttribute('data-id');
+                const name = btn.getAttribute('data-name');
+                const desc = btn.getAttribute('data-desc');
+                const date = btn.getAttribute('data-date');
+
+                const form = document.getElementById('editAlbumForm');
+                form.action = '/artist/dashboard/albums/' + id + '/edit';
+
+                document.getElementById('eaName').value = name;
+                document.getElementById('eaDesc').value = desc;
+                document.getElementById('eaDate').value = date || '';
+
+                // Close parent modal if open (for the "My Albums" list)
+                const albumsModalEl = document.getElementById('albumsModal');
+                const albumsModal = bootstrap.Modal.getInstance(albumsModalEl);
+                if (albumsModal) albumsModal.hide();
+
+                const editModal = new bootstrap.Modal(document.getElementById('editAlbumModal'));
+                editModal.show();
+            }
+
             document.getElementById('artistModalPlayAll')?.addEventListener('click', function () {
                 const songs = [];
                 document.querySelectorAll('#songsModal table tbody tr').forEach(tr => {
