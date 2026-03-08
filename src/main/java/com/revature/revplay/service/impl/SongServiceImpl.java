@@ -1,4 +1,3 @@
-
 package com.revature.revplay.service.impl;
 
 import com.revature.revplay.dto.SongDto;
@@ -39,7 +38,7 @@ public class SongServiceImpl implements SongService {
 
     /**
      * Standard constructor used to initialize the song management engine.
-     *
+     * 
      * The dependencies provided here allow the service to:
      * 1. Direct interaction with the master 'Songs' data table.
      * 2. Linking songs to their uploaded creators (Users).
@@ -49,7 +48,7 @@ public class SongServiceImpl implements SongService {
      * streaming.
      */
     public SongServiceImpl(SongRepository songRepository, UserRepository userRepository,
-                           HistoryRepository historyRepository, EntityManager entityManager) {
+            HistoryRepository historyRepository, EntityManager entityManager) {
         this.songRepository = songRepository;
         this.userRepository = userRepository;
         this.historyRepository = historyRepository;
@@ -58,7 +57,7 @@ public class SongServiceImpl implements SongService {
 
     /**
      * Retrieves all music tracks currently stored in the system.
-     *
+     * 
      * The process for returning the full library includes:
      * 1. Calling the repository's findAll() method to grab every record.
      * 2. This data powers the 'Global Charts' and 'New Releases' sections.
@@ -72,7 +71,7 @@ public class SongServiceImpl implements SongService {
 
     /**
      * Fetches a single track's metadata and media data by its unique ID.
-     *
+     * 
      * The lookup process ensures data quality by:
      * 1. Using the song's primary key to find the exact database record.
      * 2. Utilizing an Optional container to prevent NullPointerException bugs.
@@ -89,7 +88,7 @@ public class SongServiceImpl implements SongService {
 
     /**
      * Finds every song belonging to a specific artist's discography.
-     *
+     * 
      * This artist-specific query involves:
      * 1. Verifying that the artist profile actually exists in the user table.
      * 2. Performing a relational lookup in the songs table for matching artist
@@ -110,7 +109,7 @@ public class SongServiceImpl implements SongService {
     /**
      * Processes and stores a new song upload, including its actual audio and cover
      * art.
-     *
+     * 
      * This heavy-duty method manages the following technical steps:
      * 1. Validating that a mandatory audio file (MP3/WAV) has been provided by the
      * user.
@@ -153,7 +152,7 @@ public class SongServiceImpl implements SongService {
 
     /**
      * Updates an existing song's metadata and provides validation for ownership.
-     *
+     * 
      * The track update logic ensures:
      * 1. Security: It checks if the authenticated user is the actual artist who
      * uploaded it.
@@ -196,7 +195,7 @@ public class SongServiceImpl implements SongService {
 
     /**
      * A simple wrapper for persisting a pre-configured song entity.
-     *
+     * 
      * This method is useful for:
      * 1. Updating play counts or ratings in a high-concurrency environment.
      * 2. Performing quick system-level data cleanup.
@@ -212,7 +211,7 @@ public class SongServiceImpl implements SongService {
     /**
      * Performs a deep delete of a song, clearing it from all user libraries and
      * playlists.
-     *
+     * 
      * The deletion sequence is critical to prevent "orphan" data:
      * 1. It verifies the identity of the artist to prevent malicious track removal.
      * 2. It scans and deletes the user's listening history records for this track.
@@ -251,7 +250,7 @@ public class SongServiceImpl implements SongService {
     /**
      * Increments popularity metrics and logs track history for personalized
      * discovery.
-     *
+     * 
      * The 'Record Play' process follows these steps:
      * 1. It increments the global play_count on the song object for popularity
      * rankings.
@@ -284,5 +283,3 @@ public class SongServiceImpl implements SongService {
         }
     }
 }
-
-

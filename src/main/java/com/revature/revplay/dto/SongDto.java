@@ -21,8 +21,6 @@ import lombok.Builder;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-
-
 public class SongDto {
     /**
      * Unique track identification and descriptive naming fields.

@@ -2,8 +2,6 @@
  * RevPlay - Global Music Player & SPA Router
  * Inspired by reference implementation.
  */
-
-
 // ============================================================
 //  PLAYER
 // ============================================================
@@ -635,7 +633,7 @@ if (!window.App) {
                     old.replaceWith(s);
                 });
                 // We intentionally do NOT rebuild the Player queue here anymore.
-                // That way, whatever queue the user started listening to (e.g. from Playlists)
+                // That way, whatever queue the user started listening to (e.g. from Playlists) 
                 // persists undisturbed while they navigate to other pages naturally!
             } else {
                 if (url) window.location.href = url;
@@ -800,7 +798,6 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
         showToastsFromAlerts();
     });
 }
-
 
 // Listen for SPA updates
 document.addEventListener('click', () => {

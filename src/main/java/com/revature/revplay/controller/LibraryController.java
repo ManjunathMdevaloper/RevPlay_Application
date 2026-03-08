@@ -25,7 +25,6 @@ import java.util.Set;
  * gap between the user interface and the underlying database relationships for
  * music curation.
  */
-
 @Controller
 @RequestMapping("/library")
 public class LibraryController {
@@ -247,7 +246,7 @@ public class LibraryController {
     }
 
     /**
-     * Removes a particular track from a playlist view
+     * Removes a particular track from a playlist view.
      * 
      * This method manages:
      * 1. Calling the service to sever the link between the song and the specific
@@ -266,5 +265,3 @@ public class LibraryController {
         return "redirect:/library/playlists/" + playlistId;
     }
 }
-
-

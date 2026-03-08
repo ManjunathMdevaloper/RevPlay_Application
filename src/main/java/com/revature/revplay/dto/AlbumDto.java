@@ -1,4 +1,3 @@
-
 package com.revature.revplay.dto;
 
 import lombok.Data;
@@ -22,7 +21,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-
 public class AlbumDto {
     /**
      * The official title of the musical project as it will appear in searches and
@@ -42,5 +40,3 @@ public class AlbumDto {
      */
     private LocalDate releaseDate;
 }
-
-

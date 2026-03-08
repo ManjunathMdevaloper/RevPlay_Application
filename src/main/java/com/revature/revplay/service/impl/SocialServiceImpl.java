@@ -1,4 +1,3 @@
-
 package com.revature.revplay.service.impl;
 
 import com.revature.revplay.entity.Song;
@@ -35,7 +34,7 @@ public class SocialServiceImpl implements SocialService {
     /**
      * Standard constructor that wires up core repositories for social data
      * management.
-     *
+     * 
      * These dependencies allow the service to:
      * 1. Access user account status and role-based permissions (Artist vs. User).
      * 2. verify following relationships through the standard user database.
@@ -51,7 +50,7 @@ public class SocialServiceImpl implements SocialService {
 
     /**
      * Atomically toggles the "Follow" state between a user and a target artist.
-     *
+     * 
      * The following logic sequence handles:
      * 1. Validating that both the requesting user and the target artist exist in
      * the system.
@@ -90,7 +89,7 @@ public class SocialServiceImpl implements SocialService {
 
     /**
      * Checks if a specific user is currently following a target artist.
-     *
+     * 
      * The relationship check process:
      * 1. Safely handling cases where the username might be null (unauthenticated
      * guests).
@@ -109,7 +108,7 @@ public class SocialServiceImpl implements SocialService {
 
     /**
      * Calculates the total size of an artist's audience on the platform.
-     *
+     * 
      * The count retrieval logic:
      * 1. querying the specialized repository method that counts followers by artist
      * project ID.
@@ -127,7 +126,7 @@ public class SocialServiceImpl implements SocialService {
 
     /**
      * Fetches the complete list of users who are members of an artist's audience.
-     *
+     * 
      * The audience lookup process:
      * 1. retrieving all 'User' records that have established a follow link to the
      * artist.
@@ -144,7 +143,7 @@ public class SocialServiceImpl implements SocialService {
 
     /**
      * Identifies the music that is currently capturing the community's attention.
-     *
+     * 
      * The trending aggregation sequence:
      * 1. querying the song repository for tracks with high play counts and recent
      * activity.
@@ -162,7 +161,7 @@ public class SocialServiceImpl implements SocialService {
     /**
      * Ranks the platform's professional creators by their cumulative listening
      * reach.
-     *
+     * 
      * The artist chart logic manages:
      * 1. fetching every verified artist account from the master user table.
      * 2. sorting them through a heavy-duty stream comparison that sums all their
@@ -192,7 +191,7 @@ public class SocialServiceImpl implements SocialService {
     /**
      * Aggregates the lifetime stream metrics for an artist's entire musical
      * portfolio.
-     *
+     * 
      * The stream reporting logic:
      * 1. Querying the song database for the Sum of plays across all songs by the
      * artist ID.
@@ -209,5 +208,3 @@ public class SocialServiceImpl implements SocialService {
         return total != null ? total : 0L;
     }
 }
-
-

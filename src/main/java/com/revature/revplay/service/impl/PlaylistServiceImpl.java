@@ -303,7 +303,7 @@ public class PlaylistServiceImpl implements PlaylistService {
 
     /**
      * Performs a fast check to see if a song is already present in a user's
-     * library
+     * library.
      * 
      * This utility check provides:
      * 1. Real-time feedback for the 'Heart' icon in the music player.

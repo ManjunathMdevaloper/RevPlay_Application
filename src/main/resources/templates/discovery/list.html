@@ -1,4 +1,4 @@
-<!--
+<!-- 
   Discovery List View (Dashboard)
   This is the primary discovery hub of RevPlay. It aggregates various media types 
   including Songs, Artists, Albums, and Genres into a single interactive dashboard.
@@ -66,8 +66,6 @@
         <div class="row g-4 h-100">
             <!-- Left Column: 1 (Songs) & 3 (Artists) -->
             <div class="col-lg-6 d-flex flex-column gap-4">
-
-
                 <!-- Part 1: All Songs Section -->
                 <div class="card flex-grow-1 border-0 shadow-lg rounded-4 overflow-hidden dashboard-card">
                     <div class="card-header bg-white py-3 border-0">
@@ -129,10 +127,7 @@
                             <p>No tracks available yet.</p>
                         </div>
                     </div>
-
-
                 </div>
-
 
                 <!-- Part 3: Artists Section -->
                 <div class="card border-0 shadow-lg rounded-4 overflow-hidden dashboard-card" style="height: 350px;">
@@ -141,46 +136,46 @@
                             Artists</h5>
                     </div>
                     <div class="card-body p-2 container-scroll">
-                        <!--
+                        <!-- 
                           th:if: Validates that the 'artists' collection is populated.
                           Data Source: DiscoveryController -> List<User> artists (Filtered for Role.ARTIST).
                         -->
                         <div class="row row-cols-3 row-cols-md-4 row-cols-lg-5 g-2"
-                             th:if="${not #lists.isEmpty(artists)}">
+                            th:if="${not #lists.isEmpty(artists)}">
                             <!-- th:each: loops through the artist list to create profile cards. -->
                             <div th:each="artist : ${artists}" class="col dashboard-search-item"
-                                 data-search-category="artist">
-                                <!--
-                                  Artist Card:
+                                data-search-category="artist">
+                                <!-- 
+                                  Artist Card: 
                                   - Binds various profile fields (bio, genre, banner, socials) to data attributes.
                                   - This allows the detailed artist modal to load instantly without a network round-trip.
                                 -->
                                 <div class="card h-100 border-0 shadow-sm glass-card rounded-3 hover-lift"
-                                     style="cursor: pointer;" th:data-name="${artist.displayName}"
-                                     th:data-id="${artist.id}"
-                                     th:data-bio="${artist.artistProfile != null ? artist.artistProfile.bio : ''}"
-                                     th:data-genre="${artist.artistProfile != null ? artist.artistProfile.genre : ''}"
-                                     th:data-banner="${artist.artistProfile != null ? artist.artistProfile.getBannerImageUrl() : ''}"
-                                     th:data-insta="${artist.artistProfile != null ? artist.artistProfile.instagramUrl : ''}"
-                                     th:data-twitter="${artist.artistProfile != null ? artist.artistProfile.twitterUrl : ''}"
-                                     th:data-youtube="${artist.artistProfile != null ? artist.artistProfile.youtubeUrl : ''}"
-                                     th:data-spotify="${artist.artistProfile != null ? artist.artistProfile.spotifyUrl : ''}"
-                                     th:data-website="${artist.artistProfile != null ? artist.artistProfile.websiteUrl : ''}"
-                                     th:data-pfp="${artist.profilePictureUrl != null ? artist.profilePictureUrl : '/images/default-profile.svg'}"
-                                     onclick="showArtistDetails(this)">
+                                    style="cursor: pointer;" th:data-name="${artist.displayName}"
+                                    th:data-id="${artist.id}"
+                                    th:data-bio="${artist.artistProfile != null ? artist.artistProfile.bio : ''}"
+                                    th:data-genre="${artist.artistProfile != null ? artist.artistProfile.genre : ''}"
+                                    th:data-banner="${artist.artistProfile != null ? artist.artistProfile.getBannerImageUrl() : ''}"
+                                    th:data-insta="${artist.artistProfile != null ? artist.artistProfile.instagramUrl : ''}"
+                                    th:data-twitter="${artist.artistProfile != null ? artist.artistProfile.twitterUrl : ''}"
+                                    th:data-youtube="${artist.artistProfile != null ? artist.artistProfile.youtubeUrl : ''}"
+                                    th:data-spotify="${artist.artistProfile != null ? artist.artistProfile.spotifyUrl : ''}"
+                                    th:data-website="${artist.artistProfile != null ? artist.artistProfile.websiteUrl : ''}"
+                                    th:data-pfp="${artist.profilePictureUrl != null ? artist.profilePictureUrl : '/images/default-profile.svg'}"
+                                    onclick="showArtistDetails(this)">
                                     <div class="card-body p-2 text-center">
                                         <!-- Displays the artist's profile picture or a fallback. -->
                                         <img th:src="${artist.profilePictureUrl != null ? artist.profilePictureUrl : '/images/default-profile.svg'}"
-                                             class="rounded-circle mb-1 shadow-sm border border-2 border-white mx-auto"
-                                             style="width: 45px; height: 45px; object-fit: cover;">
+                                            class="rounded-circle mb-1 shadow-sm border border-2 border-white mx-auto"
+                                            style="width: 45px; height: 45px; object-fit: cover;">
                                         <h6 class="mb-0 text-truncate text-dark fw-bold" style="font-size: 0.7rem;"
                                             th:text="${artist.displayName}">Artist Name</h6>
                                     </div>
                                     <div class="artist-songs-data d-none">
                                         <!-- Hidden loop to store song data for the Play All feature in the artist modal. -->
                                         <div th:each="song : ${artist.songs}" th:data-song-id="${song.id}"
-                                             th:data-title="${song.title}" th:data-url="${song.audioUrl}"
-                                             th:data-cover="${song.coverArtUrl != null ? song.coverArtUrl : '/images/default-album.svg'}">
+                                            th:data-title="${song.title}" th:data-url="${song.audioUrl}"
+                                            th:data-cover="${song.coverArtUrl != null ? song.coverArtUrl : '/images/default-album.svg'}">
                                         </div>
                                     </div>
                                 </div>
@@ -196,7 +191,6 @@
             <!-- Right Column: 2 (Albums) & 4 (Genres) -->
             <div class="col-lg-6 d-flex flex-column gap-4">
 
-
                 <!-- Part 2: All Albums -->
                 <div class="card flex-grow-1 border-0 shadow-lg rounded-4 overflow-hidden dashboard-card">
                     <div class="card-header bg-white py-3 border-0">
@@ -205,35 +199,35 @@
                     </div>
                     <div class="card-body p-2 container-scroll">
                         <div class="row row-cols-3 row-cols-md-4 row-cols-lg-6 g-2"
-                             th:if="${not #lists.isEmpty(albums)}">
+                            th:if="${not #lists.isEmpty(albums)}">
                             <div class="col dashboard-search-item" data-search-category="album"
-                                 th:each="album : ${albums}">
+                                th:each="album : ${albums}">
                                 <div class="card h-100 border-0 shadow-sm glass-card rounded-4 overflow-hidden transition-all hover-lift"
-                                     style="cursor: pointer;" th:data-name="${album.name}"
-                                     th:data-artist="${album.artist != null ? album.artist.displayName : 'Unknown'}"
-                                     th:data-year="${album.releaseDate != null ? #temporals.year(album.releaseDate) : 'N/A'}"
-                                     th:data-genre="${album.getGenre()}" th:data-duration="${album.getTotalDuration()}"
-                                     th:data-desc="${album.description}"
-                                     th:data-cover="${album.coverArtUrl != null ? album.coverArtUrl : '/images/default-album.svg'}"
-                                     onclick="showAlbumDetails(this)">
+                                    style="cursor: pointer;" th:data-name="${album.name}"
+                                    th:data-artist="${album.artist != null ? album.artist.displayName : 'Unknown'}"
+                                    th:data-year="${album.releaseDate != null ? #temporals.year(album.releaseDate) : 'N/A'}"
+                                    th:data-genre="${album.getGenre()}" th:data-duration="${album.getTotalDuration()}"
+                                    th:data-desc="${album.description}"
+                                    th:data-cover="${album.coverArtUrl != null ? album.coverArtUrl : '/images/default-album.svg'}"
+                                    onclick="showAlbumDetails(this)">
                                     <div class="position-relative overflow-hidden">
                                         <img th:src="${album.coverArtUrl != null ? album.coverArtUrl : '/images/default-album.svg'}"
-                                             class="card-img-top mx-auto d-block"
-                                             style="aspect-ratio: 1/1; object-fit: cover;">
+                                            class="card-img-top mx-auto d-block"
+                                            style="aspect-ratio: 1/1; object-fit: cover;">
                                     </div>
                                     <div class="card-body p-2 text-center">
                                         <h6 class="mb-0 text-truncate text-dark fw-bold" style="font-size: 0.7rem;"
                                             th:text="${album.name}">Album Name</h6>
                                         <small class="text-muted d-block text-truncate" style="font-size: 0.6rem;"
-                                               th:if="${album.artist != null}"
-                                               th:text="${album.artist.displayName}"></small>
+                                            th:if="${album.artist != null}"
+                                            th:text="${album.artist.displayName}"></small>
                                     </div>
                                     <div class="album-songs-data d-none">
                                         <div th:each="song : ${album.songs}" th:data-song-id="${song.id}"
-                                             th:data-title="${song.title}"
-                                             th:data-artist="${album.artist != null ? (album.artist.displayName ?: album.artist.username) : 'Unknown'}"
-                                             th:data-url="${song.audioUrl}"
-                                             th:data-cover="${song.coverArtUrl != null ? song.coverArtUrl : '/images/default-album.svg'}">
+                                            th:data-title="${song.title}"
+                                            th:data-artist="${album.artist != null ? (album.artist.displayName ?: album.artist.username) : 'Unknown'}"
+                                            th:data-url="${song.audioUrl}"
+                                            th:data-cover="${song.coverArtUrl != null ? song.coverArtUrl : '/images/default-album.svg'}">
                                         </div>
                                     </div>
                                 </div>
@@ -242,9 +236,7 @@
                         <p class="text-muted text-center py-5" th:if="${#lists.isEmpty(albums)}">No collections found.
                         </p>
                     </div>
-
                 </div>
-
                 <!-- Part 4: Genres Section -->
                 <div class="card border-0 shadow-lg rounded-4 overflow-hidden dashboard-card" style="height: 350px;">
                     <div class="card-header bg-white py-3 border-0">
@@ -252,25 +244,24 @@
                             Genres</h5>
                     </div>
                     <div class="card-body p-2 container-scroll">
-                        <!--
+                        <!-- 
                           th:if: Checks for a list of unique genre strings.
                           Data Source: DiscoveryController -> List<String> genres.
                         -->
                         <div class="row row-cols-3 row-cols-lg-4 g-2" th:if="${not #lists.isEmpty(genres)}">
                             <!-- th:each: Iterates through the genre strings. -->
                             <div class="col dashboard-search-item" data-search-category="genre"
-                                 th:each="genre : ${genres}">
+                                th:each="genre : ${genres}">
                                 <div class="glass-card p-2 text-center rounded-pill hover-lift transition-all"
-                                     style="cursor: pointer;" th:data-genre="${genre}" onclick="showGenreDetails(this)">
+                                    style="cursor: pointer;" th:data-genre="${genre}" onclick="showGenreDetails(this)">
                                     <span class="text-dark fw-bold text-uppercase" style="font-size: 0.6rem;"
-                                          th:text="${genre}">Genre</span>
+                                        th:text="${genre}">Genre</span>
                                 </div>
                             </div>
                         </div>
                         <p class="text-muted text-center py-5" th:if="${#lists.isEmpty(genres)}">Mapping the
                             soundscape...</p>
                     </div>
-
                 </div>
             </div>
         </div>

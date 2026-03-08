@@ -21,8 +21,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-
-
 public class History {
     /**
      * The unique database primary key for the history event, managed via sequence.
@@ -61,5 +59,3 @@ public class History {
         playedAt = LocalDateTime.now();
     }
 }
-
-

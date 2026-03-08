@@ -21,7 +21,6 @@ import lombok.Builder;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-
 public class PlaylistDto {
     /**
      * Unique identifier for the collection, used mainly during update and delete

@@ -19,7 +19,6 @@ import java.util.Set;
  * and want
  * to organize into groups.
  */
-
 public interface PlaylistService {
 
     /**

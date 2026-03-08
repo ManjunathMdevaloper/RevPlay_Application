@@ -64,4 +64,3 @@ public class AuthServiceImpl implements AuthService {
         return userRepository.findByEmail(email).orElse(null);
     }
 }
-

@@ -22,7 +22,6 @@ import org.springframework.web.multipart.MultipartFile;
  * modify
  * their own data and not someone else's.
  */
-
 @Controller
 @RequestMapping("/profile")
 public class ProfileController {

@@ -31,7 +31,6 @@ public interface SocialService {
      * 5. This atomicity ensures the social graph remains synchronized with UI
      * buttons.
      */
-    
 boolean toggleFollowArtist(Long artistId, String username);
 
     /**
@@ -45,7 +44,6 @@ boolean toggleFollowArtist(Long artistId, String username);
      * 4. It ensures users have immediate visual feedback on their social status.
      */
     boolean isFollowing(Long artistId, String username);
-    
 /**
      * Aggregates the total audience size for a specific music creator.
      * 
@@ -57,7 +55,6 @@ boolean toggleFollowArtist(Long artistId, String username);
      * reach.
      * 4. Used for both public profile displays and internal ranking algorithms.
      */
-    
 long getFollowerCount(Long artistId);
 
     /**
@@ -73,7 +70,6 @@ long getFollowerCount(Long artistId);
      * ecosystem.
      */
     List<User> getFollowers(Long artistId);
-    
 /**
      * Calculates and returns the most popular tracks on the platform within a
      * limit.
@@ -85,7 +81,7 @@ long getFollowerCount(Long artistId);
      * 3. Limiting the result set to the top 'n' items to keep charts concise and
      * relevant.
      * 4. This powers the "Trending Today" and platforms-wide hit lists for users.
-     */   
+     */
 List<Song> getTopTrendingSongs(int limit);
 
     /**
@@ -100,7 +96,6 @@ List<Song> getTopTrendingSongs(int limit);
      * 4. This drives artist discovery and highlights successful platform members.
      */
     List<User> getTopArtists(int limit);
-    
 /**
      * Calculates the total lifetime listening reach of an artist's entire catalog.
      * 
@@ -112,7 +107,5 @@ List<Song> getTopTrendingSongs(int limit);
      * charts.
      * 4. It ensures creators can track their cumulative progress over time.
      */
-    
 long getTotalArtistStreams(Long artistId);
-    
 }

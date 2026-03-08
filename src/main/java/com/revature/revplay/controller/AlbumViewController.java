@@ -36,7 +36,7 @@ public class AlbumViewController {
     /**
      * Standard constructor used to wire up essential data repositories for album
      * viewing.
-     *
+     * 
      * The dependencies provided allow the controller to:
      * 1. Retrieve the master album record from the database.
      * 2. Perform a secondary lookup to find every song that belongs to that
@@ -54,7 +54,6 @@ public class AlbumViewController {
 
     /**
      * Renders a detailed information page for a specific music album.
-     *
      * The logic for assembling the album detail view includes:
      * 1. Attempting to find the album record by its primary ID or throwing a 404
      * error if missing.

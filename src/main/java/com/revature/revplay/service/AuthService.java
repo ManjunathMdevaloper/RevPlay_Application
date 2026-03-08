@@ -2,8 +2,6 @@ package com.revature.revplay.service;
 
 import com.revature.revplay.dto.UserRegistrationDto;
 import com.revature.revplay.entity.User;
-
-
 public interface AuthService {
     User registerUser(UserRegistrationDto registrationDto);
 
@@ -11,4 +9,3 @@ public interface AuthService {
 
     User findByEmail(String email);
 }
-

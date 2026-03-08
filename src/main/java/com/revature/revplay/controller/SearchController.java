@@ -28,7 +28,6 @@ import java.util.stream.Collectors;
  * across
  * multiple database tables simultaneously.
  */
-
 @Controller
 @RequestMapping("/search")
 public class SearchController {
@@ -40,7 +39,7 @@ public class SearchController {
     /**
      * Standard constructor used to wire up essential repositories and the search
      * service.
-     *
+     * 
      * The dependencies provided here allow the controller to:
      * 1. Delegate complex cross-entity searching to the SearchService.
      * 2. Quickly fetch a full list of artists from the UserRepository for browsing.
@@ -51,7 +50,7 @@ public class SearchController {
      * integrated.
      */
     public SearchController(SearchService searchService, UserRepository userRepository,
-                            AlbumRepository albumRepository) {
+            AlbumRepository albumRepository) {
         this.searchService = searchService;
         this.userRepository = userRepository;
         this.albumRepository = albumRepository;
@@ -59,7 +58,7 @@ public class SearchController {
 
     /**
      * Handles the primary keyword search functionality for the platform.
-     *
+     * 
      * The logic for this multi-destination search method includes:
      * 1. Sanity checking the input keyword to handle empty or blank searches
      * gracefully.
@@ -87,7 +86,7 @@ public class SearchController {
 
     /**
      * Prepares and displays the high-level browsing categories for user discovery.
-     *
+     * 
      * The browsing preparation involves:
      * 1. Fetching a unique list of all music genres currently present in the
      * system.
@@ -112,7 +111,7 @@ public class SearchController {
 
     /**
      * Executes highly granular song filtering based on multiple criteria.
-     *
+     * 
      * The complex filtering logic manages:
      * 1. Aggregating various optional parameters like genre, artist choice, and
      * release year.

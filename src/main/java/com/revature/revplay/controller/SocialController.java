@@ -66,11 +66,10 @@ public class SocialController {
      * bursts.
      * 5. This is the primary driver of artist-fan engagement on the platform.
      */
-
-    @PostMapping("/follow/{artistId}")
+@PostMapping("/follow/{artistId}")
     @ResponseBody
     public ResponseEntity<Boolean> toggleFollow(@PathVariable("artistId") Long artistId,
-                                                Authentication authentication) {
+            Authentication authentication) {
         try {
             if (authentication == null || !authentication.isAuthenticated()) {
                 return ResponseEntity.status(401).build();
@@ -85,7 +84,7 @@ public class SocialController {
 
     /**
      * Retrieves the current relationship status between a viewer and an artist.
-     *
+     * 
      * The status check handles:
      * 1. Identifying the authenticated user from the Spring Security context.
      * 2. querying the social graph to see if a 'FOLLOW' record exists for this
@@ -100,7 +99,7 @@ public class SocialController {
     @GetMapping("/follow/status/{artistId}")
     @ResponseBody
     public ResponseEntity<Boolean> getFollowStatus(@PathVariable("artistId") Long artistId,
-                                                   Authentication authentication) {
+            Authentication authentication) {
         try {
             if (authentication == null || !authentication.isAuthenticated()) {
                 return ResponseEntity.ok(false);
@@ -127,14 +126,12 @@ public class SocialController {
      * 5. It drives platform discovery by highlighting what other peers are
      * enjoying.
      */
-
 @GetMapping("/trending")
     public String viewTrending(Model model) {
         model.addAttribute("topSongs", socialService.getTopTrendingSongs(20));
         model.addAttribute("topArtists", socialService.getTopArtists(10));
         return "discovery/trending";
     }
-
 /**
      * Displays a chronological list of every track the user has recently enjoyed.
      * 
@@ -150,32 +147,28 @@ public class SocialController {
      * 5. This adds a layer of personalization and convenience to the RevPlay
      * experience.
      */
-
-
 @GetMapping("/history")
-public String viewHistory(Authentication authentication, Model model) {
-    if (authentication == null)
-        return "redirect:/login";
+    public String viewHistory(Authentication authentication, Model model) {
+        if (authentication == null)
+            return "redirect:/login";
 
-    com.revature.revplay.entity.User user = userRepository.findByUsername(authentication.getName()).orElseThrow();
-    java.util.List<com.revature.revplay.entity.History> allHistory = historyRepository
-            .findByUserOrderByPlayedAtDesc(user);
+        com.revature.revplay.entity.User user = userRepository.findByUsername(authentication.getName()).orElseThrow();
+        java.util.List<com.revature.revplay.entity.History> allHistory = historyRepository
+                .findByUserOrderByPlayedAtDesc(user);
 
-    // Recent history: last 50 songs
-    java.util.List<com.revature.revplay.entity.History> recentHistory = allHistory.stream()
-            .limit(50)
-            .collect(java.util.stream.Collectors.toList());
+        // Recent history: last 50 songs
+        java.util.List<com.revature.revplay.entity.History> recentHistory = allHistory.stream()
+                .limit(50)
+                .collect(java.util.stream.Collectors.toList());
 
-    model.addAttribute("recentHistory", recentHistory);
-    model.addAttribute("completeHistory", allHistory);
-    // Keep 'history' for backward compatibility if any other fragment uses it
-    model.addAttribute("history", recentHistory);
+        model.addAttribute("recentHistory", recentHistory);
+        model.addAttribute("completeHistory", allHistory);
+        // Keep 'history' for backward compatibility if any other fragment uses it
+        model.addAttribute("history", recentHistory);
 
-    return "discovery/history";
-}
-    
-
-/**
+        return "discovery/history";
+    }
+   /** 
      * Performs a complete reset of the user's listening chronological records.
      * 
      * the history purge logic manages:
@@ -188,15 +181,14 @@ public String viewHistory(Authentication authentication, Model model) {
      * 5. This is a privacy-first feature that gives users full control over their
      * account data.
      */
-
-
 @PostMapping("/history/clear")
-@org.springframework.transaction.annotation.Transactional
-public String clearHistory(Authentication authentication) {
-    if (authentication == null)
-        return "redirect:/login";
-    com.revature.revplay.entity.User user = userRepository.findByUsername(authentication.getName()).orElseThrow();
-    historyRepository.deleteByUser(user);
-    return "redirect:/social/history";
-}
+    @org.springframework.transaction.annotation.Transactional
+    public String clearHistory(Authentication authentication) {
+        if (authentication == null)
+            return "redirect:/login";
+        com.revature.revplay.entity.User user = userRepository.findByUsername(authentication.getName()).orElseThrow();
+        historyRepository.deleteByUser(user);
+        return "redirect:/social/history";
+    }
+  
 }

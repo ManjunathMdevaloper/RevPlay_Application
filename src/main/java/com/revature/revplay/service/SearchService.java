@@ -21,7 +21,6 @@ public interface SearchService {
     /**
      * Performs a comprehensive search across all major entity types in the RevPlay
      * system.
-     *
      * The searching logic includes:
      * 1. Accepting a raw keyword string from the user's search entry.
      * 2. checking multiple fields simultaneously, such as names, titles, and
@@ -37,7 +36,6 @@ public interface SearchService {
     /**
      * Applies a specialized filter set to the global song catalog for refined
      * finding.
-     *
      * The filtering implementation handles:
      * 1. Combining multiple optional criteria like artist identity, genre, and
      * album links.
@@ -55,7 +53,6 @@ public interface SearchService {
     /**
      * Retrieves a curated list of every unique genre currently present in the
      * system.
-     *
      * This metadata retrieval process:
      * 1. Scans the entire song database for distinct genre tags.
      * 2. returns a clean list of categorizeable strings to populate filter

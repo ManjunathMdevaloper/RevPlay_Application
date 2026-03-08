@@ -72,7 +72,7 @@ public class DiscoveryController {
      * 5. Returning the "discovery/list" view, which is the "front door" of the
      * RevPlay experience.
      */
-    @GetMapping("/")
+@GetMapping("/")
     public String home(Model model) {
         model.addAttribute("songs", songService.getAllSongs());
         model.addAttribute("albums", albumRepository.findAll());
@@ -81,7 +81,7 @@ public class DiscoveryController {
         model.addAttribute("publicPlaylists", playlistService.getAllPublicPlaylists());
         return "discovery/list";
     }
-    /**
+/**
      * Manages a specialized 'Explore' view focused strictly on public user
      * playlists.
      * 
@@ -97,7 +97,6 @@ public class DiscoveryController {
      * 5. It encourages users to see what their peers are listening to and follow
      * new tastes.
      */
-    
 @GetMapping("/discovery")
     public String discovery(
             @org.springframework.web.bind.annotation.RequestParam(name = "q", required = false) String query,
@@ -116,7 +115,6 @@ public class DiscoveryController {
         model.addAttribute("publicPlaylists", playlists);
         return "discovery/explore-playlists";
     }
-    
 /**
      * Provides a focused view for an individual song, including metadata and
      * library options.
@@ -132,7 +130,7 @@ public class DiscoveryController {
      * for a track.
      * 5. Ensuring that both the music player and the text descriptions are
      * synchronized for the user.
-     */ 
+     */
 @GetMapping("/song/{id}")
     public String viewSongDetails(@PathVariable("id") Long id, Model model, Authentication authentication) {
         Song song = songService.getSongById(id);
@@ -142,4 +140,4 @@ public class DiscoveryController {
         }
         return "discovery/detail";
     }
-    }
+}

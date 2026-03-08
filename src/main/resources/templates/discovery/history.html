@@ -18,137 +18,135 @@
 </head>
 
 <body>
+    <!-- Injects the global navigation bar. -->
+    <div th:replace="~{fragments/layout :: navbar}"></div>
 
-<!-- Injects the global navigation bar. -->
-<div th:replace="~{fragments/layout :: navbar}"></div>
+    <div id="main-content" class="fade-in">
 
-<div id="main-content" class="fade-in">
-
-    <div class="container mb-5 mt-5">
-        <!-- Header Section with Glassmorphism Effect -->
-        <div
+        <div class="container mb-5 mt-5">
+            <!-- Header Section with Glassmorphism Effect -->
+            <div
                 class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-5 gap-3 p-4 rounded-4 bg-white shadow-sm border border-light">
-            <div>
-                <h1 class="text-primary fw-bold display-6 mb-1">Your Musical Journey</h1>
-                <p class="text-muted mb-0">Revisit the sounds that defined your moments on RevPlay.</p>
+                <div>
+                    <h1 class="text-primary fw-bold display-6 mb-1">Your Musical Journey</h1>
+                    <p class="text-muted mb-0">Revisit the sounds that defined your moments on RevPlay.</p>
+                </div>
+                <!-- th:if: Only shows the clear history form if there are logs to remove. -->
+                <form id="clearHistoryForm" th:if="${not #lists.isEmpty(completeHistory)}"
+                    th:action="@{/social/history/clear}" method="post"
+                    onsubmit="return confirmAction('Are you sure you want to clear your entire listening history? This cannot be undone.', this);">
+                    <button type="submit" class="btn btn-outline-danger shadow-sm fw-bold rounded-pill px-4 hover-lift">
+                        <i class="bi bi-trash3-fill me-2"></i>Purge All History
+                    </button>
+                </form>
             </div>
-            <!-- th:if: Only shows the clear history form if there are logs to remove. -->
-            <form id="clearHistoryForm" th:if="${not #lists.isEmpty(completeHistory)}"
-                  th:action="@{/social/history/clear}" method="post"
-                  onsubmit="return confirmAction('Are you sure you want to clear your entire listening history? This cannot be undone.', this);">
-                <button type="submit" class="btn btn-outline-danger shadow-sm fw-bold rounded-pill px-4 hover-lift">
-                    <i class="bi bi-trash3-fill me-2"></i>Purge All History
-                </button>
-            </form>
-        </div>
 
-        <!-- Tab Navigation for Filtering History -->
-        <ul class="nav nav-pills custom-pills mb-4 gap-2" id="historyTabs" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active rounded-pill px-4 fw-bold shadow-sm" id="recent-tab"
+            <!-- Tab Navigation for Filtering History -->
+            <ul class="nav nav-pills custom-pills mb-4 gap-2" id="historyTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active rounded-pill px-4 fw-bold shadow-sm" id="recent-tab"
                         data-bs-toggle="pill" data-bs-target="#recent" type="button" role="tab" aria-controls="recent"
                         aria-selected="true">
-                    Recently Played (Last 50)
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link rounded-pill px-4 fw-bold shadow-sm" id="complete-tab" data-bs-toggle="pill"
+                        Recently Played (Last 50)
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link rounded-pill px-4 fw-bold shadow-sm" id="complete-tab" data-bs-toggle="pill"
                         data-bs-target="#complete" type="button" role="tab" aria-controls="complete"
                         aria-selected="false">
-                    Complete Timeline
-                </button>
-            </li>
-        </ul>
+                        Complete Timeline
+                    </button>
+                </li>
+            </ul>
 
-        <div class="tab-content" id="historyTabsContent">
-            <!-- Recent History Tab -->
-            <div class="tab-pane fade show active" id="recent" role="tabpanel" aria-labelledby="recent-tab">
-                <div th:replace="~{fragments/history-table :: historyTable(${recentHistory}, 'recent')}"></div>
-            </div>
+            <div class="tab-content" id="historyTabsContent">
+                <!-- Recent History Tab -->
+                <div class="tab-pane fade show active" id="recent" role="tabpanel" aria-labelledby="recent-tab">
+                    <div th:replace="~{fragments/history-table :: historyTable(${recentHistory}, 'recent')}"></div>
+                </div>
 
-            <!-- Complete History Tab -->
-            <div class="tab-pane fade" id="complete" role="tabpanel" aria-labelledby="complete-tab">
-                <div th:replace="~{fragments/history-table :: historyTable(${completeHistory}, 'complete')}"></div>
+                <!-- Complete History Tab -->
+                <div class="tab-pane fade" id="complete" role="tabpanel" aria-labelledby="complete-tab">
+                    <div th:replace="~{fragments/history-table :: historyTable(${completeHistory}, 'complete')}"></div>
+                </div>
             </div>
         </div>
-    </div>
 
 
-</div><!-- /#main-content -->
+    </div><!-- /#main-content -->
 
-<style>
-    .custom-pills .nav-link {
-        color: #6c757d;
-        background: #f8f9fa;
-        border: 1px solid #e9ecef;
-        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-
-    .custom-pills .nav-link.active {
-        color: #fff;
-        background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-        border-color: transparent;
-        transform: translateY(-2px);
-    }
-
-    .btn-primary-gradient {
-        background: linear-gradient(135deg, #007bff 0%, #00a2ff 100%);
-        border: none;
-        color: white;
-        transition: all 0.2s ease;
-    }
-
-    .btn-primary-gradient:hover {
-        background: linear-gradient(135deg, #0056b3 0%, #007bff 100%);
-        transform: scale(1.05);
-        color: white;
-    }
-
-    .history-row {
-        transition: background-color 0.2s ease;
-    }
-
-    .history-row:hover {
-        background-color: #f8faff !important;
-    }
-
-    .hover-lift {
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .hover-lift:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-
-    .song-thumb {
-        transition: transform 0.3s ease;
-    }
-
-    .history-row:hover .song-thumb {
-        transform: scale(1.1);
-    }
-
-    .fade-in {
-        animation: fadeIn 0.5s ease-out;
-    }
-
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(10px);
+    <style>
+        .custom-pills .nav-link {
+            color: #6c757d;
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        to {
-            opacity: 1;
-            transform: translateY(0);
+        .custom-pills .nav-link.active {
+            color: #fff;
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+            border-color: transparent;
+            transform: translateY(-2px);
         }
-    }
-</style>
 
-<!-- Injects the global footer fragment. -->
-<div th:replace="~{fragments/layout :: footer}"></div>
+        .btn-primary-gradient {
+            background: linear-gradient(135deg, #007bff 0%, #00a2ff 100%);
+            border: none;
+            color: white;
+            transition: all 0.2s ease;
+        }
 
+        .btn-primary-gradient:hover {
+            background: linear-gradient(135deg, #0056b3 0%, #007bff 100%);
+            transform: scale(1.05);
+            color: white;
+        }
+
+        .history-row {
+            transition: background-color 0.2s ease;
+        }
+
+        .history-row:hover {
+            background-color: #f8faff !important;
+        }
+
+        .hover-lift {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .hover-lift:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .song-thumb {
+            transition: transform 0.3s ease;
+        }
+
+        .history-row:hover .song-thumb {
+            transform: scale(1.1);
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+
+    <!-- Injects the global footer fragment. -->
+    <div th:replace="~{fragments/layout :: footer}"></div>
 </body>
 
 </html>

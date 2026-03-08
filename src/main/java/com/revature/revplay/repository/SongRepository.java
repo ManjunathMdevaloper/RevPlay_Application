@@ -25,7 +25,6 @@ public interface SongRepository extends JpaRepository<Song, Long> {
         /**
          * Pulls all tracks belonging to a specific genre.
          */
-        
 List<Song> findByGenre(String genre);
 
         /**
@@ -45,24 +44,19 @@ List<Song> findByGenre(String genre);
          */
         @org.springframework.data.jpa.repository.Query("SELECT DISTINCT s.genre FROM Song s WHERE s.genre IS NOT NULL")
         List<String> findAllGenres();
-        
 /**
          * Performs a case-insensitive search for tracks containing the target string in
          * their title.
          */
-        
 List<Song> findByTitleContainingIgnoreCase(String title);
-        
-/**
+/** 
          * Calculates the total lifetime reach of an artist by summing plays across
          * their entire catalog.
          * This single numeric value is the primary "Impact" metric used on professional
          * dashboards.
          */
         @org.springframework.data.jpa.repository.Query("SELECT SUM(s.playCount) FROM Song s WHERE s.artist.id = :artistId")
-        
 Long getTotalPlayCountByArtistId(@org.springframework.data.repository.query.Param("artistId") Long artistId);
-        
 /**
          * Identifies the current "Hits" on the platform by ranking every track by
          * cumulative plays.
@@ -70,9 +64,7 @@ Long getTotalPlayCountByArtistId(@org.springframework.data.repository.query.Para
          * discovery.
          */
         @org.springframework.data.jpa.repository.Query("SELECT s FROM Song s ORDER BY s.playCount DESC")
-        
 List<Song> findTopTrendingSongs(org.springframework.data.domain.Pageable pageable);
-        
 /**
          * The platform's most powerful discovery engine—a multi-parameter filtering
          * query.
@@ -92,12 +84,10 @@ List<Song> findTopTrendingSongs(org.springframework.data.domain.Pageable pageabl
                         "(:artist IS NULL OR s.artist = :artist) AND " +
                         "(:albumId IS NULL OR s.albumId = :albumId) AND " +
                         "(:releaseYear IS NULL OR EXTRACT(YEAR FROM s.releaseDate) = :releaseYear)")
-        
 List<Song> searchAndFilterSongs(
                         @org.springframework.data.repository.query.Param("title") String title,
                         @org.springframework.data.repository.query.Param("genre") String genre,
                         @org.springframework.data.repository.query.Param("artist") com.revature.revplay.entity.User artist,
                         @org.springframework.data.repository.query.Param("albumId") Long albumId,
                         @org.springframework.data.repository.query.Param("releaseYear") Integer releaseYear);
-        
 }

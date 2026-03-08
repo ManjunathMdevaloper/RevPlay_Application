@@ -1,4 +1,4 @@
-<!--
+<!-- 
   Layout Fragment Template
   This file serves as the master structural template for the entire RevPlay application.
   It utilizes Thymeleaf 'fragments' to define reusable components like the <head>, <nav>, and <footer>.
@@ -9,8 +9,6 @@
 <!DOCTYPE html>
 
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-
-
 <!-- 
   Head Fragment: th:fragment="head(title)"
   - th:fragment: Defines a reusable block named 'head' that accepts a dynamic 'title' parameter.
@@ -104,7 +102,11 @@
         </div>
     </nav>
 
-
+    <!-- 
+      Footer Fragment: th:fragment="footer"
+      - th:replace="~{fragments/music-player :: player}": Injects the music player fragment from another file.
+      - th:src="@{/js/player.js}": Includes the essential JavaScript logic for the platform's audio engine.
+    -->
     <footer th:fragment="footer" class="text-center">
         <div sec:authorize="isAuthenticated()" th:replace="~{fragments/music-player :: player}"></div>
         <div class="container pb-3 border-top pt-3 border-light mt-5">
@@ -118,7 +120,6 @@
     </footer>
 
     <!-- Global Confirm Modal Fragment: th:fragment="confirmModal" -->
-
     <div th:fragment="confirmModal" class="modal fade" id="globalConfirmModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
             <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">

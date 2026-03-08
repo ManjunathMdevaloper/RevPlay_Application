@@ -129,4 +129,3 @@ public class AuthController {
         return "redirect:/login?registerSuccess";
     }
 }
-

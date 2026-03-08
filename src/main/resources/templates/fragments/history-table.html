@@ -5,74 +5,74 @@
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
                     <thead class="bg-light text-muted small text-uppercase fw-bold">
-                    <tr>
-                        <th class="ps-4 py-3" style="width: 40%;">Track Details</th>
-                        <th class="py-3">Artist</th>
-                        <th class="d-none d-md-table-cell py-3">Played On</th>
-                        <th class="text-end pe-4 py-3">Action</th>
-                    </tr>
+                        <tr>
+                            <th class="ps-4 py-3" style="width: 40%;">Track Details</th>
+                            <th class="py-3">Artist</th>
+                            <th class="d-none d-md-table-cell py-3">Played On</th>
+                            <th class="text-end pe-4 py-3">Action</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    <!-- th:each: Iterates through the list of History objects. -->
-                    <tr th:each="entry : ${historyList}" class="history-row">
-                        <td class="ps-4">
-                            <div class="d-flex align-items-center py-2">
-                                <div class="position-relative me-3">
-                                    <img th:src="${entry.song.coverArtUrl != null ? entry.song.coverArtUrl : '/images/default-album.svg'}"
-                                         style="width: 55px; height: 55px; object-fit: cover;"
-                                         class="rounded-3 border shadow-sm song-thumb">
-                                    <div
+                        <!-- th:each: Iterates through the list of History objects. -->
+                        <tr th:each="entry : ${historyList}" class="history-row">
+                            <td class="ps-4">
+                                <div class="d-flex align-items-center py-2">
+                                    <div class="position-relative me-3">
+                                        <img th:src="${entry.song.coverArtUrl != null ? entry.song.coverArtUrl : '/images/default-album.svg'}"
+                                            style="width: 55px; height: 55px; object-fit: cover;"
+                                            class="rounded-3 border shadow-sm song-thumb">
+                                        <div
                                             class="play-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center rounded-3 opacity-0">
-                                        <i class="bi bi-play-fill text-white fs-4"></i>
+                                            <i class="bi bi-play-fill text-white fs-4"></i>
+                                        </div>
+                                    </div>
+                                    <div class="overflow-hidden">
+                                        <h6 class="mb-0 fw-bold text-dark text-truncate" th:text="${entry.song.title}">
+                                            Song Title</h6>
+                                        <small class="text-muted d-md-none"
+                                            th:text="${entry.song.artist != null ? (entry.song.artist.displayName ?: entry.song.artist.username) : 'Unknown'}"></small>
                                     </div>
                                 </div>
-                                <div class="overflow-hidden">
-                                    <h6 class="mb-0 fw-bold text-dark text-truncate" th:text="${entry.song.title}">
-                                        Song Title</h6>
-                                    <small class="text-muted d-md-none"
-                                           th:text="${entry.song.artist != null ? (entry.song.artist.displayName ?: entry.song.artist.username) : 'Unknown'}"></small>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
+                            </td>
+                            <td>
                                 <span class="fw-medium text-dark-emphasis"
-                                      th:text="${entry.song.artist != null ? (entry.song.artist.displayName ?: entry.song.artist.username) : 'Unknown Artist'}">Artist</span>
-                        </td>
-                        <td class="d-none d-md-table-cell">
-                            <div class="d-flex flex-column">
+                                    th:text="${entry.song.artist != null ? (entry.song.artist.displayName ?: entry.song.artist.username) : 'Unknown Artist'}">Artist</span>
+                            </td>
+                            <td class="d-none d-md-table-cell">
+                                <div class="d-flex flex-column">
                                     <span class="text-dark fw-medium"
-                                          th:text="${#temporals.format(entry.playedAt, 'MMM dd, yyyy')}">Date</span>
-                                <small class="text-muted"
-                                       th:text="${#temporals.format(entry.playedAt, 'HH:mm:ss')}">Time</small>
-                            </div>
-                        </td>
-                        <td class="text-end pe-4">
-                            <button
+                                        th:text="${#temporals.format(entry.playedAt, 'MMM dd, yyyy')}">Date</span>
+                                    <small class="text-muted"
+                                        th:text="${#temporals.format(entry.playedAt, 'HH:mm:ss')}">Time</small>
+                                </div>
+                            </td>
+                            <td class="text-end pe-4">
+                                <button
                                     class="btn btn-primary-gradient rounded-pill px-4 py-2 shadow-sm btn-sm fw-bold play-again-btn"
                                     th:data-song-id="${entry.song.id}" th:data-audio-url="${entry.song.audioUrl}"
                                     th:data-title="${entry.song.title}"
                                     th:data-artist="${entry.song.artist != null ? (entry.song.artist.displayName ?: entry.song.artist.username) : 'Unknown Artist'}"
                                     th:data-cover="${entry.song.coverArtUrl != null ? entry.song.coverArtUrl : '/images/default-album.svg'}"
                                     onclick="playGlobalAudio(this.getAttribute('data-song-id'), this.getAttribute('data-audio-url'), this.getAttribute('data-title'), this.getAttribute('data-artist'), this.getAttribute('data-cover'))">
-                                <i class="bi bi-play-circle-fill me-1"></i>Play Again
-                            </button>
-                        </td>
-                    </tr>
+                                    <i class="bi bi-play-circle-fill me-1"></i>Play Again
+                                </button>
+                            </td>
+                        </tr>
 
-                    <!-- Empty State UI -->
-                    <tr th:if="${#lists.isEmpty(historyList)}">
-                        <td colspan="4" class="text-center py-5">
-                            <div class="empty-history-icon mb-3">
-                                <span class="display-3">🎧</span>
-                            </div>
-                            <h5 class="text-dark fw-bold">Silence is golden, but music is better.</h5>
-                            <p class="text-muted mb-4 small">Your history for this section is currently
-                                empty.</p>
-                            <a th:href="@{/}"
-                               class="btn btn-primary rounded-pill px-5 py-2 shadow hover-lift fw-bold">Explore
-                                Music</a>
-                        </td>
-                    </tr>
+                        <!-- Empty State UI -->
+                        <tr th:if="${#lists.isEmpty(historyList)}">
+                            <td colspan="4" class="text-center py-5">
+                                <div class="empty-history-icon mb-3">
+                                    <span class="display-3">🎧</span>
+                                </div>
+                                <h5 class="text-dark fw-bold">Silence is golden, but music is better.</h5>
+                                <p class="text-muted mb-4 small">Your history for this section is currently
+                                    empty.</p>
+                                <a th:href="@{/}"
+                                    class="btn btn-primary rounded-pill px-5 py-2 shadow hover-lift fw-bold">Explore
+                                    Music</a>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>

@@ -42,7 +42,6 @@ public class SearchResultDto {
     /**
      * A utility method to quickly determine if the search returned zero results
      * across all categories.
-     *
      * This method is essential for:
      * 1. Displaying a "No Results Found" message to the user when appropriate.
      * 2. determining if specialized UI sections (like artist results) should be

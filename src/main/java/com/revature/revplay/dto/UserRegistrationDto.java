@@ -56,4 +56,3 @@ public class UserRegistrationDto {
      */
     private boolean isArtist;
 }
-

@@ -28,7 +28,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-
 public class Album {
 
     /**
@@ -133,5 +132,3 @@ public class Album {
         createdAt = LocalDateTime.now();
     }
 }
-
-

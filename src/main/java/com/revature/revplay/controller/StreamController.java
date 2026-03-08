@@ -19,17 +19,15 @@ import org.springframework.web.bind.annotation.RestController;
  * captured to drive the platform's trending algorithms and artist payment
  * metrics.
  */
-
-
-
 @RestController
 @RequestMapping("/api/stream")
 public class StreamController {
+
     private final SongService songService;
 
     /**
      * Standard constructor for injecting the SongService dependency.
-     *
+     * 
      * This dependency allows the controller to:
      * 1. Register play events in the master tracking database.
      * 2. update the aggregate popularity scores for both tracks and artists.
@@ -46,7 +44,7 @@ public class StreamController {
 
     /**
      * Increments the play count and history for a specific song ID.
-     *
+     * 
      * The stream recording logic handles:
      * 1. Identifying the song being played through a path variable.
      * 2. Capturing the current user's session from the authentication context (if
@@ -62,13 +60,10 @@ public class StreamController {
      */
     @PostMapping("/{songId}/increment")
     public ResponseEntity<String> incrementStream(@PathVariable("songId") Long songId,
-                                                  org.springframework.security.core.Authentication auth) {
+            org.springframework.security.core.Authentication auth) {
         String username = (auth != null) ? auth.getName() : null;
         songService.recordPlay(songId, username);
 
         return ResponseEntity.ok("Stream recorded cleanly.");
     }
-
 }
-
-

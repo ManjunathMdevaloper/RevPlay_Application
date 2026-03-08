@@ -30,7 +30,6 @@ import java.util.List;
  * and media storage
  * to provide a one-stop-shop for artist growth and content distribution.
  */
-
 @Controller
 @RequestMapping("/artist/dashboard")
 public class ArtistDashboardController {
@@ -44,7 +43,7 @@ public class ArtistDashboardController {
 
     /**
      * Standard constructor that wires up the entire artist-support infrastructure.
-     *
+     * 
      * The dependencies provided here allow the dashboard to:
      * 1. Manage CRUD operations for tracks and professional albums.
      * 2. Calculate real-time analytics like total stream counts and follower
@@ -56,10 +55,10 @@ public class ArtistDashboardController {
      * professional-grade.
      */
     public ArtistDashboardController(SongService songService, UserService userService,
-                                     AlbumRepository albumRepository,
-                                     com.revature.revplay.service.SocialService socialService,
-                                     jakarta.persistence.EntityManager entityManager,
-                                     com.revature.revplay.repository.HistoryRepository historyRepository) {
+            AlbumRepository albumRepository,
+            com.revature.revplay.service.SocialService socialService,
+            jakarta.persistence.EntityManager entityManager,
+            com.revature.revplay.repository.HistoryRepository historyRepository) {
         this.songService = songService;
         this.userService = userService;
         this.albumRepository = albumRepository;
@@ -71,7 +70,7 @@ public class ArtistDashboardController {
     /**
      * Renders the master dashboard view with full analytics and content management
      * lists.
-     *
+     * 
      * The dashboard rendering process includes:
      * 1. Identifying the authenticated artist and fetching their complete catalog.
      * 2. calculating popularity rankings by sorting songs based on their total play
@@ -112,7 +111,7 @@ public class ArtistDashboardController {
 
     /**
      * Displays a dedicated standalone form for professional song uploads.
-     *
+     * 
      * The form preparation logic handles:
      * 1. Identifying the artist's library to provide a context for the upload.
      * 2. Pre-fetching a list of the artist's existing albums for categorization.
@@ -132,7 +131,7 @@ public class ArtistDashboardController {
 
     /**
      * Processes the heavy-duty multi-part upload of a new track.
-     *
+     * 
      * This method manages:
      * 1. Capturing the raw audio (MP3/WAV) and optional cover art image bytes.
      * 2. Delegating the complex media storage and database linking to the
@@ -146,10 +145,10 @@ public class ArtistDashboardController {
      */
     @PostMapping("/songs/create")
     public String createSong(Authentication authentication,
-                             @ModelAttribute("songDto") SongDto songDto,
-                             @RequestParam("audioFile") MultipartFile audioFile,
-                             @RequestParam(value = "coverFile", required = false) MultipartFile coverFile,
-                             RedirectAttributes redirectAttributes) {
+            @ModelAttribute("songDto") SongDto songDto,
+            @RequestParam("audioFile") MultipartFile audioFile,
+            @RequestParam(value = "coverFile", required = false) MultipartFile coverFile,
+            RedirectAttributes redirectAttributes) {
 
         User artist = userService.getUserByUsername(authentication.getName());
         songService.saveSong(songDto, artist, audioFile, coverFile);
@@ -160,7 +159,7 @@ public class ArtistDashboardController {
 
     /**
      * Prepares the track editing form with existing metadata and security checks.
-     *
+     * 
      * The edit preparation ensures:
      * 1. Security: It verifies the artist is only editing their own musical
      * property.
@@ -196,7 +195,6 @@ public class ArtistDashboardController {
 
     /**
      * Saves the modified metadata and/or new cover art for an existing track.
-     *
      * The update process handles:
      * 1. Validating the artist's ownership of the specific song ID being modified.
      * 2. selectively updating metadata fields through the SongService
@@ -209,10 +207,10 @@ public class ArtistDashboardController {
      */
     @PostMapping("/songs/{id}/edit")
     public String editSong(@PathVariable("id") Long id,
-                           Authentication authentication,
-                           @ModelAttribute("songDto") SongDto songDto,
-                           @RequestParam(value = "coverFile", required = false) MultipartFile coverFile,
-                           RedirectAttributes redirectAttributes) {
+            Authentication authentication,
+            @ModelAttribute("songDto") SongDto songDto,
+            @RequestParam(value = "coverFile", required = false) MultipartFile coverFile,
+            RedirectAttributes redirectAttributes) {
 
         User artist = userService.getUserByUsername(authentication.getName());
         songService.updateSong(id, songDto, artist.getId(), coverFile);
@@ -223,7 +221,7 @@ public class ArtistDashboardController {
 
     /**
      * Triggers a deep-cleaning deletion of a music track.
-     *
+     * 
      * The deletion workflow includes:
      * 1. Verifying the artist's identity to prevent unauthorized media removal.
      * 2. removing all relational links from user libraries, playlists, and history.
@@ -234,7 +232,7 @@ public class ArtistDashboardController {
      */
     @PostMapping("/songs/{id}/delete")
     public String deleteSong(@PathVariable("id") Long id, Authentication authentication,
-                             RedirectAttributes redirectAttributes) {
+            RedirectAttributes redirectAttributes) {
         User artist = userService.getUserByUsername(authentication.getName());
         songService.deleteSong(id, artist.getId());
 
@@ -244,7 +242,7 @@ public class ArtistDashboardController {
 
     /**
      * Renders the professional form for creating a new musical project (Album).
-     *
+     * 
      * The preparation logic involves:
      * 1. Initializing an empty AlbumDto to capture the project's branding
      * information.
@@ -263,7 +261,7 @@ public class ArtistDashboardController {
 
     /**
      * Processes the creation of a new Album entity, including its branding imagery.
-     *
+     * 
      * This method manages:
      * 1. Capturing the professional release metadata (Title, Bio, Release Date).
      * 2. extracting and storing the raw binary bytes for the album's high-res cover
@@ -276,9 +274,9 @@ public class ArtistDashboardController {
      */
     @PostMapping("/albums/create")
     public String createAlbum(Authentication authentication,
-                              @ModelAttribute("albumDto") AlbumDto albumDto,
-                              @RequestParam(value = "coverFile", required = false) MultipartFile coverFile,
-                              RedirectAttributes redirectAttributes) {
+            @ModelAttribute("albumDto") AlbumDto albumDto,
+            @RequestParam(value = "coverFile", required = false) MultipartFile coverFile,
+            RedirectAttributes redirectAttributes) {
 
         User artist = userService.getUserByUsername(authentication.getName());
 
@@ -307,7 +305,7 @@ public class ArtistDashboardController {
     /**
      * Loads the album modification form with current data and security
      * verification.
-     *
+     * 
      * The edit retrieval process Ensures:
      * 1. The requesting artist is the actual creator of the album project.
      * 2. Current metadata is mapped accurately to the DTO for pre-filling the user
@@ -340,7 +338,7 @@ public class ArtistDashboardController {
 
     /**
      * Saves updated branding and metadata for an existing album project.
-     *
+     * 
      * The update logic handles:
      * 1. Validating that the album belongs to the authenticated artist.
      * 2. Updating high-level fields like project name, description, and release
@@ -353,10 +351,10 @@ public class ArtistDashboardController {
      */
     @PostMapping("/albums/{id}/edit")
     public String editAlbum(@PathVariable("id") Long id,
-                            Authentication authentication,
-                            @ModelAttribute("albumDto") AlbumDto albumDto,
-                            @RequestParam(value = "coverFile", required = false) MultipartFile coverFile,
-                            RedirectAttributes redirectAttributes) {
+            Authentication authentication,
+            @ModelAttribute("albumDto") AlbumDto albumDto,
+            @RequestParam(value = "coverFile", required = false) MultipartFile coverFile,
+            RedirectAttributes redirectAttributes) {
 
         User artist = userService.getUserByUsername(authentication.getName());
         Album album = albumRepository.findById(id)
@@ -388,7 +386,7 @@ public class ArtistDashboardController {
     /**
      * Performs a complex, deep deletion of an entire album and manages its track
      * orphans.
-     *
+     * 
      * This sophisticated deletion workflow involves:
      * 1. Security: Verifying ownership before any destructive database actions
      * occur.
@@ -406,7 +404,7 @@ public class ArtistDashboardController {
     @PostMapping("/albums/{id}/delete")
     @org.springframework.transaction.annotation.Transactional
     public String deleteAlbum(@PathVariable("id") Long id, Authentication authentication,
-                              RedirectAttributes redirectAttributes) {
+            RedirectAttributes redirectAttributes) {
         User artist = userService.getUserByUsername(authentication.getName());
         Album album = albumRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Album not found"));
