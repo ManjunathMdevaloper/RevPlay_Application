@@ -73,79 +73,77 @@
         </div>
 
 
+        <style>
+            .custom-pills .nav-link {
+                color: #6c757d;
+                background: #f8f9fa;
+                border: 1px solid #e9ecef;
+                transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            }
+
+            .custom-pills .nav-link.active {
+                color: #fff;
+                background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+                border-color: transparent;
+                transform: translateY(-2px);
+            }
+
+            .btn-primary-gradient {
+                background: linear-gradient(135deg, #007bff 0%, #00a2ff 100%);
+                border: none;
+                color: white;
+                transition: all 0.2s ease;
+            }
+
+            .btn-primary-gradient:hover {
+                background: linear-gradient(135deg, #0056b3 0%, #007bff 100%);
+                transform: scale(1.05);
+                color: white;
+            }
+
+            .history-row {
+                transition: background-color 0.2s ease;
+            }
+
+            .history-row:hover {
+                background-color: #f8faff !important;
+            }
+
+            .hover-lift {
+                transition: transform 0.2s ease, box-shadow 0.2s ease;
+            }
+
+            .hover-lift:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            }
+
+            .song-thumb {
+                transition: transform 0.3s ease;
+            }
+
+            .history-row:hover .song-thumb {
+                transform: scale(1.1);
+            }
+
+            .fade-in {
+                animation: fadeIn 0.5s ease-out;
+            }
+
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(10px);
+                }
+
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        </style>
     </div><!-- /#main-content -->
 
-    <style>
-        .custom-pills .nav-link {
-            color: #6c757d;
-            background: #f8f9fa;
-            border: 1px solid #e9ecef;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .custom-pills .nav-link.active {
-            color: #fff;
-            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-            border-color: transparent;
-            transform: translateY(-2px);
-        }
-
-        .btn-primary-gradient {
-            background: linear-gradient(135deg, #007bff 0%, #00a2ff 100%);
-            border: none;
-            color: white;
-            transition: all 0.2s ease;
-        }
-
-        .btn-primary-gradient:hover {
-            background: linear-gradient(135deg, #0056b3 0%, #007bff 100%);
-            transform: scale(1.05);
-            color: white;
-        }
-
-        .history-row {
-            transition: background-color 0.2s ease;
-        }
-
-        .history-row:hover {
-            background-color: #f8faff !important;
-        }
-
-        .hover-lift {
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .hover-lift:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        .song-thumb {
-            transition: transform 0.3s ease;
-        }
-
-        .history-row:hover .song-thumb {
-            transform: scale(1.1);
-        }
-
-        .fade-in {
-            animation: fadeIn 0.5s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-    </style>
-
-    <!-- Injects the global footer fragment. -->
     <div th:replace="~{fragments/layout :: footer}"></div>
 </body>
 

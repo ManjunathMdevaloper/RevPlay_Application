@@ -102,41 +102,40 @@
                 </div>
             </div>
         </div>
+        <script th:inline="javascript">
+            /**
+             * Library Like System
+             * Handles the 'Unlike' action asynchronously to avoid page refresh.
+             */
+            document.addEventListener('DOMContentLoaded', function () {
+                const likeBtns = document.querySelectorAll('.like-btn');
+                likeBtns.forEach(btn => {
+                    btn.addEventListener('click', function () {
+                        const songId = this.getAttribute('data-id');
+                        fetch(`/library/like/${songId}`, { method: 'POST' })
+                            .then(res => res.json())
+                            .then(isLiked => {
+                                // If removed (isLiked === false), we hide the row for immediate feedback.
+                                if (!isLiked) {
+                                    const row = btn.closest('tr');
+                                    row.classList.add('fade-out');
+                                    setTimeout(() => row.remove(), 300);
+                                }
+                            });
+                    });
+                });
+            });
+        </script>
+        <style>
+            .fade-out {
+                opacity: 0;
+                transition: opacity 0.3s ease;
+            }
+        </style>
     </div><!-- /#main-content -->
 
     <!-- Injects the layout's global footer. -->
     <div th:replace="~{fragments/layout :: footer}"></div>
-
-    <script th:inline="javascript">
-        /**
-         * Library Like System
-         * Handles the 'Unlike' action asynchronously to avoid page refresh.
-         */
-        document.addEventListener('DOMContentLoaded', function () {
-            const likeBtns = document.querySelectorAll('.like-btn');
-            likeBtns.forEach(btn => {
-                btn.addEventListener('click', function () {
-                    const songId = this.getAttribute('data-id');
-                    fetch(`/library/like/${songId}`, { method: 'POST' })
-                        .then(res => res.json())
-                        .then(isLiked => {
-                            // If removed (isLiked === false), we hide the row for immediate feedback.
-                            if (!isLiked) {
-                                const row = btn.closest('tr');
-                                row.classList.add('fade-out');
-                                setTimeout(() => row.remove(), 300);
-                            }
-                        });
-                });
-            });
-        });
-    </script>
-    <style>
-        .fade-out {
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-    </style>
 </body>
 
 </html>
