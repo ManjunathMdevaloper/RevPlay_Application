@@ -68,4 +68,5 @@ public class UserDto {
     private Long favoriteSongsCount;
     private Long listeningTime; // in minutes maybe
     private Long followingCount;
+    private java.util.List<UserDto> followedArtists;
 }

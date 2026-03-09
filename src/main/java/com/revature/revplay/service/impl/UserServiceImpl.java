@@ -120,6 +120,22 @@ public class UserServiceImpl implements UserService {
         dto.setFollowingCount((long) user.getFollowing().size());
         dto.setListeningTime(0L);
 
+        // Populate Following List
+        if (user.getFollowing() != null) {
+            dto.setFollowedArtists(user.getFollowing().stream().map(followed -> {
+                UserDto simpleDto = new UserDto();
+                simpleDto.setId(followed.getId());
+                simpleDto.setUsername(followed.getUsername());
+                simpleDto.setDisplayName(followed.getDisplayName());
+                simpleDto.setProfilePictureUrl(followed.getProfilePictureUrl());
+                if (followed.getRole() == Role.ARTIST && followed.getArtistProfile() != null) {
+                    simpleDto.setArtistName(followed.getArtistProfile().getArtistName());
+                    simpleDto.setGenre(followed.getArtistProfile().getGenre());
+                }
+                return simpleDto;
+            }).collect(java.util.stream.Collectors.toList()));
+        }
+
         return dto;
     }
 

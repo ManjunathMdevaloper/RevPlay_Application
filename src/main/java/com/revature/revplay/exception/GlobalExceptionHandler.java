@@ -11,6 +11,14 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(org.springframework.web.servlet.resource.NoResourceFoundException.class)
+    @ResponseStatus(org.springframework.http.HttpStatus.NOT_FOUND)
+    public void handleNoResourceFound(org.springframework.web.servlet.resource.NoResourceFoundException ex) {
+        // Silently handle 404s for static resources or missing handlers to avoid log
+        // noise
+        log.debug("Resource not found: {}", ex.getResourcePath());
+    }
+
     @ExceptionHandler(ResourceNotFoundException.class)
     @ResponseStatus(org.springframework.http.HttpStatus.NOT_FOUND)
     public ModelAndView handleNotFound(ResourceNotFoundException ex) {

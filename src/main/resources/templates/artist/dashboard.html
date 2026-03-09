@@ -38,45 +38,53 @@
                 </div>
             </div>
 
-            <!-- MODAL: Create New Album 
-                 - th:action: Submits the form to the album creation endpoint.
-                 - th:object="${albumDto}": Binds input fields to a data transfer object in the backend.
-                 - enctype="multipart/form-data": Essential for the 'coverFile' image upload.
-            -->
+            <!-- MODAL: Create New Album -->
             <div class="modal fade" id="createAlbumModal" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-dialog modal-dialog-centered modal-lg">
                     <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
-                        <div class="modal-header bg-primary text-white border-0 py-3">
-                            <h5 class="modal-title fw-bold">📀 Publish New Album</h5>
-                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                        </div>
-                        <div class="modal-body p-4">
+                        <div class="modal-body p-4 p-md-5">
+                            <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+                                <div>
+                                    <h2 class="fw-bold mb-0 text-primary">Publish New Album</h2>
+                                    <p class="text-muted small mb-0">Curate your collection for the world to hear</p>
+                                </div>
+                                <button type="button"
+                                    class="btn btn-outline-secondary rounded-pill px-3 shadow-sm fw-bold small"
+                                    data-bs-dismiss="modal">✕ Cancel</button>
+                            </div>
                             <form th:action="@{/artist/dashboard/albums/create}" th:object="${albumDto}" method="post"
                                 enctype="multipart/form-data">
-                                <div class="mb-3">
-                                    <label for="albName" class="form-label fw-bold">Album Title</label>
-                                    <!-- th:field="*{name}": Links to the 'name' property of AlbumDto. -->
-                                    <input type="text" th:field="*{name}" class="form-control" id="albName"
+                                <div class="mb-4">
+                                    <label for="albName" class="form-label fw-bold small text-muted">Album Title <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" th:field="*{name}"
+                                        class="form-control rounded-3 border-light shadow-sm" id="albName"
                                         placeholder="E.g. Midnight Melodies" required>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="albDesc" class="form-label fw-bold">Description</label>
-                                    <textarea th:field="*{description}" class="form-control" id="albDesc" rows="2"
+                                <div class="mb-4">
+                                    <label for="albDesc" class="form-label fw-bold small text-muted">Description</label>
+                                    <textarea th:field="*{description}"
+                                        class="form-control rounded-3 border-light shadow-sm" id="albDesc" rows="3"
                                         placeholder="Tell your fans about this collection..."></textarea>
                                 </div>
-                                <div class="row mb-3">
-                                    <div class="col-md-6">
-                                        <label for="albDate" class="form-label fw-bold font-sm">Release Date</label>
-                                        <input type="date" th:field="*{releaseDate}" class="form-control" id="albDate">
+                                <div class="row mb-4">
+                                    <div class="col-md-6 mb-3 mb-md-0">
+                                        <label for="albDate" class="form-label fw-bold small text-muted">Release
+                                            Date</label>
+                                        <input type="date" th:field="*{releaseDate}"
+                                            class="form-control rounded-3 border-light shadow-sm" id="albDate">
                                     </div>
                                     <div class="col-md-6">
-                                        <label for="albCover" class="form-label fw-bold font-sm">Cover Art</label>
-                                        <input type="file" name="coverFile" class="form-control" id="albCover"
+                                        <label for="albCover" class="form-label fw-bold small text-muted">Album Cover
+                                            Art</label>
+                                        <input type="file" name="coverFile"
+                                            class="form-control rounded-3 border-light shadow-sm" id="albCover"
                                             accept="image/*">
                                     </div>
                                 </div>
-                                <div class="d-grid mt-4">
-                                    <button type="submit" class="btn btn-primary btn-lg fw-bold shadow">Create
+                                <div class="d-grid mt-5">
+                                    <button type="submit"
+                                        class="btn btn-primary btn-lg fw-bold rounded-pill shadow">Publish New
                                         Album</button>
                                 </div>
                             </form>
@@ -89,54 +97,75 @@
             <div class="modal fade" id="uploadSongModal" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-lg">
                     <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
-                        <div class="modal-header bg-primary text-white border-0 py-3">
-                            <h5 class="modal-title fw-bold">🎵 Upload New Track</h5>
-                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                        </div>
-                        <div class="modal-body p-4">
+                        <div class="modal-body p-4 p-md-5">
+                            <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+                                <div>
+                                    <h2 class="fw-bold mb-0 text-primary">Upload New Track</h2>
+                                    <p class="text-muted small mb-0">Publish your latest masterpiece to RevPlay</p>
+                                </div>
+                                <button type="button"
+                                    class="btn btn-outline-secondary rounded-pill px-3 shadow-sm fw-bold small"
+                                    data-bs-dismiss="modal">✕ Cancel</button>
+                            </div>
                             <form th:action="@{/artist/dashboard/songs/create}" th:object="${songDto}" method="post"
                                 enctype="multipart/form-data">
-                                <div class="row mb-3">
-                                    <div class="col-md-8">
-                                        <label for="sTitle" class="form-label fw-bold">Track Title</label>
-                                        <input type="text" id="sTitle" th:field="*{title}" class="form-control" required
+                                <div class="row mb-4">
+                                    <div class="col-md-8 mb-3 mb-md-0">
+                                        <label for="sTitle" class="form-label fw-bold small text-muted">Track Title
+                                            <span class="text-danger">*</span></label>
+                                        <input type="text" id="sTitle" th:field="*{title}"
+                                            class="form-control rounded-3 border-light shadow-sm" required
                                             placeholder="Name your masterpiece" />
                                     </div>
                                     <div class="col-md-4">
-                                        <label for="sGenre" class="form-label fw-bold">Genre</label>
-                                        <input type="text" id="sGenre" th:field="*{genre}" class="form-control" required
+                                        <label for="sGenre" class="form-label fw-bold small text-muted">Genre <span
+                                                class="text-danger">*</span></label>
+                                        <input type="text" id="sGenre" th:field="*{genre}"
+                                            class="form-control rounded-3 border-light shadow-sm" required
                                             placeholder="Pop, Rock, etc." />
                                     </div>
                                 </div>
-                                <div class="row mb-3">
-                                    <div class="col-md-6">
-                                        <label for="sAlbum" class="form-label fw-bold">Assign to Album
+                                <div class="row mb-4">
+                                    <div class="col-md-6 mb-3 mb-md-0">
+                                        <label for="sAlbum" class="form-label fw-bold small text-muted">Assign to Album
                                             (Optional)</label>
-                                        <select id="sAlbum" th:field="*{albumId}" class="form-select">
+                                        <select id="sAlbum" th:field="*{albumId}"
+                                            class="form-select rounded-3 border-light shadow-sm">
                                             <option value="" th:text="'-- Standalone Single --'"></option>
                                             <option th:each="album : ${albums}" th:value="${album.id}"
                                                 th:text="${album.name}"></option>
                                         </select>
                                     </div>
                                     <div class="col-md-6">
-                                        <label for="sDur" class="form-label fw-bold">Duration (Seconds)</label>
-                                        <input type="number" id="sDur" th:field="*{duration}" class="form-control"
+                                        <label for="sDur" class="form-label fw-bold small text-muted">Track Duration
+                                            (Seconds)</label>
+                                        <input type="number" id="sDur" th:field="*{duration}"
+                                            class="form-control rounded-3 border-light shadow-sm"
                                             placeholder="180 for 3:00" />
                                     </div>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="sAudio" class="form-label fw-bold text-primary">Audio File (.mp3, .wav)
-                                        *</label>
-                                    <input type="file" id="sAudio" name="audioFile" class="form-control border-primary"
-                                        accept="audio/*" required />
+                                <div class="p-4 bg-light rounded-4 border border-white mb-4 shadow-sm">
+                                    <h6 class="fw-bold mb-3 text-secondary small text-uppercase tracking-wider">Media
+                                        Files</h6>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3 mb-md-0">
+                                            <label for="sAudio" class="form-label fw-bold text-dark">Audio File <span
+                                                    class="text-danger">*</span></label>
+                                            <input type="file" id="sAudio" name="audioFile"
+                                                class="form-control border-light shadow-sm" accept="audio/*" required />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="sCover" class="form-label fw-bold text-dark">Cover Art
+                                                (Optional)</label>
+                                            <input type="file" id="sCover" name="coverFile"
+                                                class="form-control border-light shadow-sm" accept="image/*" />
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="mb-4">
-                                    <label for="sCover" class="form-label fw-bold">Cover Art (Optional)</label>
-                                    <input type="file" id="sCover" name="coverFile" class="form-control"
-                                        accept="image/*" />
-                                </div>
-                                <div class="d-grid shadow-sm mt-4">
-                                    <button type="submit" class="btn btn-primary btn-lg fw-bold">Publish Track</button>
+                                <div class="d-grid mt-4">
+                                    <button type="submit"
+                                        class="btn btn-primary btn-lg fw-bold rounded-pill shadow">Publish
+                                        Track</button>
                                 </div>
                             </form>
                         </div>
@@ -144,7 +173,20 @@
                 </div>
             </div>
 
-            <div th:if="${successMessage}" class="alert alert-success mt-3" th:text="${successMessage}">Success!</div>
+            <div th:if="${successMessage}"
+                class="alert alert-success mt-3 border-0 shadow-sm rounded-3 d-flex align-items-center bg-success-subtle py-3"
+                role="alert">
+                <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3"
+                    style="width: 32px; height: 32px; flex-shrink: 0;">
+                    <span class="fw-bold">✓</span>
+                </div>
+                <div>
+                    <strong class="d-block text-success">Success!</strong>
+                    <span class="text-success-emphasis small fw-medium" th:text="${successMessage}">Your changes have
+                        been saved successfully.</span>
+                </div>
+                <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
 
             <!-- Quick Stats Banner — each card opens a modal popup -->
             <div class="row g-4 mb-5 text-center">
@@ -628,48 +670,65 @@
         <div class="modal fade" id="editSongModal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
-                    <div class="modal-header bg-primary text-white border-0 py-3">
-                        <h5 class="modal-title fw-bold">✏️ Edit Track Details</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body p-4">
+                    <div class="modal-body p-4 p-md-5">
+                        <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+                            <div>
+                                <h2 class="fw-bold mb-0 text-primary">Manage Track Data</h2>
+                                <p class="text-muted small mb-0">Publish your latest masterpiece to RevPlay</p>
+                            </div>
+                            <button type="button"
+                                class="btn btn-outline-secondary rounded-pill px-3 shadow-sm fw-bold small"
+                                data-bs-dismiss="modal">✕ Cancel</button>
+                        </div>
                         <form id="editSongForm" method="post" enctype="multipart/form-data">
-                            <div class="row mb-3">
-                                <div class="col-md-8">
-                                    <label for="esTitle" class="form-label fw-bold">Track Title</label>
-                                    <input type="text" id="esTitle" name="title" class="form-control" required
+                            <div class="row mb-4">
+                                <div class="col-md-7 mb-3 mb-md-0">
+                                    <label for="esTitle" class="form-label fw-bold small text-muted">Track Title <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" id="esTitle" name="title"
+                                        class="form-control rounded-3 border-light shadow-sm" required
                                         placeholder="Name your masterpiece" />
                                 </div>
-                                <div class="col-md-4">
-                                    <label for="esGenre" class="form-label fw-bold">Genre</label>
-                                    <input type="text" id="esGenre" name="genre" class="form-control" required
+                                <div class="col-md-5">
+                                    <label for="esGenre" class="form-label fw-bold small text-muted">Genre <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" id="esGenre" name="genre"
+                                        class="form-control rounded-3 border-light shadow-sm" required
                                         placeholder="Pop, Rock, etc." />
                                 </div>
                             </div>
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label for="esAlbum" class="form-label fw-bold">Assign to Album (Optional)</label>
-                                    <select id="esAlbum" name="albumId" class="form-select">
+                            <div class="row mb-4">
+                                <div class="col-md-6 mb-3 mb-md-0">
+                                    <label for="esAlbum" class="form-label fw-bold small text-muted">Assign to Album
+                                        (Optional)</label>
+                                    <select id="esAlbum" name="albumId"
+                                        class="form-select rounded-3 border-light shadow-sm">
                                         <option value="">-- Standalone Single --</option>
                                         <option th:each="album : ${albums}" th:value="${album.id}"
                                             th:text="${album.name}"></option>
                                     </select>
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="esDur" class="form-label fw-bold">Duration (Seconds)</label>
-                                    <input type="number" id="esDur" name="duration" class="form-control"
+                                    <label for="esDur" class="form-label fw-bold small text-muted">Track Duration
+                                        (Seconds)</label>
+                                    <input type="number" id="esDur" name="duration"
+                                        class="form-control rounded-3 border-light shadow-sm"
                                         placeholder="180 for 3:00" />
                                 </div>
                             </div>
-                            <div class="mb-3">
-                                <label for="esCover" class="form-label fw-bold">Update Cover Art (Optional)</label>
-                                <input type="file" id="esCover" name="coverFile" class="form-control"
-                                    accept="image/*" />
-                                <small class="text-muted">Leave empty to keep existing artwork.</small>
+                            <div class="p-4 bg-light rounded-4 border border-white mb-4 shadow-sm">
+                                <h6 class="fw-bold mb-3 text-secondary small text-uppercase tracking-wider">Update
+                                    Artwork</h6>
+                                <div class="mb-2">
+                                    <label for="esCover" class="form-label fw-bold text-dark">Cover Art (Optional) <span
+                                            class="text-secondary small fw-normal">[Re-upload overrides]</span></label>
+                                    <input type="file" id="esCover" name="coverFile"
+                                        class="form-control border-light shadow-sm" accept="image/*" />
+                                </div>
                             </div>
                             <div class="d-grid mt-4">
-                                <button type="submit" class="btn btn-primary btn-lg fw-bold shadow">Save
-                                    Changes</button>
+                                <button type="submit" class="btn btn-primary btn-lg fw-bold rounded-pill shadow">Save
+                                    Track Changes</button>
                             </div>
                         </form>
                     </div>
@@ -681,38 +740,48 @@
         <!-- MODAL 6: Edit Album Modal -->
         <!-- =========================================================== -->
         <div class="modal fade" id="editAlbumModal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
-                    <div class="modal-header bg-primary text-white border-0 py-3">
-                        <h5 class="modal-title fw-bold">✏️ Edit Album Details</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body p-4">
-                        <form id="editAlbumForm" method="post" enctype="multipart/form-data">
-                            <div class="mb-3">
-                                <label for="eaName" class="form-label fw-bold">Album Title</label>
-                                <input type="text" name="name" class="form-control" id="eaName"
-                                    placeholder="E.g. Midnight Melodies" required>
+                    <div class="modal-body p-4 p-md-5">
+                        <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+                            <div>
+                                <h2 class="fw-bold mb-0 text-primary">Edit Album</h2>
+                                <p class="text-muted small mb-0">Curate your collection for the world to hear</p>
                             </div>
-                            <div class="mb-3">
-                                <label for="eaDesc" class="form-label fw-bold">Description</label>
-                                <textarea name="description" class="form-control" id="eaDesc" rows="2"
+                            <button type="button"
+                                class="btn btn-outline-secondary rounded-pill px-3 shadow-sm fw-bold small"
+                                data-bs-dismiss="modal">✕ Cancel</button>
+                        </div>
+                        <form id="editAlbumForm" method="post" enctype="multipart/form-data">
+                            <div class="mb-4">
+                                <label for="eaName" class="form-label fw-bold small text-muted">Album Title <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" name="name" class="form-control rounded-3 border-light shadow-sm"
+                                    id="eaName" placeholder="E.g. Midnight Melodies" required>
+                            </div>
+                            <div class="mb-4">
+                                <label for="eaDesc" class="form-label fw-bold small text-muted">Description</label>
+                                <textarea name="description" class="form-control rounded-3 border-light shadow-sm"
+                                    id="eaDesc" rows="3"
                                     placeholder="Tell your fans about this collection..."></textarea>
                             </div>
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label for="eaDate" class="form-label fw-bold font-sm">Release Date</label>
-                                    <input type="date" name="releaseDate" class="form-control" id="eaDate">
+                            <div class="row mb-4">
+                                <div class="col-md-6 mb-3 mb-md-0">
+                                    <label for="eaDate" class="form-label fw-bold small text-muted">Release Date</label>
+                                    <input type="date" name="releaseDate"
+                                        class="form-control rounded-3 border-light shadow-sm" id="eaDate">
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="eaCover" class="form-label fw-bold font-sm">Update Cover Art</label>
-                                    <input type="file" name="coverFile" class="form-control" id="eaCover"
+                                    <label for="eaCover" class="form-label fw-bold small text-muted">Album Cover
+                                        Art</label>
+                                    <input type="file" name="coverFile"
+                                        class="form-control rounded-3 border-light shadow-sm" id="eaCover"
                                         accept="image/*">
                                 </div>
                             </div>
-                            <div class="d-grid mt-4">
-                                <button type="submit" class="btn btn-primary btn-lg fw-bold shadow">Save
-                                    Progress</button>
+                            <div class="d-grid mt-5">
+                                <button type="submit" class="btn btn-primary btn-lg fw-bold rounded-pill shadow">Save
+                                    Album Changes</button>
                             </div>
                         </form>
                     </div>

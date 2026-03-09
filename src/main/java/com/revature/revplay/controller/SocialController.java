@@ -66,15 +66,19 @@ public class SocialController {
      * bursts.
      * 5. This is the primary driver of artist-fan engagement on the platform.
      */
-@PostMapping("/follow/{artistId}")
+    @PostMapping("/follow/{artistId}")
     @ResponseBody
     public ResponseEntity<Boolean> toggleFollow(@PathVariable("artistId") Long artistId,
             Authentication authentication) {
+        log.info("Attempting to toggle follow for artistId: {} by user: {}", artistId,
+                authentication != null ? authentication.getName() : "Anonymous");
         try {
             if (authentication == null || !authentication.isAuthenticated()) {
+                log.warn("Unauthorized attempt to toggle follow for artistId: {}", artistId);
                 return ResponseEntity.status(401).build();
             }
             boolean isNowFollowing = socialService.toggleFollowArtist(artistId, authentication.getName());
+            log.info("Toggle follow successful. New status for artistId {}: following={}", artistId, isNowFollowing);
             return ResponseEntity.ok(isNowFollowing);
         } catch (Exception e) {
             log.error("Toggle follow failed for artistId {}: ", artistId, e);
@@ -111,7 +115,8 @@ public class SocialController {
             return ResponseEntity.status(500).body(false);
         }
     }
-/**
+
+    /**
      * Renders a dashboard of the most popular content currently on the platform.
      * 
      * The trending logic entails:
@@ -126,13 +131,14 @@ public class SocialController {
      * 5. It drives platform discovery by highlighting what other peers are
      * enjoying.
      */
-@GetMapping("/trending")
+    @GetMapping("/trending")
     public String viewTrending(Model model) {
         model.addAttribute("topSongs", socialService.getTopTrendingSongs(20));
         model.addAttribute("topArtists", socialService.getTopArtists(10));
         return "discovery/trending";
     }
-/**
+
+    /**
      * Displays a chronological list of every track the user has recently enjoyed.
      * 
      * The history retrieval process includes:
@@ -147,7 +153,7 @@ public class SocialController {
      * 5. This adds a layer of personalization and convenience to the RevPlay
      * experience.
      */
-@GetMapping("/history")
+    @GetMapping("/history")
     public String viewHistory(Authentication authentication, Model model) {
         if (authentication == null)
             return "redirect:/login";
@@ -168,7 +174,8 @@ public class SocialController {
 
         return "discovery/history";
     }
-   /** 
+
+    /**
      * Performs a complete reset of the user's listening chronological records.
      * 
      * the history purge logic manages:
@@ -181,7 +188,7 @@ public class SocialController {
      * 5. This is a privacy-first feature that gives users full control over their
      * account data.
      */
-@PostMapping("/history/clear")
+    @PostMapping("/history/clear")
     @org.springframework.transaction.annotation.Transactional
     public String clearHistory(Authentication authentication) {
         if (authentication == null)
@@ -190,5 +197,5 @@ public class SocialController {
         historyRepository.deleteByUser(user);
         return "redirect:/social/history";
     }
-  
+
 }

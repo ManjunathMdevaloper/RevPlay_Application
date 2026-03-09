@@ -122,27 +122,45 @@
             <!-- Stats Grid: These numeric values are calculated and passed from UserServiceImpl. -->
             <div class="row g-4 mb-5 justify-content-center">
                 <div class="col-6 col-md-4">
-                    <div class="card p-4 h-100 text-center border-0 shadow-sm bg-light">
-                        <h2 class="fw-bold text-orange mb-0" th:text="${userProfile.totalPlaylists}">0</h2>
-                        <small class="text-uppercase text-muted fw-bold tracking-wider"
-                            style="font-size: 0.7rem;">Playlists</small>
-                    </div>
+                    <a th:href="@{/library/playlists}" class="text-decoration-none h-100 d-block">
+                        <div class="card p-4 h-100 text-center border-0 shadow-sm bg-light stat-card-hover">
+                            <h2 class="fw-bold text-orange mb-0" th:text="${userProfile.totalPlaylists}">0</h2>
+                            <small class="text-uppercase text-muted fw-bold tracking-wider"
+                                style="font-size: 0.7rem;">Playlists</small>
+                        </div>
+                    </a>
                 </div>
                 <div class="col-6 col-md-4">
-                    <div class="card p-4 h-100 text-center border-0 shadow-sm bg-light">
-                        <h2 class="fw-bold text-orange mb-0" th:text="${userProfile.favoriteSongsCount}">0</h2>
-                        <small class="text-uppercase text-muted fw-bold tracking-wider"
-                            style="font-size: 0.7rem;">Favorites</small>
-                    </div>
+                    <a th:href="@{/library/liked}" class="text-decoration-none h-100 d-block">
+                        <div class="card p-4 h-100 text-center border-0 shadow-sm bg-light stat-card-hover">
+                            <h2 class="fw-bold text-orange mb-0" th:text="${userProfile.favoriteSongsCount}">0</h2>
+                            <small class="text-uppercase text-muted fw-bold tracking-wider"
+                                style="font-size: 0.7rem;">Favorites</small>
+                        </div>
+                    </a>
                 </div>
                 <div class="col-6 col-md-4">
-                    <div class="card p-4 h-100 text-center border-0 shadow-sm bg-light">
+                    <div class="card p-4 h-100 text-center border-0 shadow-sm bg-light stat-card-hover"
+                        data-bs-toggle="modal" data-bs-target="#followingModal">
                         <h2 class="fw-bold text-orange mb-0" th:text="${userProfile.followingCount}">0</h2>
                         <small class="text-uppercase text-muted fw-bold tracking-wider"
                             style="font-size: 0.7rem;">Following</small>
                     </div>
                 </div>
             </div>
+
+            <style>
+                .stat-card-hover {
+                    transition: all 0.2s ease-in-out;
+                    cursor: pointer;
+                }
+
+                .stat-card-hover:hover {
+                    transform: translateY(-5px);
+                    background-color: #fff !important;
+                    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08) !important;
+                }
+            </style>
         </div>
 
         <!-- 
@@ -247,6 +265,40 @@
                                     Changes</button>
                             </div>
                         </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Following Modal -->
+        <div class="modal fade" id="followingModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+                    <div class="modal-header bg-light border-0 py-3">
+                        <h5 class="modal-title fw-bold text-dark">Artists You Follow</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body p-0" style="max-height: 400px; overflow-y: auto;">
+                        <div th:if="${#lists.isEmpty(userProfile.followedArtists)}" class="p-5 text-center text-muted">
+                            <div class="mb-3 fs-1 opacity-25">👤</div>
+                            <p class="mb-0">You're not following any artists yet.</p>
+                        </div>
+                        <ul class="list-group list-group-flush"
+                            th:unless="${#lists.isEmpty(userProfile.followedArtists)}">
+                            <li th:each="artist : ${userProfile.followedArtists}"
+                                class="list-group-item d-flex align-items-center p-3 border-light border-start-0 border-end-0">
+                                <img th:src="${artist.profilePictureUrl != null ? artist.profilePictureUrl : '/images/default-profile.svg'}"
+                                    class="rounded-circle me-3 border shadow-sm"
+                                    style="width: 50px; height: 50px; object-fit: cover;">
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-0 fw-bold"
+                                        th:text="${artist.artistName != null ? artist.artistName : artist.displayName}">
+                                        Artist Name</h6>
+                                    <small class="text-muted"
+                                        th:text="${artist.genre != null ? artist.genre : 'Artist'}">Genre</small>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>

@@ -155,7 +155,12 @@ erDiagram
 
 ---
 
-## 👥 Team & User Stories
+## � Project Status: **Functional Completion Reached** ✅
+All core features and user stories have been fully implemented, tested, and integrated. The application is now in the **Documentation Phase**, where we are polishing technical guides and finalizing architectural diagrams.
+
+---
+
+## �👥 Team & User Stories
 
 ### 👨‍💻 Person 1 — Authentication & Basic Profile + Basic Discovery ✅
 
@@ -175,89 +180,89 @@ erDiagram
 
 ---
 
-### 👨‍💻 Person 2 — Search, Categories & Artist/Album Views
+### 👨‍💻 Person 2 — Search, Categories & Artist/Album Views ✅
 
 **As a User (Listener), I should be able to:**
-- [ ] Search for songs, artists, albums, and playlists by keywords
-- [ ] Browse content by categories (genre, artist, album)
-- [ ] Filter songs by genre, artist, album, or release year
+- ✅ Search for songs, artists, albums, and playlists by keywords
+- ✅ Browse content by categories (genre, artist, album)
+- ✅ Filter songs by genre, artist, album, or release year
 
 **Artist & Album Views:**
-- [ ] View artist profiles with their songs and albums
-- [ ] View album details with track list
+- ✅ View artist profiles with their songs and albums
+- ✅ View album details with track list
 
 **As a Musician/Artist, I should be able to:**
-- [ ] View my artist profile as users see it
+- ✅ View my artist profile as users see it
 - ✅ Add social media links (Instagram, X, YouTube, Website)
 
 ---
 
-### 👨‍💻 Person 3 — Music Player & Playback Queue
+### 👨‍💻 Person 3 — Music Player & Playback Queue ✅
 
 **As a User (Listener), I should be able to:**
-- [ ] Play songs using integrated web music player
-- [ ] Use player controls (play, pause, skip forward, skip backward, seek)
-- [ ] View currently playing song with progress bar
-- [ ] Create and manage playback queue
-- [ ] Enable repeat mode (off, repeat one, repeat all)
-- [ ] Enable shuffle mode
-- [ ] Adjust volume control
+- ✅ Play songs using integrated web music player
+- ✅ Use player controls (play, pause, skip forward, skip backward, seek)
+- ✅ View currently playing song with progress bar
+- ✅ Create and manage playback queue
+- ✅ Enable repeat mode (off, repeat one, repeat all)
+- ✅ Enable shuffle mode
+- ✅ Adjust volume control
 
 **Listening History:**
-- [ ] View recently played songs (last 50 songs)
-- [ ] View complete listening history with date and time
-- [ ] Clear listening history
+- ✅ View recently played songs (last 50 songs)
+- ✅ View complete listening history with date and time
+- ✅ Clear listening history
 
 ---
 
-### 👨‍💻 Person 4 — Favorites & Playlist Management
+### 👨‍💻 Person 4 — Favorites & Playlist Management ✅
 
 **As a User (Listener), I should be able to:**
-- [ ] Mark songs as favorites
-- [ ] Remove songs from favorites
-- [ ] View all my favorite songs
-- [ ] Quick access to favorite songs from player
+- ✅ Mark songs as favorites
+- ✅ Remove songs from favorites
+- ✅ View all my favorite songs
+- ✅ Quick access to favorite songs from player
 
 **Playlist Management:**
-- [ ] Create playlists with name and description
-- [ ] Set playlist privacy (public or private)
-- [ ] Add songs to my playlists
-- [ ] Remove songs from my playlists
-- [ ] Reorder songs in playlists
-- [ ] Update playlist details (name, description, privacy)
-- [ ] Delete playlists created by me
-- [ ] View all my playlists
-- [ ] View public playlists created by other users
-- [ ] Follow/unfollow public playlists
+- ✅ Create playlists with name and description
+- ✅ Set playlist privacy (public or private)
+- ✅ Add songs to my playlists
+- ✅ Remove songs from my playlists
+- ✅ Reorder songs in playlists
+- ✅ Update playlist details (name, description, privacy)
+- ✅ Delete playlists created by me
+- ✅ View all my playlists
+- ✅ View public playlists created by other users
+- ✅ Follow/unfollow public playlists
 
 ---
 
-### 👨‍💻 Person 5 — Artist Upload & Analytics + Account Stats
+### 👨‍💻 Person 5 — Artist Upload & Analytics + Account Stats ✅
 
 **As a Musician/Artist, I should be able to:**
-- [ ] Upload songs with details (title, genre, duration, audio file)
-- [ ] Upload album artwork/cover image
-- [ ] Create albums with name, description, release date, and cover art
-- [ ] Add songs to albums
-- [ ] Remove songs from albums
-- [ ] View all my uploaded songs
-- [ ] View all my created albums
-- [ ] Update song information (title, genre, album)
-- [ ] Update album information (name, description, cover art)
-- [ ] Delete my songs
-- [ ] Delete my albums (if no songs are in the album)
-- [ ] Set song visibility (public/unlisted)
+- ✅ Upload songs with details (title, genre, duration, audio file)
+- ✅ Upload album artwork/cover image
+- ✅ Create albums with name, description, release date, and cover art
+- ✅ Add songs to albums
+- ✅ Remove songs from albums
+- ✅ View all my uploaded songs
+- ✅ View all my created albums
+- ✅ Update song information (title, genre, album)
+- ✅ Update album information (name, description, cover art)
+- ✅ Delete my songs
+- ✅ Delete my albums (if no songs are in the album)
+- ✅ Set song visibility (public/unlisted)
 
 **Analytics & Insights:**
-- [ ] View dashboard with key metrics (total songs, total plays, total favorites)
-- [ ] View play count for individual songs
-- [ ] View songs sorted by popularity (most played)
-- [ ] View list of users who favorited my songs
-- [ ] View listening trends over time (daily/weekly/monthly plays)
-- [ ] View top listeners (users who played my songs the most)
+- ✅ View dashboard with key metrics (total songs, total plays, total favorites)
+- ✅ View play count for individual songs
+- ✅ View songs sorted by popularity (most played)
+- ✅ View list of users who favorited my songs
+- ✅ View listening trends over time (daily/weekly/monthly plays)
+- ✅ View top listeners (users who played my songs the most)
 
 **Account Statistics:**
-- [ ] View my account statistics (total playlists, favorite songs count, listening time)
+- ✅ View my account statistics (total playlists, favorite songs count, listening time)
 
 ---
 
@@ -279,16 +284,26 @@ erDiagram
 - **Data URIs:** Profile and banner images are served as Base64 Data URIs directly from the Oracle BLOB store to minimize complex file system management.
 - **Security:** Spring Security 6 integration using modern lambda-based DSL and role-based access control.
 
-DROP TABLE ALBUMS CASCADE CONSTRAINTS;
-DROP TABLE ARTIST_PROFILES CASCADE CONSTRAINTS;
-DROP TABLE ARTISTS CASCADE CONSTRAINTS;
-DROP TABLE FAVORITES CASCADE CONSTRAINTS;
-DROP TABLE LISTENING_HISTORY CASCADE CONSTRAINTS;
-DROP TABLE PLAYLIST_FOLLOWERS CASCADE CONSTRAINTS;
+```sql
+-- --- RevPlay Database Cleanup (Oracle) ---
+-- Run these to reset the schema if needed. 
+-- WARNING: This will permanently delete all application data.
+
+-- 1. Drop Tables (in order of dependency)
+DROP TABLE USER_HISTORY CASCADE CONSTRAINTS;
+DROP TABLE USER_LIKED_SONGS CASCADE CONSTRAINTS;
+DROP TABLE USER_FOLLOWING_ARTISTS CASCADE CONSTRAINTS;
 DROP TABLE PLAYLIST_SONGS CASCADE CONSTRAINTS;
 DROP TABLE PLAYLISTS CASCADE CONSTRAINTS;
 DROP TABLE SONGS CASCADE CONSTRAINTS;
-DROP TABLE USER_FOLLOWING_ARTISTS CASCADE CONSTRAINTS;
-DROP TABLE USER_HISTORY CASCADE CONSTRAINTS;
-DROP TABLE USER_LIKED_SONGS CASCADE CONSTRAINTS;
+DROP TABLE ALBUMS CASCADE CONSTRAINTS;
+DROP TABLE ARTIST_PROFILES CASCADE CONSTRAINTS;
 DROP TABLE USERS CASCADE CONSTRAINTS;
+
+-- 2. Drop Sequences
+DROP SEQUENCE USERS_SEQ;
+DROP SEQUENCE SONGS_SEQ;
+DROP SEQUENCE ALBUMS_SEQ;
+DROP SEQUENCE PLAYLISTS_SEQ;
+DROP SEQUENCE HISTORY_SEQ;
+```

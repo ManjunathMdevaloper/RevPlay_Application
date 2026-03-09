@@ -36,8 +36,10 @@ if (!window.Player) {
             if (seek) {
                 seek.addEventListener('input', (e) => {
                     this._seeking = true;
+                    const pct = e.target.value;
+                    e.target.style.setProperty('--seek-before-width', pct + '%');
                     if (this.audio.duration) {
-                        const ct = (e.target.value / 100) * this.audio.duration;
+                        const ct = (pct / 100) * this.audio.duration;
                         const el = get('player-current-time');
                         if (el) el.innerText = this.formatTime(ct);
                     }
@@ -54,8 +56,10 @@ if (!window.Player) {
             const vol = get('player-volume');
             if (vol) {
                 this.audio.volume = parseFloat(vol.value);
+                vol.style.setProperty('--seek-before-width', (vol.value * 100) + '%');
                 vol.addEventListener('input', (e) => {
                     this.audio.volume = parseFloat(e.target.value);
+                    e.target.style.setProperty('--seek-before-width', (e.target.value * 100) + '%');
                     this.updateVolumeIcon();
                 });
             }
@@ -254,7 +258,10 @@ if (!window.Player) {
                 this.audio.volume = this._lastVolume || 0.8;
             }
             const vol = document.getElementById('player-volume');
-            if (vol) vol.value = this.audio.volume;
+            if (vol) {
+                vol.value = this.audio.volume;
+                vol.style.setProperty('--seek-before-width', (vol.value * 100) + '%');
+            }
             this.updateVolumeIcon();
         },
 
@@ -284,6 +291,7 @@ if (!window.Player) {
             const bar = document.getElementById('player-seek-bar');
             if (bar && !this._seeking) {
                 bar.value = pct;
+                bar.style.setProperty('--seek-before-width', pct + '%');
                 const ct = document.getElementById('player-current-time');
                 if (ct) ct.innerText = this.formatTime(currentTime);
             }
@@ -426,7 +434,10 @@ if (!window.Player) {
                 this.audio.src = song.url;
                 if (state.volume !== undefined) this.audio.volume = state.volume;
                 const vol = document.getElementById('player-volume');
-                if (vol) vol.value = this.audio.volume;
+                if (vol) {
+                    vol.value = this.audio.volume;
+                    vol.style.setProperty('--seek-before-width', (vol.value * 100) + '%');
+                }
 
                 this.audio.addEventListener('loadedmetadata', () => {
                     if (state.time > 0) this.audio.currentTime = state.time;
