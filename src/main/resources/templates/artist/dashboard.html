@@ -513,8 +513,8 @@
                             <small class="text-white opacity-75">Total: <strong th:text="${totalStreams}">0</strong>
                                 lifetime plays</small>
                         </div>
-                        <button type="button" class="btn-close btn-close-white shadow-none"
-                            data-bs-dismiss="modal"></button>
+                        <!-- <button type="button" class="btn-close btn-close-white shadow-none"
+                            data-bs-dismiss="modal"></button> -->
                     </div>
                     <div class="modal-body p-4">
                         <div th:if="${not #lists.isEmpty(songsByStreams)}">
@@ -605,8 +605,8 @@
                             <small class="text-white opacity-75" th:text="${followerCount} + ' people follow you'">0
                                 followers</small>
                         </div>
-                        <button type="button" class="btn-close btn-close-white shadow-none"
-                            data-bs-dismiss="modal"></button>
+                        <!-- <button type="button" class="btn-close btn-close-white shadow-none"
+                            data-bs-dismiss="modal"></button> -->
                     </div>
                     <div class="modal-body p-3">
                         <div th:if="${not #lists.isEmpty(followers)}" class="list-group list-group-flush">

@@ -21,11 +21,11 @@
 <body class="auth-body">
     <div class="container">
         <div class="row w-100 justify-content-center">
-            <div class="col-md-6 col-lg-5">
-                <div class="card overflow-hidden border-0 auth-card p-2">
-                    <div class="card-body p-4 p-md-5">
+            <div class="col-md-7 col-lg-6">
+                <div class="card overflow-hidden border-0 auth-card">
+                    <div class="card-body p-3 p-md-4">
 
-                        <div class="text-center mb-4">
+                        <div class="text-center mb-3">
                             <!-- th:src="@{/images/logo.png}": Resolves the absolute path to the platform logo. -->
                             <img th:src="@{/images/logo.png}" alt="RevPlay Logo" class="mb-3"
                                 style="height: 80px; width: auto;">
@@ -42,19 +42,19 @@
                           - param.registerSuccess: Triggered after a fresh account is created.
                         -->
                         <div th:if="${param.error}"
-                            class="alert alert-danger py-2 text-center small border-0 shadow-sm mb-4">
+                            class="alert alert-danger py-2 text-center small border-0 shadow-sm mb-3">
                             Invalid username or password.
                         </div>
                         <div th:if="${param.logout}"
-                            class="alert alert-success py-2 text-center small border-0 shadow-sm mb-4">
+                            class="alert alert-success py-2 text-center small border-0 shadow-sm mb-3">
                             Logged out successfully.
                         </div>
                         <div th:if="${param.resetSuccess}"
-                            class="alert alert-success py-2 text-center small border-0 shadow-sm mb-4">
+                            class="alert alert-success py-2 text-center small border-0 shadow-sm mb-3">
                             Password updated successfully!
                         </div>
                         <div th:if="${param.registerSuccess}"
-                            class="alert alert-success py-2 text-center small border-0 shadow-sm mb-4">
+                            class="alert alert-success py-2 text-center small border-0 shadow-sm mb-3">
                             Registration successful! Please login.
                         </div>
 
@@ -81,11 +81,11 @@
                                         style="color: var(--primary-color);">Forgot?</a>
                                 </div>
                             </div>
-                            <div class="d-grid mt-4">
+                            <div class="d-grid mt-3">
                                 <button type="submit" class="btn btn-primary btn-lg rounded-2 fw-bold shadow">Sign
                                     In</button>
                             </div>
-                            <div class="text-center mt-4 pt-2">
+                            <div class="text-center mt-3 pt-2">
                                 <span class="small text-muted">New to RevPlay?</span>
                                 <!-- th:href="@{/register}": Directs new users to the sign-up page. -->
                                 <a th:href="@{/register}" class="small fw-bold text-decoration-none ms-1"

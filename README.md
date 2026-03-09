@@ -34,7 +34,7 @@ Before running the application, make sure you have:
 ## 🏃 Running the Application
 
 ```bash
-# Using the Maven Wrapper (recommended)
+# Using the Maven Wrapper to run the application
 ./mvnw spring-boot:run
 
 # If JAVA_HOME is not set to Java 17+, override it:
@@ -42,6 +42,18 @@ $env:JAVA_HOME = 'C:\Program Files\Java\jdk-21'; ./mvnw spring-boot:run
 ```
 
 The application will start at: **http://localhost:8080**
+
+### 🧪 Running Tests & Code Coverage
+```bash
+# Run all automated tests
+./mvnw test
+
+# Generate a JaCoCo code coverage report
+./mvnw clean test jacoco:report
+
+# Once completed, you can view the HTML report by opening:
+# target/site/jacoco/index.html in your web browser.
+```
 
 > You will be redirected to the Login page immediately. Register an account to get started.
 
@@ -53,17 +65,22 @@ The application will start at: **http://localhost:8080**
 src/
 ├── main/
 │   ├── java/com/revature/revplay/
-│   │   ├── config/          # Spring Security configuration
-│   │   ├── controller/      # MVC Controllers
-│   │   ├── customexceptions/# Global exception handlers & custom classes
-│   │   ├── model/           # JPA Entity classes
-│   │   ├── repository/      # Spring Data JPA Repositories
-│   │   ├── service/         # Business logic services
-│   │   └── utils/           # Utility classes (e.g. Base64Util)
+│   │   ├── config/          # Spring Security, Web, and general configurations
+│   │   ├── controller/      # MVC Web Controllers and REST API Endpoints
+│   │   ├── dto/             # Data Transfer Objects for forms & API responses
+│   │   ├── entity/          # JPA Entity classes modeling the database tables
+│   │   ├── exception/       # Global exception handlers & custom error classes
+│   │   ├── repository/      # Spring Data JPA Repositories for data access
+│   │   └── service/         # Business logic services and their implementations
 │   └── resources/
-│       ├── static/css/      # Global stylesheet (style.css)
-│       ├── static/images/   # Static assets
-│       └── templates/       # Thymeleaf HTML templates
+│       ├── scripts/         # SQL initialization scripts and database setup
+│       ├── static/          # Global assets (CSS, JS, images)
+│       ├── templates/       # Thymeleaf HTML templates (UI views)
+│       ├── application.properties # Main application configuration
+│       └── log4j2.xml       # Externalized logging configurations
+└── test/
+    └── java/com/revature/revplay/
+        └── service/         # JUnit & Mockito test classes for service layer
 ```
 
 ---
