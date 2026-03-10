@@ -11,6 +11,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import lombok.extern.log4j.Log4j2;
+
 /**
  * This class is the central security configuration for the RevPlay application.
  * It uses Spring Security to define how users are authenticated and which parts
@@ -23,6 +25,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
  */
 @Configuration
 @EnableWebSecurity
+@Log4j2
 public class SecurityConfig {
 
         /**
@@ -41,6 +44,7 @@ public class SecurityConfig {
          */
         @Bean
         public static PasswordEncoder passwordEncoder() {
+                log.info("Initializing BCryptPasswordEncoder for secure password management");
                 // Return a new instance of BCryptPasswordEncoder for secure password management
                 return new BCryptPasswordEncoder();
         }
@@ -67,6 +71,7 @@ public class SecurityConfig {
          */
         @Bean
         public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+                log.info("Configuring HttpSecurity filter chain for incoming requests");
                 // Line below: Disable Cross-Site Request Forgery protection for easier
                 // integration
                 http.csrf(csrf -> csrf.disable())
@@ -132,6 +137,7 @@ public class SecurityConfig {
          */
         @Bean
         public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+                log.info("Extracting AuthenticationManager from AuthenticationConfiguration");
                 // Line below: Extract and return the core authentication manager from the
                 // system config
                 return configuration.getAuthenticationManager();

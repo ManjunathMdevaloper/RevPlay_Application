@@ -4,6 +4,8 @@ package com.revature.revplay;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import lombok.extern.log4j.Log4j2;
+
 /**
  * This is the primary entry point and heart of the RevPlay application.
  * By using the @SpringBootApplication annotation, it triggers three key
@@ -18,6 +20,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * streaming ecosystem to life.
  */
 @SpringBootApplication
+@Log4j2
 public class RevPlayApplication {
 
     /**
@@ -37,9 +40,9 @@ public class RevPlayApplication {
      * traffic on port 8080.
      */
     public static void main(String[] args) {
+        log.info("Starting RevPlay application...");
         SpringApplication.run(RevPlayApplication.class, args);
+        log.info("RevPlay application started successfully.");
     }
 
 }
-
-

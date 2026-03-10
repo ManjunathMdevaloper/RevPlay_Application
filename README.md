@@ -183,7 +183,7 @@ All core features and user stories have been fully implemented, tested, and inte
 
 **As a User (Listener), I should be able to:**
 - ✅ Register and create an account with email, username, and password
-- ✅ Login to my account using email/username and password
+- ✅ Login to my account using username and password
 - ✅ View and edit my profile (display name, bio, profile picture)
 
 **As a Musician/Artist, I should be able to:**
