@@ -8,125 +8,345 @@
   - Secure Access: Uses #authentication checks to ensure only the owner sees 'Remove' actions.
   Data Source: PlaylistController -> Playlist playlist
 -->
+
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
-    <!-- Injects the head fragment with the specific page title. -->
     <div th:replace="~{fragments/layout :: head('Playlist Detail - RevPlay')}"></div>
 </head>
 
 <body>
-    <!-- Injects the global navigation bar. -->
-    <div th:replace="~{fragments/layout :: navbar}"></div>
 
-    <div id="main-content">
+<div th:replace="~{fragments/layout :: navbar}"></div>
 
-        <div class="container mb-5 mt-4">
-            <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2">
-                <div>
-                    <!-- th:text: Dynamically displays the custom name and description of the playlist entity. -->
-                    <h2 class="text-primary fw-bold mb-1" th:text="${playlist.name}">Playlist Title</h2>
-                    <p class="text-muted mb-0" th:text="${playlist.description}">Playlist Description</p>
-                </div>
-                <div>
-                    <a th:href="@{/library/playlists}" class="btn btn-outline-secondary">Back to Library</a>
-                </div>
-            </div>
+<div id="main-content">
 
-            <!-- th:if: Feedback alert for successful removal of tracks. -->
-            <div th:if="${successMessage}" class="alert alert-success mt-3 shadow-sm" th:text="${successMessage}">
-                Success!
-            </div>
+<div class="container mb-5 mt-4">
 
-            <!-- Empty State UI: Displayed if the songs collection is empty. -->
-            <div th:if="${#lists.isEmpty(playlist.songs)}" class="alert alert-light text-center py-5 border">
-                <h4 class="text-secondary fw-bold mb-3">No Tracks Added</h4>
-                <p class="text-muted">Explore the discovery portal and dynamically click 'Add' to send tracks straight
-                    here.
-                </p>
-                <a th:href="@{/discovery}" class="btn btn-primary mt-3 px-4">Browse Music</a>
-            </div>
+<div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2">
 
-            <!-- Track Table: Rendered ONLY if the playlist contains songs. -->
-            <div th:unless="${#lists.isEmpty(playlist.songs)}" class="card shadow-sm border-light">
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0">
-                            <thead class="bg-light text-muted small text-uppercase">
-                                <tr>
-                                    <th class="ps-4">Cover</th>
-                                    <th>Title</th>
-                                    <th>Artist</th>
-                                    <th>Genre</th>
-                                    <th class="text-end pe-4">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Iterates through each song in the playlist's many-to-many collection. -->
-                                <tr th:each="song : ${playlist.songs}">
-                                    <td class="ps-4">
-                                        <!-- Image Rendering with Dynamic Fallback. -->
-                                        <img th:if="${song.coverArtUrl != null}" th:src="@{${song.coverArtUrl}}"
-                                            style="width: 45px; height: 45px; object-fit: cover;"
-                                            class="rounded border">
-                                        <img th:unless="${song.coverArtUrl != null}"
-                                            th:src="@{/images/default-album.svg}"
-                                            style="width: 45px; height: 45px; object-fit: cover;"
-                                            class="rounded border bg-light">
-                                    </td>
-                                    <td>
-                                        <h6 class="mb-0 fw-bold text-dark" th:text="${song.title}">Song Title</h6>
-                                        <small class="text-muted" th:if="${song.albumId != null}">Album Included</small>
-                                    </td>
-                                    <td>
-                                        <a th:href="@{/artists/{username}(username=${song.artist.username})}"
-                                            class="text-decoration-none text-primary fw-bold"
-                                            th:text="${song.artist.displayName}">Artist Name</a>
-                                    </td>
-                                    <td>
-                                        <span class="badge bg-secondary" th:text="${song.genre}">Genre</span>
-                                    </td>
-                                    <td class="text-end pe-4 d-flex justify-content-end align-items-center">
-                                        <!-- 
-                                          Security Check:
-                                          - th:if: Compares the logged-in user's name with the playlist owner's username 
-                                            to decide whether to show the 'Remove' option.
-                                        -->
-                                        <form
-                                            th:if="${#authentication != null and #authentication.name == playlist.user.username}"
-                                            th:action="@{/library/api/playlists/{playlistId}/remove/{songId}(playlistId=${playlist.id}, songId=${song.id})}"
-                                            method="post" class="me-2 mb-0"
-                                            onsubmit="return confirmAction('Remove this song from your playlist?', this);">
-                                            <button type="submit" class="btn btn-outline-danger btn-sm">Remove</button>
-                                        </form>
+<div>
 
-                                        <!-- 
-                                          Global Play Button:
-                                          - th:data-*: Binds track metadata to attributes for JavaScript access.
-                                          - onclick: Calls the client-side playGlobalAudio() function for instant playback.
-                                        -->
-                                        <button th:if="${song.audioUrl != null}"
-                                            class="btn btn-sm btn-primary fw-bold me-1 text-white shadow"
-                                            th:data-song-id="${song.id}" th:data-audio-url="${song.audioUrl}"
-                                            th:data-title="${song.title}"
-                                            th:data-artist="${song.artist != null ? (song.artist.displayName ?: song.artist.username) : 'Unknown Artist'}"
-                                            th:data-cover="${song.coverArtUrl != null ? song.coverArtUrl : '/images/default-album.svg'}"
-                                            onclick="playGlobalAudio(this.getAttribute('data-song-id'), this.getAttribute('data-audio-url'), this.getAttribute('data-title'), this.getAttribute('data-artist'), this.getAttribute('data-cover'))">
-                                            ▶
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div><!-- /#main-content -->
+<h2 class="text-primary fw-bold mb-1" th:text="${playlist.name}">Playlist Title</h2>
 
-    <!-- Injects the layout's global footer. -->
-    <div th:replace="~{fragments/layout :: footer}"></div>
+<p class="text-muted mb-0" th:text="${playlist.description}">Playlist Description</p>
+
+<!-- Followers Count -->
+
+<p class="text-muted mb-0">
+Followers: <span id="followersCount">0</span>
+</p>
+
+</div>
+
+<div class="d-flex align-items-center">
+
+<button th:if="${#authentication != null and #authentication.name == playlist.user.username}"
+class="btn btn-primary fw-bold px-4 shadow-sm rounded-pill me-2"
+data-bs-toggle="modal"
+data-bs-target="#editPlaylistModal">
+Edit Playlist </button>
+
+<!-- Follow Playlist -->
+<form th:if="${#authentication != null and #authentication.principal.username != playlist.user.username}"
+      th:action="@{/library/playlists/{id}/follow(id=${playlist.id})}"
+      method="post"
+      class="me-2"
+      onsubmit="setTimeout(() => location.reload(), 200);">
+
+    <button class="btn btn-success fw-bold px-3 rounded-pill shadow-sm">
+        Follow
+    </button>
+
+</form>
+
+
+<!-- Unfollow Playlist -->
+<form th:if="${#authentication != null and #authentication.principal.username != playlist.user.username}"
+      th:action="@{/library/playlists/{id}/unfollow(id=${playlist.id})}"
+      method="post"
+      class="me-2"
+      onsubmit="setTimeout(() => location.reload(), 200);">
+
+    <button class="btn btn-outline-danger fw-bold px-3 rounded-pill shadow-sm">
+        Unfollow
+    </button>
+
+</form>
+
+<a th:href="@{/library/playlists}"
+class="btn btn-outline-secondary px-4 rounded-pill shadow-sm">
+Back to Library </a>
+
+</div>
+</div>
+
+<div th:if="${successMessage}"
+class="alert alert-success mt-3 shadow-sm"
+th:text="${successMessage}">
+Success!
+</div>
+
+<div th:if="${#lists.isEmpty(playlist.songs)}"
+class="alert alert-light text-center py-5 border">
+
+<h4 class="text-secondary fw-bold mb-3">No Tracks Added</h4>
+
+<p class="text-muted">
+Explore the discovery portal and dynamically click 'Add'
+to send tracks straight here.
+</p>
+
+<a th:href="@{/discovery}" class="btn btn-primary mt-3 px-4">
+Browse Music
+</a>
+
+</div>
+
+<div th:unless="${#lists.isEmpty(playlist.songs)}"
+class="card shadow-sm border-light">
+
+<div class="card-body p-0">
+
+<div class="table-responsive">
+
+<table class="table table-hover align-middle mb-0">
+
+<thead class="bg-light text-muted small text-uppercase">
+
+<tr>
+<th class="ps-4">Cover</th>
+<th>Title</th>
+<th>Artist</th>
+<th>Genre</th>
+<th class="text-end pe-4">Actions</th>
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr th:each="song : ${playlist.songs}">
+
+<td class="ps-4">
+
+<img th:if="${song.coverArtUrl != null}"
+th:src="@{${song.coverArtUrl}}"
+style="width:45px;height:45px;object-fit:cover;"
+class="rounded border">
+
+<img th:unless="${song.coverArtUrl != null}"
+th:src="@{/images/default-album.svg}"
+style="width:45px;height:45px;object-fit:cover;"
+class="rounded border bg-light">
+
+</td>
+
+<td>
+
+<h6 class="mb-0 fw-bold text-dark"
+th:text="${song.title}">
+Song Title
+</h6>
+
+<small class="text-muted"
+th:if="${song.albumId != null}">
+Album Included </small>
+
+</td>
+
+<td>
+
+<a th:href="@{/artists/{username}(username=${song.artist.username})}"
+class="text-decoration-none text-primary fw-bold"
+th:text="${song.artist.displayName}">
+Artist Name </a>
+
+</td>
+
+<td>
+
+<span class="badge bg-secondary"
+th:text="${song.genre}">
+Genre </span>
+
+</td>
+
+<td class="text-end pe-4 d-flex justify-content-end align-items-center">
+
+<form th:if="${#authentication != null and #authentication.name == playlist.user.username}"
+th:action="@{/library/api/playlists/{playlistId}/remove/{songId}(playlistId=${playlist.id}, songId=${song.id})}"
+method="post"
+class="me-2 mb-0"
+onsubmit="return confirmAction('Remove this song from your playlist?', this);">
+
+<button type="submit"
+class="btn btn-outline-danger btn-sm">
+Remove </button>
+
+</form>
+
+<button th:if="${song.audioUrl != null}"
+class="btn btn-sm btn-primary fw-bold me-1 text-white shadow"
+th:data-song-id="${song.id}"
+th:data-audio-url="${song.audioUrl}"
+th:data-title="${song.title}"
+th:data-artist="${song.artist != null ? (song.artist.displayName ?: song.artist.username) : 'Unknown Artist'}"
+th:data-cover="${song.coverArtUrl != null ? song.coverArtUrl : '/images/default-album.svg'}"
+onclick="playGlobalAudio(
+this.getAttribute('data-song-id'),
+this.getAttribute('data-audio-url'),
+this.getAttribute('data-title'),
+this.getAttribute('data-artist'),
+this.getAttribute('data-cover')
+)">
+▶ </button>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+</div>
+</div>
+
+</div>
+
+<!-- Edit Playlist Modal -->
+
+<div class="modal fade"
+id="editPlaylistModal"
+tabindex="-1"
+aria-hidden="true"
+th:if="${#authentication != null and #authentication.name == playlist.user.username}">
+
+<div class="modal-dialog modal-dialog-centered">
+
+<div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+
+<div class="modal-header bg-primary text-white border-0 py-3">
+
+<h5 class="modal-title fw-bold">Edit Playlist</h5>
+
+<button type="button"
+class="btn-close btn-close-white"
+data-bs-dismiss="modal"
+aria-label="Close"></button>
+
+</div>
+
+<div class="modal-body p-4 pb-2">
+
+<form method="post"
+th:action="@{/library/playlists/{id}/update(id=${playlist.id})}"
+th:object="${playlistDto}">
+
+<div class="mb-4">
+
+<label class="form-label fw-bold">
+Playlist Name
+</label>
+
+<input type="text"
+th:field="*{name}"
+class="form-control border-primary shadow-sm"
+placeholder="E.g. Daily Drive, Gym Focus"
+required>
+
+</div>
+
+<div class="mb-4">
+
+<label class="form-label fw-bold">
+Description (Optional)
+</label>
+
+<textarea th:field="*{description}"
+class="form-control shadow-sm"
+rows="2"
+placeholder="Describe the vibe..."></textarea>
+
+</div>
+
+<div class="mb-4">
+
+<div class="form-check form-switch card p-3 bg-light border-0">
+
+<input class="form-check-input"
+type="checkbox"
+th:field="*{public}"
+id="isPublicEdit">
+
+<label class="form-check-label fw-bold text-dark"
+for="isPublicEdit">
+Make this playlist Public </label>
+
+<small class="text-muted">
+Public playlists are visible on your profile.
+</small>
+
+</div>
+
+</div>
+
+<div class="d-grid gap-2 mb-2">
+
+<button type="submit"
+class="btn btn-primary btn-lg fw-bold shadow">
+Save Changes </button>
+
+<button type="button"
+class="btn btn-link text-muted text-decoration-none"
+data-bs-dismiss="modal">
+Cancel </button>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div th:replace="~{fragments/layout :: footer}"></div>
+
+<!-- Followers Count Script -->
+
+<script th:inline="javascript">
+
+document.addEventListener("DOMContentLoaded", function () {
+
+const playlistId = /*[[${playlist.id}]]*/ 0;
+
+fetch("/library/api/playlists/" + playlistId + "/followers")
+.then(response => response.json())
+.then(data => {
+
+const element = document.getElementById("followersCount");
+
+if(element){
+element.innerText = data;
+}
+
+})
+.catch(error => console.error("Failed loading followers:", error));
+
+});
+
+</script>
+
 </body>
-
 </html>

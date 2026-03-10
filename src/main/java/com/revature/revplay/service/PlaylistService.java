@@ -154,4 +154,10 @@ public interface PlaylistService {
      * popularity instantly.
      */
     boolean isSongLiked(Long songId, String username);
+    
+    void followPlaylist(Long playlistId, String username);
+
+    void unfollowPlaylist(Long playlistId, String username);
+    
+    long getPlaylistFollowerCount(Long playlistId);
 }

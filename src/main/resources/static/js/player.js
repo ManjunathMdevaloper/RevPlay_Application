@@ -32,6 +32,7 @@ if (!window.Player) {
             safe('player-add-playlist', 'click', (e) => { e.stopPropagation(); this.togglePlaylistDropdown(); });
 
             // Seek bar
+            // controls the music player's progress/seek bar.
             const seek = get('player-seek-bar');
             if (seek) {
                 seek.addEventListener('input', (e) => {
@@ -427,7 +428,7 @@ if (!window.Player) {
                     }
                 });
                 if (res.ok) {
-                    App.showToast('✅ Added to playlist!');
+                    App.showToast('Added to playlist!');
                     document.getElementById('player-playlist-menu').style.display = 'none';
                 } else {
                     App.showToast('Failed to add to playlist.', 'danger');
@@ -438,6 +439,8 @@ if (!window.Player) {
         },
 
         // ---- State Persistence ----
+        // Save the current player state (song, time, volume, shuffle, repeat, queue)
+        // in localStorage so playback can resume after page reload.
         saveLastPlayed() {
             const song = this.currentSong || (this.queue.length > 0 ? this.queue[this.currentIndex] : null);
             if (!song) return;

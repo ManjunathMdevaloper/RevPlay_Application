@@ -210,7 +210,29 @@ public class LibraryController {
         log.info("Viewing playlist details for ID: {}", id);
         Playlist playlist = playlistService.getPlaylistById(id);
         model.addAttribute("playlist", playlist);
+
+        PlaylistDto playlistDto = new PlaylistDto();
+        playlistDto.setId(playlist.getId());
+        playlistDto.setName(playlist.getName());
+        playlistDto.setDescription(playlist.getDescription());
+        playlistDto.setPublic(playlist.isPublic());
+        model.addAttribute("playlistDto", playlistDto);
+
         return "library/playlist-detail";
+    }
+
+    /**
+     * Processes the update of an existing playlist from a form submission.
+     */
+    @PostMapping("/playlists/{id}/update")
+    public String updatePlaylist(@PathVariable("id") Long id,
+            @ModelAttribute("playlistDto") PlaylistDto playlistDto,
+            Authentication authentication,
+            RedirectAttributes redirectAttributes) {
+        log.info("User {} is updating playlist ID: '{}'", authentication.getName(), id);
+        playlistService.updatePlaylist(id, playlistDto, authentication.getName());
+        redirectAttributes.addFlashAttribute("successMessage", "Playlist updated successfully.");
+        return "redirect:/library/playlists/" + id;
     }
 
     /**
@@ -278,4 +300,55 @@ public class LibraryController {
         redirectAttributes.addFlashAttribute("successMessage", "Song removed from playlist.");
         return "redirect:/library/playlists/" + playlistId;
     }
+    /**
+
+    * Allows a user to follow a public playlist.
+      */
+      @PostMapping("/playlists/{id}/follow")
+      public String followPlaylist(@PathVariable("id") Long id,
+      Authentication authentication,
+      RedirectAttributes redirectAttributes) {
+
+      log.info("User {} is following playlist ID: {}", authentication.getName(), id);
+
+      playlistService.followPlaylist(id, authentication.getName());
+
+      redirectAttributes.addFlashAttribute("successMessage", "You are now following this playlist.");
+
+      return "redirect:/library/playlists/" + id;
+      }
+
+    /**
+
+    * Allows a user to unfollow a playlist.
+      */
+      @PostMapping("/playlists/{id}/unfollow")
+      public String unfollowPlaylist(@PathVariable("id") Long id,
+      Authentication authentication,
+      RedirectAttributes redirectAttributes) {
+
+      log.info("User {} is unfollowing playlist ID: {}", authentication.getName(), id);
+
+      playlistService.unfollowPlaylist(id, authentication.getName());
+
+      redirectAttributes.addFlashAttribute("successMessage", "You unfollowed this playlist.");
+
+      return "redirect:/library/playlists/" + id;
+      }
+
+    /**
+
+    * API endpoint to fetch playlist follower count.
+      */
+      @GetMapping("/api/playlists/{id}/followers")
+      @ResponseBody
+      public ResponseEntity<Long> getPlaylistFollowerCount(@PathVariable("id") Long id) {
+
+      log.debug("Fetching follower count for playlist ID: {}", id);
+
+      long count = playlistService.getPlaylistFollowerCount(id);
+
+      return ResponseEntity.ok(count);
+      }
+
 }

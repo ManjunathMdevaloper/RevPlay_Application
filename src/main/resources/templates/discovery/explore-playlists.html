@@ -142,6 +142,14 @@
                     <div class="modal-body px-4 pb-4 pt-3">
                         <p id="modalPlaylistDesc" class="text-muted small mb-4 bg-light p-3 rounded-4 border"
                             style="line-height: 1.5;"></p>
+                            <!-- Follow Playlist Button -->
+<div class="mb-3 text-end">
+    <form id="followPlaylistForm" method="post">
+        <button class="btn btn-success btn-sm rounded-pill px-3 fw-bold shadow-sm">
+            Follow Playlist
+        </button>
+    </form>
+</div>
                         <div class="d-flex justify-content-between align-items-end mb-3">
                             <h6 class="fw-bold mb-0 text-dark">Included Tracks</h6>
                             <button id="modalPlaylistPlayAll"
@@ -171,79 +179,112 @@
                 overflow: hidden;
             }
         </style>
-
+       <script th:inline="javascript">
+    const loggedUser = /*[[${#authentication.principal.username}]]*/ "";
+</script>
         <script>
+        
             /**
              * Populates and triggers the Playlist details modal.
              * Reads data from the clicked card's data attributes and the hidden eager-loaded track storage.
              */
-            function showPlaylistDetails(element) {
-                const name = element.getAttribute('data-name');
-                const desc = element.getAttribute('data-desc');
-                const owner = element.getAttribute('data-owner');
-                const ownerPfp = element.getAttribute('data-owner-pfp');
+             function showPlaylistDetails(element) {
+            	    const name = element.getAttribute('data-name');
+            	    const desc = element.getAttribute('data-desc');
+            	    const owner = element.getAttribute('data-owner');
+            	    const ownerPfp = element.getAttribute('data-owner-pfp');
+            	    const playlistId = element.getAttribute('data-id');
 
-                document.getElementById('modalPlaylistName').innerText = name;
-                document.getElementById('modalPlaylistOwner').innerText = owner;
-                document.getElementById('modalPlaylistOwnerPfp').src = ownerPfp;
+            	    document.getElementById('modalPlaylistName').innerText = name;
+            	    document.getElementById('modalPlaylistOwner').innerText = owner;
+            	    document.getElementById('modalPlaylistOwnerPfp').src = ownerPfp;
 
-                const descEl = document.getElementById('modalPlaylistDesc');
-                if (desc && desc.trim() !== '') {
-                    descEl.innerText = desc;
-                    descEl.classList.remove('d-none');
-                } else {
-                    descEl.classList.add('d-none');
-                }
+            	    const descEl = document.getElementById('modalPlaylistDesc');
+            	    if (desc && desc.trim() !== '') {
+            	        descEl.innerText = desc;
+            	        descEl.classList.remove('d-none');
+            	    } else {
+            	        descEl.classList.add('d-none');
+            	    }
 
-                const songsList = document.getElementById('modalPlaylistSongsList');
-                songsList.innerHTML = '';
+            	    const followForm = document.getElementById("followPlaylistForm");
+            	    if (followForm) {
+            	        followForm.action = "/library/playlists/" + playlistId + "/follow";
+            	    }
 
-                const allSongs = [];
-                const songsData = element.querySelectorAll('.playlist-songs-data div');
+            	    /* ADDED: Hide follow button if playlist owner */
+            	    const followContainer = document.getElementById("followPlaylistForm").parentElement;
+            	    if (loggedUser === owner) {
+            	        followContainer.style.display = "none";
+            	    } else {
+            	        followContainer.style.display = "block";
+            	    }
 
-                if (songsData.length === 0) {
-                    songsList.innerHTML = '<p class="text-muted text-center small py-4">No tracks have been added to this playlist yet.</p>';
-                    document.getElementById('modalPlaylistPlayAll').style.display = 'none';
-                } else {
-                    document.getElementById('modalPlaylistPlayAll').style.display = 'block';
-                    songsData.forEach((song, index) => {
-                        const sId = song.getAttribute('data-song-id');
-                        const sTitle = song.getAttribute('data-title');
-                        const sArtist = song.getAttribute('data-artist');
-                        const sUrl = song.getAttribute('data-url');
-                        const sCover = song.getAttribute('data-cover');
+            	    const songsList = document.getElementById('modalPlaylistSongsList');
+            	    songsList.innerHTML = '';
 
-                        if (sUrl) allSongs.push({ id: sId, url: sUrl, title: sTitle, artist: sArtist, cover: sCover });
+            	    const allSongs = [];
+            	    const songsData = element.querySelectorAll('.playlist-songs-data div');
 
-                        const songRow = document.createElement('div');
-                        songRow.className = "d-flex align-items-center justify-content-between p-2 mb-2 bg-white rounded-3 border transition-all hover-transform shadow-sm";
-                        songRow.innerHTML = `
-                            <div class="d-flex align-items-center overflow-hidden">
-                                <span class="text-muted mx-2 small fw-bold" style="min-width: 20px;">${index + 1}</span>
-                                <div class="text-truncate">
-                                    <h6 class="mb-0 fw-bold small text-dark text-truncate">${sTitle}</h6>
-                                    <small class="text-muted small text-truncate" style="font-size: 0.7rem;">${sArtist}</small>
-                                </div>
-                            </div>
-                            ${sUrl ? `<button class="btn btn-sm rounded-circle p-0 d-flex align-items-center justify-content-center shadow-none flex-shrink-0 mx-2" style="width: 32px; height: 32px; background: #FF6600; color: white; border: none;" onclick="event.stopPropagation(); playModalAudio('${sId}')">▶</button>` : '<span class="badge bg-light text-muted border-0 small">N/A</span>'}
-                        `;
-                        songsList.appendChild(songRow);
-                    });
-                }
+            	    if (songsData.length === 0) {
+            	        songsList.innerHTML = '<p class="text-muted text-center small py-4">No tracks have been added to this playlist yet.</p>';
+            	        document.getElementById('modalPlaylistPlayAll').style.display = 'none';
+            	    } else {
+            	        document.getElementById('modalPlaylistPlayAll').style.display = 'block';
 
-                window.currentModalSongs = allSongs;
+            	        songsData.forEach((song, index) => {
+            	            const sId = song.getAttribute('data-song-id');
+            	            const sTitle = song.getAttribute('data-title');
+            	            const sArtist = song.getAttribute('data-artist');
+            	            const sUrl = song.getAttribute('data-url');
+            	            const sCover = song.getAttribute('data-cover');
 
-                document.getElementById('modalPlaylistPlayAll').onclick = function (e) {
-                    e.stopPropagation();
-                    if (allSongs.length > 0) {
-                        playModalAudio(allSongs[0].id);
-                        bootstrap.Modal.getInstance(document.getElementById('playlistDetailsModal')).hide();
-                    }
-                };
+            	            if (sUrl) allSongs.push({
+            	                id: sId,
+            	                url: sUrl,
+            	                title: sTitle,
+            	                artist: sArtist,
+            	                cover: sCover
+            	            });
 
-                const modal = new bootstrap.Modal(document.getElementById('playlistDetailsModal'));
-                modal.show();
-            }
+            	            const songRow = document.createElement('div');
+            	            songRow.className = "d-flex align-items-center justify-content-between p-2 mb-2 bg-white rounded-3 border transition-all hover-transform shadow-sm";
+
+            	            songRow.innerHTML = `
+            	                <div class="d-flex align-items-center overflow-hidden">
+            	                    <span class="text-muted mx-2 small fw-bold" style="min-width:20px;">${index + 1}</span>
+            	                    <div class="text-truncate">
+            	                        <h6 class="mb-0 fw-bold small text-dark text-truncate">${sTitle}</h6>
+            	                        <small class="text-muted small text-truncate" style="font-size:0.7rem;">${sArtist}</small>
+            	                    </div>
+            	                </div>
+            	                ${sUrl ?
+            	                `<button class="btn btn-sm rounded-circle p-0 d-flex align-items-center justify-content-center shadow-none flex-shrink-0 mx-2"
+            	                    style="width:32px;height:32px;background:#FF6600;color:white;border:none;"
+            	                    onclick="event.stopPropagation(); playModalAudio('${sId}')">▶</button>`
+            	                :
+            	                '<span class="badge bg-light text-muted border-0 small">N/A</span>'}
+            	            `;
+
+            	            songsList.appendChild(songRow);
+            	        });
+            	    }
+
+            	    window.currentModalSongs = allSongs;
+
+            	    document.getElementById('modalPlaylistPlayAll').onclick = function (e) {
+            	        e.stopPropagation();
+            	        if (allSongs.length > 0) {
+            	            playModalAudio(allSongs[0].id);
+            	            bootstrap.Modal.getInstance(
+            	                document.getElementById('playlistDetailsModal')
+            	            ).hide();
+            	        }
+            	    };
+
+            	    const modal = new bootstrap.Modal(document.getElementById('playlistDetailsModal'));
+            	    modal.show();
+            	}
         </script>
 
     </div><!-- /#main-content -->
