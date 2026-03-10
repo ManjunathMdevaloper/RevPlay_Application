@@ -1,0 +1,8 @@
+2026-03-10T05:51:10.419+05:30  WARN 65572 --- [RevPlay] [HikariPool-7 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-7 - Thread starvation or clock leap detected (housekeeper delta=5h31m49s317ms697탎200ns).
+2026-03-10T09:25:19.937+05:30  WARN 65572 --- [RevPlay] [HikariPool-7 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-7 - Thread starvation or clock leap detected (housekeeper delta=2h36m16s270ms210탎500ns).
+2026-03-10T09:45:04.098+05:30  INFO 65572 --- [RevPlay] [http-nio-8081-exec-6] c.r.revplay.controller.AuthController    : Accessing login page
+2026-03-10T10:24:45.050+05:30  INFO 65572 --- [RevPlay] [http-nio-8081-exec-3] c.r.revplay.controller.AuthController    : Accessing login page
+2026-03-10T10:25:12.498+05:30  INFO 65572 --- [RevPlay] [http-nio-8081-exec-4] c.r.revplay.controller.AuthController    : Accessing login page
+2026-03-10T10:25:35.150+05:30  INFO 65572 --- [RevPlay] [http-nio-8081-exec-3] c.r.revplay.controller.AuthController    : Accessing login page
+2026-03-10T11:56:29.886+05:30  WARN 65572 --- [RevPlay] [HikariPool-7 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-7 - Thread starvation or clock leap detected (housekeeper delta=22m46s311ms341탎800ns).
+2026-03-10T12:15:46.132+05:30  WARN 65572 --- [RevPlay] [HikariPool-7 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-7 - Thread starvation or clock leap detected (housekeeper delta=6m46s52ms50탎300ns).

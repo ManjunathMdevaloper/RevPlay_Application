@@ -194,8 +194,12 @@ class ArtistDashboardControllerTest {
         User artist = new User();
         artist.setId(1L);
 
+        Album album = new Album();
+        album.setName("Test Album");
+
         when(authentication.getName()).thenReturn("artist");
         when(userService.getUserByUsername("artist")).thenReturn(artist);
+        when(albumRepository.save(any(Album.class))).thenReturn(album);
 
         String view = controller.createAlbum(
                 authentication,
