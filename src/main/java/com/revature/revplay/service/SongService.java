@@ -108,8 +108,7 @@ List<Song> getSongsByArtistId(Long artistId);
          * 1. When a specific song was started by a specific user.
          * 2. Updates the global popularity stats to help with trending algorithm.
          * 3. Feeds into the user's 'Recent History' so they can find the track later.
-         * 4. It provides the data needed for artists to see how their music is
-         * performing.
+         * 4. It provides the data needed for artists to see how their music is performing.
          */
         void recordPlay(Long id, String username);
 }
