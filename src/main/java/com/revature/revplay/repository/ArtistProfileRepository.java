@@ -1,4 +1,3 @@
-
 package com.revature.revplay.repository;
 
 import com.revature.revplay.entity.ArtistProfile;

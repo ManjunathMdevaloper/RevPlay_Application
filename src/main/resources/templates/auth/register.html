@@ -65,7 +65,8 @@
                                 <!-- th:field="*{password}": Binds to the 'password' property; input is masked for security. -->
                                 <input type="password" id="password" th:field="*{password}"
                                     class="form-control rounded-2 border-light shadow-sm" placeholder="••••••••"
-                                    required />
+                                    required pattern="(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z0-9]).{6,}"
+                                    title="Password must be at least 6 characters long and include at least one letter, one number, and one special character." />
                                 <p th:if="${#fields.hasErrors('password')}" class="text-danger small mt-1"
                                     th:errors="*{password}"></p>
                             </div>
