@@ -21,12 +21,6 @@ import java.util.List;
  */
 @Repository
 public interface SongRepository extends JpaRepository<Song, Long> {
-
-        /**
-         * Pulls all tracks belonging to a specific genre.
-         */
-List<Song> findByGenre(String genre);
-
         /**
          * Pulls all tracks belonging to a specific artist.
          */

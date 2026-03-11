@@ -70,19 +70,47 @@ public class ForgotPasswordController {
      */
     @PostMapping("/forgot-password")
     public String processForgotPassword(@RequestParam("username") String username,
-            @RequestParam("email") String email,
             Model model) {
-        log.info("Processing forgot password request for user: {} with email: {}", username, email);
-        boolean isValid = userService.verifyUser(username, email);
-        if (isValid) {
-            log.info("Forgot password verification successful for user: {}", username);
+        log.info("Processing forgot password request for user: {}", username);
+        try {
+            com.revature.revplay.entity.User user = userService.getUserByUsername(username);
+            log.info("User found, proceeding to security question step for user: {}", username);
             model.addAttribute("username", username);
-            return "auth/reset-password";
-        } else {
-            log.warn("Forgot password verification failed: Credentials match not found for user: {} and email: {}",
-                    username, email);
-            model.addAttribute("error", "No account found with that username and email combination.");
+            model.addAttribute("securityQuestion", user.getSecurityQuestion());
+            model.addAttribute("securityHint", user.getSecurityHint());
+            return "auth/forgot-password-question";
+        } catch (RuntimeException e) {
+            log.warn("Forgot password verification failed: User not found: {}", username);
+            model.addAttribute("error", "No account found with that username.");
             return "auth/forgot-password";
+        }
+    }
+
+    @PostMapping("/verify-security-question")
+    public String verifySecurityQuestion(@RequestParam("username") String username,
+            @RequestParam("securityAnswer") String securityAnswer,
+            Model model) {
+        log.info("Processing security question answer for user: {}", username);
+        try {
+            com.revature.revplay.entity.User user = userService.getUserByUsername(username);
+
+            // Compare answers ignoring case
+            if (user.getSecurityAnswer() != null &&
+                    user.getSecurityAnswer().equalsIgnoreCase(securityAnswer.trim())) {
+                log.info("Security question verification successful for user: {}", username);
+                model.addAttribute("username", username);
+                return "auth/reset-password";
+            } else {
+                log.warn("Security question verification failed for user: {}", username);
+                model.addAttribute("username", username);
+                model.addAttribute("securityQuestion", user.getSecurityQuestion());
+                model.addAttribute("securityHint", user.getSecurityHint());
+                model.addAttribute("error", "Incorrect answer to the security question.");
+                return "auth/forgot-password-question";
+            }
+        } catch (RuntimeException e) {
+            log.warn("User not found during security question verification: {}", username);
+            return "redirect:/forgot-password";
         }
     }
 

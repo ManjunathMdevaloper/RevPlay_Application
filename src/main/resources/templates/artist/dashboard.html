@@ -18,898 +18,898 @@
 
 <body>
 
-<!-- Injects the global navigation bar. -->
-<div th:replace="~{fragments/layout :: navbar}"></div>
+    <!-- Injects the global navigation bar. -->
+    <div th:replace="~{fragments/layout :: navbar}"></div>
 
-<div id="main-content">
+    <div id="main-content">
 
-    <div class="container mb-5 mt-4">
-        <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
-            <h2 class="text-primary fw-bold mb-0">Artist Dashboard</h2>
-            <div>
-                <button type="button" class="btn btn-outline-primary fw-bold shadow-sm me-2" data-bs-toggle="modal"
+        <div class="container mb-5 mt-4">
+            <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+                <h2 class="text-primary fw-bold mb-0">Artist Dashboard</h2>
+                <div>
+                    <button type="button" class="btn btn-outline-primary fw-bold shadow-sm me-2" data-bs-toggle="modal"
                         data-bs-target="#createAlbumModal">
-                    + Create New Album
-                </button>
-                <button type="button" class="btn btn-primary fw-bold shadow-sm" data-bs-toggle="modal"
+                        + Create New Album
+                    </button>
+                    <button type="button" class="btn btn-primary fw-bold shadow-sm" data-bs-toggle="modal"
                         data-bs-target="#uploadSongModal">
-                    ↑ Upload Fast Track
-                </button>
-            </div>
-        </div>
-
-        <!-- MODAL: Create New Album -->
-        <div class="modal fade" id="createAlbumModal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg">
-                <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
-                    <div class="modal-body p-4 p-md-5">
-                        <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
-                            <div>
-                                <h2 class="fw-bold mb-0 text-primary">Publish New Album</h2>
-                                <p class="text-muted small mb-0">Curate your collection for the world to hear</p>
-                            </div>
-                            <button type="button"
-                                    class="btn btn-outline-secondary rounded-pill px-3 shadow-sm fw-bold small"
-                                    data-bs-dismiss="modal">✕ Cancel</button>
-                        </div>
-                        <form th:action="@{/artist/dashboard/albums/create}" th:object="${albumDto}" method="post"
-                              enctype="multipart/form-data">
-                            <div class="mb-4">
-                                <label for="albName" class="form-label fw-bold small text-muted">Album Title <span
-                                        class="text-danger">*</span></label>
-                                <input type="text" th:field="*{name}"
-                                       class="form-control rounded-3 border-light shadow-sm" id="albName"
-                                       placeholder="E.g. Midnight Melodies" required>
-                            </div>
-                            <div class="mb-4">
-                                <label for="albDesc" class="form-label fw-bold small text-muted">Description</label>
-                                <textarea th:field="*{description}"
-                                          class="form-control rounded-3 border-light shadow-sm" id="albDesc" rows="3"
-                                          placeholder="Tell your fans about this collection..."></textarea>
-                            </div>
-                            <div class="row mb-4">
-                                <div class="col-md-6 mb-3 mb-md-0">
-                                    <label for="albDate" class="form-label fw-bold small text-muted">Release
-                                        Date</label>
-                                    <input type="date" th:field="*{releaseDate}"
-                                           class="form-control rounded-3 border-light shadow-sm" id="albDate">
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="albCover" class="form-label fw-bold small text-muted">Album Cover
-                                        Art</label>
-                                    <input type="file" name="coverFile"
-                                           class="form-control rounded-3 border-light shadow-sm" id="albCover"
-                                           accept="image/*">
-                                </div>
-                            </div>
-                            <div class="d-grid mt-5">
-                                <button type="submit"
-                                        class="btn btn-primary btn-lg fw-bold rounded-pill shadow">Publish New
-                                    Album</button>
-                            </div>
-                        </form>
-                    </div>
+                        ↑ Upload Fast Track
+                    </button>
                 </div>
             </div>
-        </div>
 
-        <!-- MODAL: Upload Fast Track -->
-        <div class="modal fade" id="uploadSongModal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg">
-                <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
-                    <div class="modal-body p-4 p-md-5">
-                        <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
-                            <div>
-                                <h2 class="fw-bold mb-0 text-primary">Upload New Track</h2>
-                                <p class="text-muted small mb-0">Publish your latest masterpiece to RevPlay</p>
-                            </div>
-                            <button type="button"
+            <!-- MODAL: Create New Album -->
+            <div class="modal fade" id="createAlbumModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+                        <div class="modal-body p-4 p-md-5">
+                            <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+                                <div>
+                                    <h2 class="fw-bold mb-0 text-primary">Publish New Album</h2>
+                                    <p class="text-muted small mb-0">Curate your collection for the world to hear</p>
+                                </div>
+                                <button type="button"
                                     class="btn btn-outline-secondary rounded-pill px-3 shadow-sm fw-bold small"
                                     data-bs-dismiss="modal">✕ Cancel</button>
-                        </div>
-                        <form th:action="@{/artist/dashboard/songs/create}" th:object="${songDto}" method="post"
-                              enctype="multipart/form-data">
-                            <div class="row mb-4">
-                                <div class="col-md-8 mb-3 mb-md-0">
-                                    <label for="sTitle" class="form-label fw-bold small text-muted">Track Title
-                                        <span class="text-danger">*</span></label>
-                                    <input type="text" id="sTitle" th:field="*{title}"
-                                           class="form-control rounded-3 border-light shadow-sm" required
-                                           placeholder="Name your masterpiece" />
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="sGenre" class="form-label fw-bold small text-muted">Genre <span
+                            </div>
+                            <form th:action="@{/artist/dashboard/albums/create}" th:object="${albumDto}" method="post"
+                                enctype="multipart/form-data">
+                                <div class="mb-4">
+                                    <label for="albName" class="form-label fw-bold small text-muted">Album Title <span
                                             class="text-danger">*</span></label>
-                                    <input type="text" id="sGenre" th:field="*{genre}"
-                                           class="form-control rounded-3 border-light shadow-sm" required
-                                           placeholder="Pop, Rock, etc." />
+                                    <input type="text" th:field="*{name}"
+                                        class="form-control rounded-3 border-light shadow-sm" id="albName"
+                                        placeholder="E.g. Midnight Melodies" required>
                                 </div>
-                            </div>
-                            <div class="row mb-4">
-                                <div class="col-md-6 mb-3 mb-md-0">
-                                    <label for="sAlbum" class="form-label fw-bold small text-muted">Assign to Album
-                                        (Optional)</label>
-                                    <select id="sAlbum" th:field="*{albumId}"
-                                            class="form-select rounded-3 border-light shadow-sm">
-                                        <option value="" th:text="'-- Standalone Single --'"></option>
-                                        <option th:each="album : ${albums}" th:value="${album.id}"
-                                                th:text="${album.name}"></option>
-                                    </select>
+                                <div class="mb-4">
+                                    <label for="albDesc" class="form-label fw-bold small text-muted">Description</label>
+                                    <textarea th:field="*{description}"
+                                        class="form-control rounded-3 border-light shadow-sm" id="albDesc" rows="3"
+                                        placeholder="Tell your fans about this collection..."></textarea>
                                 </div>
-                                <div class="col-md-6">
-                                    <label for="sDur" class="form-label fw-bold small text-muted">Track Duration
-                                        (Seconds) <span class="text-danger">*</span></label>
-                                    <input type="number" id="sDur" th:field="*{duration}"
-                                           class="form-control rounded-3 border-light shadow-sm bg-light"
-                                           placeholder="Auto-calculated" readonly required min="1" />
-                                </div>
-                            </div>
-                            <div class="p-4 bg-light rounded-4 border border-white mb-4 shadow-sm">
-                                <h6 class="fw-bold mb-3 text-secondary small text-uppercase tracking-wider">Media
-                                    Files</h6>
-                                <div class="row">
+                                <div class="row mb-4">
                                     <div class="col-md-6 mb-3 mb-md-0">
-                                        <label for="sAudio" class="form-label fw-bold text-dark">Audio File <span
-                                                class="text-danger">*</span></label>
-                                        <input type="file" id="sAudio" name="audioFile"
-                                               class="form-control border-light shadow-sm" accept="audio/*" required />
+                                        <label for="albDate" class="form-label fw-bold small text-muted">Release
+                                            Date</label>
+                                        <input type="date" th:field="*{releaseDate}"
+                                            class="form-control rounded-3 border-light shadow-sm" id="albDate">
                                     </div>
                                     <div class="col-md-6">
-                                        <label for="sCover" class="form-label fw-bold text-dark">Cover Art
-                                            (Optional)</label>
-                                        <input type="file" id="sCover" name="coverFile"
-                                               class="form-control border-light shadow-sm" accept="image/*" />
+                                        <label for="albCover" class="form-label fw-bold small text-muted">Album Cover
+                                            Art</label>
+                                        <input type="file" name="coverFile"
+                                            class="form-control rounded-3 border-light shadow-sm" id="albCover"
+                                            accept="image/*">
                                     </div>
                                 </div>
-                            </div>
-                            <div class="d-grid mt-4">
-                                <button type="submit"
-                                        class="btn btn-primary btn-lg fw-bold rounded-pill shadow">Publish
-                                    Track</button>
-                            </div>
-                        </form>
+                                <div class="d-grid mt-5">
+                                    <button type="submit"
+                                        class="btn btn-primary btn-lg fw-bold rounded-pill shadow">Publish New
+                                        Album</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div th:if="${successMessage}"
-             class="alert alert-success mt-3 border-0 shadow-sm rounded-3 d-flex align-items-center bg-success-subtle py-3"
-             role="alert">
-            <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3"
-                 style="width: 32px; height: 32px; flex-shrink: 0;">
-                <span class="fw-bold">✓</span>
+            <!-- MODAL: Upload Fast Track -->
+            <div class="modal fade" id="uploadSongModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+                        <div class="modal-body p-4 p-md-5">
+                            <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+                                <div>
+                                    <h2 class="fw-bold mb-0 text-primary">Upload New Track</h2>
+                                    <p class="text-muted small mb-0">Publish your latest masterpiece to RevPlay</p>
+                                </div>
+                                <button type="button"
+                                    class="btn btn-outline-secondary rounded-pill px-3 shadow-sm fw-bold small"
+                                    data-bs-dismiss="modal">✕ Cancel</button>
+                            </div>
+                            <form th:action="@{/artist/dashboard/songs/create}" th:object="${songDto}" method="post"
+                                enctype="multipart/form-data">
+                                <div class="row mb-4">
+                                    <div class="col-md-8 mb-3 mb-md-0">
+                                        <label for="sTitle" class="form-label fw-bold small text-muted">Track Title
+                                            <span class="text-danger">*</span></label>
+                                        <input type="text" id="sTitle" th:field="*{title}"
+                                            class="form-control rounded-3 border-light shadow-sm" required
+                                            placeholder="Name your masterpiece" />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="sGenre" class="form-label fw-bold small text-muted">Genre <span
+                                                class="text-danger">*</span></label>
+                                        <input type="text" id="sGenre" th:field="*{genre}"
+                                            class="form-control rounded-3 border-light shadow-sm" required
+                                            placeholder="Pop, Rock, etc." />
+                                    </div>
+                                </div>
+                                <div class="row mb-4">
+                                    <div class="col-md-6 mb-3 mb-md-0">
+                                        <label for="sAlbum" class="form-label fw-bold small text-muted">Assign to Album
+                                            (Optional)</label>
+                                        <select id="sAlbum" th:field="*{albumId}"
+                                            class="form-select rounded-3 border-light shadow-sm">
+                                            <option value="" th:text="'-- Standalone Single --'"></option>
+                                            <option th:each="album : ${albums}" th:value="${album.id}"
+                                                th:text="${album.name}"></option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="sDur" class="form-label fw-bold small text-muted">Track Duration
+                                            (Seconds) <span class="text-danger">*</span></label>
+                                        <input type="number" id="sDur" th:field="*{duration}"
+                                            class="form-control rounded-3 border-light shadow-sm bg-light"
+                                            placeholder="Auto-calculated" readonly required min="1" />
+                                    </div>
+                                </div>
+                                <div class="p-4 bg-light rounded-4 border border-white mb-4 shadow-sm">
+                                    <h6 class="fw-bold mb-3 text-secondary small text-uppercase tracking-wider">Media
+                                        Files</h6>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3 mb-md-0">
+                                            <label for="sAudio" class="form-label fw-bold text-dark">Audio File <span
+                                                    class="text-danger">*</span></label>
+                                            <input type="file" id="sAudio" name="audioFile"
+                                                class="form-control border-light shadow-sm" accept="audio/*" required />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="sCover" class="form-label fw-bold text-dark">Cover Art
+                                                (Optional)</label>
+                                            <input type="file" id="sCover" name="coverFile"
+                                                class="form-control border-light shadow-sm" accept="image/*" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-grid mt-4">
+                                    <button type="submit"
+                                        class="btn btn-primary btn-lg fw-bold rounded-pill shadow">Publish
+                                        Track</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div>
-                <strong class="d-block text-success">Success!</strong>
-                <span class="text-success-emphasis small fw-medium" th:text="${successMessage}">Your changes have
+
+            <div th:if="${successMessage}"
+                class="alert alert-success mt-3 border-0 shadow-sm rounded-3 d-flex align-items-center bg-success-subtle py-3"
+                role="alert">
+                <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3"
+                    style="width: 32px; height: 32px; flex-shrink: 0;">
+                    <span class="fw-bold">✓</span>
+                </div>
+                <div>
+                    <strong class="d-block text-success">Success!</strong>
+                    <span class="text-success-emphasis small fw-medium" th:text="${successMessage}">Your changes have
                         been saved successfully.</span>
+                </div>
+                <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
-            <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
 
-        <!-- Quick Stats Banner — each card opens a modal popup -->
-        <div class="row g-4 mb-5 text-center">
-            <!-- Total Songs Card: Shows how many tracks the artist has. -->
-            <div class="col-md-3">
-                <div class="card shadow-sm border-0 border-top border-primary border-4 py-3 bg-light stat-card"
-                     data-bs-toggle="modal" data-bs-target="#songsModal"
-                     style="cursor: pointer; transition: all 0.2s;"
-                     onmouseenter="this.style.transform='translateY(-3px)'"
-                     onmouseleave="this.style.transform='translateY(0)'">
-                    <!-- th:text: Calculates size of 'songs' list provided by the Model. -->
-                    <h1 class="text-primary fw-bold" th:text="${#lists.size(songs)}">0</h1>
-                    <p class="text-muted fw-bold mb-0 text-uppercase small">Total Songs</p>
+            <!-- Quick Stats Banner — each card opens a modal popup -->
+            <div class="row g-4 mb-5 text-center">
+                <!-- Total Songs Card: Shows how many tracks the artist has. -->
+                <div class="col-md-3">
+                    <div class="card shadow-sm border-0 border-top border-primary border-4 py-3 bg-light stat-card"
+                        data-bs-toggle="modal" data-bs-target="#songsModal"
+                        style="cursor: pointer; transition: all 0.2s;"
+                        onmouseenter="this.style.transform='translateY(-3px)'"
+                        onmouseleave="this.style.transform='translateY(0)'">
+                        <!-- th:text: Calculates size of 'songs' list provided by the Model. -->
+                        <h1 class="text-primary fw-bold" th:text="${#lists.size(songs)}">0</h1>
+                        <p class="text-muted fw-bold mb-0 text-uppercase small">Total Songs</p>
+                    </div>
+                </div>
+                <!-- Active Albums Card -->
+                <div class="col-md-3">
+                    <div class="card shadow-sm border-0 border-top border-primary border-4 py-3 bg-white stat-card"
+                        data-bs-toggle="modal" data-bs-target="#albumsModal"
+                        style="cursor: pointer; transition: all 0.2s;"
+                        onmouseenter="this.style.transform='translateY(-3px)'"
+                        onmouseleave="this.style.transform='translateY(0)'">
+                        <h1 class="text-primary fw-bold" th:text="${#lists.size(albums)}">0</h1>
+                        <p class="text-muted fw-bold mb-0 text-uppercase small">Active Albums</p>
+                    </div>
+                </div>
+                <!-- Lifetime Streams Card: Aggregated play count across all songs. -->
+                <div class="col-md-3">
+                    <div class="card shadow-sm border-0 border-top border-success border-4 py-3 bg-white stat-card"
+                        data-bs-toggle="modal" data-bs-target="#streamsModal"
+                        style="cursor: pointer; transition: all 0.2s;"
+                        onmouseenter="this.style.transform='translateY(-3px)'"
+                        onmouseleave="this.style.transform='translateY(0)'">
+                        <h1 class="text-success fw-bold" th:text="${totalStreams}">0</h1>
+                        <p class="text-muted fw-bold mb-0 text-uppercase small">Lifetime Streams</p>
+                    </div>
+                </div>
+                <!-- Followers Card: Number of users following this artist. -->
+                <div class="col-md-3">
+                    <div class="card shadow-sm border-0 border-top border-info border-4 py-3 bg-white stat-card"
+                        data-bs-toggle="modal" data-bs-target="#followersModal"
+                        style="cursor: pointer; transition: all 0.2s;"
+                        onmouseenter="this.style.transform='translateY(-3px)'"
+                        onmouseleave="this.style.transform='translateY(0)'">
+                        <h1 class="text-info fw-bold" th:text="${followerCount}">0</h1>
+                        <p class="text-muted fw-bold mb-0 text-uppercase small">Followers</p>
+                    </div>
                 </div>
             </div>
-            <!-- Active Albums Card -->
-            <div class="col-md-3">
-                <div class="card shadow-sm border-0 border-top border-primary border-4 py-3 bg-white stat-card"
-                     data-bs-toggle="modal" data-bs-target="#albumsModal"
-                     style="cursor: pointer; transition: all 0.2s;"
-                     onmouseenter="this.style.transform='translateY(-3px)'"
-                     onmouseleave="this.style.transform='translateY(0)'">
-                    <h1 class="text-primary fw-bold" th:text="${#lists.size(albums)}">0</h1>
-                    <p class="text-muted fw-bold mb-0 text-uppercase small">Active Albums</p>
-                </div>
-            </div>
-            <!-- Lifetime Streams Card: Aggregated play count across all songs. -->
-            <div class="col-md-3">
-                <div class="card shadow-sm border-0 border-top border-success border-4 py-3 bg-white stat-card"
-                     data-bs-toggle="modal" data-bs-target="#streamsModal"
-                     style="cursor: pointer; transition: all 0.2s;"
-                     onmouseenter="this.style.transform='translateY(-3px)'"
-                     onmouseleave="this.style.transform='translateY(0)'">
-                    <h1 class="text-success fw-bold" th:text="${totalStreams}">0</h1>
-                    <p class="text-muted fw-bold mb-0 text-uppercase small">Lifetime Streams</p>
-                </div>
-            </div>
-            <!-- Followers Card: Number of users following this artist. -->
-            <div class="col-md-3">
-                <div class="card shadow-sm border-0 border-top border-info border-4 py-3 bg-white stat-card"
-                     data-bs-toggle="modal" data-bs-target="#followersModal"
-                     style="cursor: pointer; transition: all 0.2s;"
-                     onmouseenter="this.style.transform='translateY(-3px)'"
-                     onmouseleave="this.style.transform='translateY(0)'">
-                    <h1 class="text-info fw-bold" th:text="${followerCount}">0</h1>
-                    <p class="text-muted fw-bold mb-0 text-uppercase small">Followers</p>
-                </div>
-            </div>
-        </div>
 
-        <!-- Default view: show tracks table below stats -->
-        <div class="card shadow-sm border-light mb-5">
-            <div class="card-header bg-white py-3 border-0 d-flex justify-content-between align-items-center">
-                <h5 class="mb-0 fw-bold text-primary">🎵 My Tracks Overview</h5>
-                <small class="text-muted">Click any stat card above to manage</small>
-            </div>
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0">
-                        <thead class="bg-light text-muted small text-uppercase">
-                        <tr>
-                            <th class="ps-4">Cover</th>
-                            <th>Title</th>
-                            <th>Genre</th>
-                            <th>Duration</th>
-                            <th>Streams</th>
-                            <th class="text-end pe-4">Actions</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <!--
+            <!-- Default view: show tracks table below stats -->
+            <div class="card shadow-sm border-light mb-5">
+                <div class="card-header bg-white py-3 border-0 d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 fw-bold text-primary">🎵 My Tracks Overview</h5>
+                    <small class="text-muted">Click any stat card above to manage</small>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="bg-light text-muted small text-uppercase">
+                                <tr>
+                                    <th class="ps-4">Cover</th>
+                                    <th>Title</th>
+                                    <th>Genre</th>
+                                    <th>Duration</th>
+                                    <th>Streams</th>
+                                    <th class="text-end pe-4">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!--
                           Main Tracks Loop:
                           - th:each: Populates the overview table with all songs in the artist's library.
                           - Displays cover art, title, genre, and play counts.
                         -->
-                        <tr th:each="song : ${songs}">
-                            <td class="ps-4">
-                                <img th:if="${song.coverArtUrl != null}" th:src="@{${song.coverArtUrl}}"
-                                     style="width: 45px; height: 45px; object-fit: cover;"
-                                     class="rounded border">
-                                <img th:unless="${song.coverArtUrl != null}"
-                                     th:src="@{/images/default-album.svg}"
-                                     style="width: 45px; height: 45px; object-fit: cover;"
-                                     class="rounded border bg-light">
-                            </td>
-                            <td>
-                                <h6 class="mb-0 fw-bold" th:text="${song.title}">Song Title</h6>
-                                <small class="text-muted">ID: <span th:text="${song.id}">123</span></small>
-                            </td>
-                            <td>
-                                <span class="badge bg-secondary" th:text="${song.genre}">Genre</span>
-                            </td>
-                            <td class="text-muted">
-                                <!-- Formats seconds into a human-readable MM:SS format. -->
-                                <span
-                                        th:text="${song.duration / 60} + ':' + ${T(java.lang.String).format('%02d', song.duration % 60)}">0:00</span>
-                            </td>
-                            <td class="fw-bold text-dark" th:text="${song.playCount}">0</td>
-                            <td class="text-end pe-4">
-                                <!-- Action Buttons: Edit leads to the edit form, Delete triggers a safety confirmation. -->
-                                <button type="button" class="btn btn-sm btn-outline-primary"
-                                        onclick="openEditSongModal(this)" th:data-id="${song.id}"
-                                        th:data-title="${song.title}" th:data-genre="${song.genre}"
-                                        th:data-album="${song.albumId}"
-                                        th:data-duration="${song.duration}">Edit</button>
-                                <form th:action="@{/artist/dashboard/songs/{id}/delete(id=${song.id})}"
-                                      method="post" class="d-inline"
-                                      onsubmit="return confirmAction('WARNING: Are you sure you want to completely erase this track from your catalog?', this);">
-                                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
-                                </form>
-                            </td>
-                        </tr>
-                        <tr th:if="${#lists.isEmpty(songs)}">
-                            <td colspan="6" class="text-center py-5 text-muted">You haven't uploaded any tracks
-                                yet. Click 'Upload Fast Track' to begin!</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- =========================================================== -->
-    <!-- MODAL 1: Total Songs -->
-    <!-- =========================================================== -->
-    <div class="modal fade" id="songsModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
-            <div class="modal-content border-0 shadow rounded-4 overflow-hidden">
-                <div class="modal-header border-0 px-4 pt-4 pb-2"
-                     style="background: linear-gradient(135deg, #FF6600 0%, #FF9900 100%);">
-                    <div>
-                        <h4 class="modal-title fw-bold text-white mb-0">🎵 My Songs</h4>
-                        <small class="text-white opacity-75"
-                               th:text="${#lists.size(songs)} + ' tracks in your catalog'">0 tracks</small>
-                    </div>
-                </div>
-                <div class="modal-body p-0">
-                    <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0">
-                            <thead class="bg-light text-muted small text-uppercase sticky-top">
-                            <tr>
-                                <th class="ps-4">Cover</th>
-                                <th>Song Details</th>
-                                <th>Album</th>
-                                <th>Genre</th>
-                                <th>Duration</th>
-                                <th>Streams</th>
-                                <th class="text-center">Audio</th>
-                                <th class="text-end pe-4">Actions</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr th:each="song : ${songs}">
-                                <td class="ps-4">
-                                    <img th:if="${song.coverArtUrl != null}" th:src="@{${song.coverArtUrl}}"
-                                         style="width: 55px; height: 55px; object-fit: cover;"
-                                         class="rounded-3 border shadow-sm">
-                                    <div th:unless="${song.coverArtUrl != null}"
-                                         class="rounded-3 border bg-light d-flex align-items-center justify-content-center"
-                                         style="width: 55px; height: 55px; font-size: 1.4rem;">🎵</div>
-                                </td>
-                                <td>
-                                    <h6 class="mb-0 fw-bold text-dark" th:text="${song.title}">Song Title</h6>
-                                </td>
-                                <td>
-                                            <span class="badge bg-light text-dark border fw-medium"
-                                                  th:text="${song.album != null ? song.album.name : 'No Album'}"
-                                                  th:classappend="${song.album == null ? 'text-muted' : ''}">—</span>
-                                </td>
-                                <td>
-                                    <span class="badge bg-secondary" th:text="${song.genre}">Genre</span>
-                                </td>
-                                <td class="text-muted fw-medium">
-                                            <span
-                                                    th:text="${song.duration / 60} + ':' + ${T(java.lang.String).format('%02d', song.duration % 60)}">0:00</span>
-                                </td>
-                                <td>
-                                    <span class="fw-bold text-dark" th:text="${song.playCount}">0</span>
-                                    <small class="text-muted d-block" style="font-size:0.7rem;">plays</small>
-                                </td>
-                                <td class="text-center">
-                                            <span th:if="${song.audioUrl != null}"
-                                                  class="badge bg-success-subtle text-success border border-success">✔
-                                                Uploaded</span>
-                                    <span th:unless="${song.audioUrl != null}"
-                                          class="badge bg-danger-subtle text-danger border border-danger">✘
-                                                Missing</span>
-                                </td>
-                                <td class="text-end pe-4">
-                                    <button type="button" class="btn btn-sm btn-outline-primary fw-bold me-1"
+                                <tr th:each="song : ${songs}">
+                                    <td class="ps-4">
+                                        <img th:if="${song.coverArtUrl != null}" th:src="@{${song.coverArtUrl}}"
+                                            style="width: 45px; height: 45px; object-fit: cover;"
+                                            class="rounded border">
+                                        <img th:unless="${song.coverArtUrl != null}"
+                                            th:src="@{/images/default-album.svg}"
+                                            style="width: 45px; height: 45px; object-fit: cover;"
+                                            class="rounded border bg-light">
+                                    </td>
+                                    <td>
+                                        <h6 class="mb-0 fw-bold" th:text="${song.title}">Song Title</h6>
+                                        <small class="text-muted">ID: <span th:text="${song.id}">123</span></small>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-secondary" th:text="${song.genre}">Genre</span>
+                                    </td>
+                                    <td class="text-muted">
+                                        <!-- Formats seconds into a human-readable MM:SS format. -->
+                                        <span
+                                            th:text="${song.duration / 60} + ':' + ${T(java.lang.String).format('%02d', song.duration % 60)}">0:00</span>
+                                    </td>
+                                    <td class="fw-bold text-dark" th:text="${song.playCount}">0</td>
+                                    <td class="text-end pe-4">
+                                        <!-- Action Buttons: Edit leads to the edit form, Delete triggers a safety confirmation. -->
+                                        <button type="button" class="btn btn-sm btn-outline-primary"
                                             onclick="openEditSongModal(this)" th:data-id="${song.id}"
                                             th:data-title="${song.title}" th:data-genre="${song.genre}"
-                                            th:data-album="${song.albumId}" th:data-duration="${song.duration}">✏️
-                                        Edit</button>
-                                    <form th:action="@{/artist/dashboard/songs/{id}/delete(id=${song.id})}"
-                                          method="post" class="d-inline"
-                                          onsubmit="return confirmAction('WARNING: Are you sure you want to completely erase this track?', this);">
-                                        <button type="submit" class="btn btn-sm btn-outline-danger fw-bold">🗑
-                                            Delete</button>
-                                    </form>
-                                </td>
-                            </tr>
-                            <tr th:if="${#lists.isEmpty(songs)}">
-                                <td colspan="8" class="text-center py-5 text-muted">
-                                    <div style="font-size:3rem;">🎵</div>
-                                    <h5 class="mt-2">No songs yet!</h5>
-                                    <button type="button" class="btn btn-primary rounded-pill px-4 mt-2"
-                                            data-bs-toggle="modal" data-bs-target="#uploadSongModal">Upload your
-                                        first track</button>
-                                </td>
-                            </tr>
+                                            th:data-album="${song.albumId}"
+                                            th:data-duration="${song.duration}">Edit</button>
+                                        <form th:action="@{/artist/dashboard/songs/{id}/delete(id=${song.id})}"
+                                            method="post" class="d-inline"
+                                            onsubmit="return confirmAction('WARNING: Are you sure you want to completely erase this track from your catalog?', this);">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                <tr th:if="${#lists.isEmpty(songs)}">
+                                    <td colspan="6" class="text-center py-5 text-muted">You haven't uploaded any tracks
+                                        yet. Click 'Upload Fast Track' to begin!</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
-                <div class="modal-footer border-0 bg-light">
-                    <button type="button" class="btn btn-primary rounded-pill fw-bold px-4" data-bs-toggle="modal"
-                            data-bs-target="#uploadSongModal">+ Upload New Track</button>
-                    <button type="button" class="btn btn-outline-secondary rounded-pill"
-                            data-bs-dismiss="modal">Close</button>
-                </div>
             </div>
         </div>
-    </div>
 
-    <!-- =========================================================== -->
-    <!-- MODAL 2: Active Albums -->
-    <!-- =========================================================== -->
-    <div class="modal fade" id="albumsModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
-            <div class="modal-content border-0 shadow rounded-4 overflow-hidden">
-                <div class="modal-header border-0 px-4 pt-4 pb-2"
-                     style="background: linear-gradient(135deg, #6f42c1 0%, #a855f7 100%);">
-                    <div>
-                        <h4 class="modal-title fw-bold text-white mb-0">📀 My Albums</h4>
-                        <small class="text-white opacity-75"
-                               th:text="${#lists.size(albums)} + ' albums in your catalog'">0 albums</small>
-                    </div>
-                    <button type="button" class="btn-close btn-close-white shadow-none"
-                            data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body p-0">
-                    <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0">
-                            <thead class="bg-light text-muted small text-uppercase sticky-top">
-                            <tr>
-                                <th class="ps-4">Cover</th>
-                                <th>Album</th>
-                                <th>Release Date</th>
-                                <th>Songs</th>
-                                <th class="text-end pe-4">Actions</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr th:each="album : ${albums}">
-                                <td class="ps-4">
-                                    <img th:if="${album.coverArtUrl != null}" th:src="@{${album.coverArtUrl}}"
-                                         style="width: 55px; height: 55px; object-fit: cover;"
-                                         class="rounded-3 border shadow-sm">
-                                    <div th:unless="${album.coverArtUrl != null}"
-                                         class="rounded-3 border bg-light d-flex align-items-center justify-content-center"
-                                         style="width: 55px; height: 55px; font-size: 1.4rem;">📀</div>
-                                </td>
-                                <td>
-                                    <h6 class="mb-0 fw-bold text-dark" th:text="${album.name}">Album Name</h6>
-                                    <small class="text-muted text-truncate d-block" style="max-width:220px;"
-                                           th:text="${album.description}">Description</small>
-                                </td>
-                                <td class="text-muted fw-medium"
-                                    th:text="${album.releaseDate != null ? album.releaseDate : '—'}">—</td>
-                                <td>
-                                            <span
-                                                    class="badge bg-primary-subtle text-primary border border-primary fw-bold"
-                                                    th:text="${album.songs != null ? album.songs.size() : 0} + ' tracks'">0</span>
-                                </td>
-                                <td class="text-end pe-4">
-                                    <button type="button" class="btn btn-sm btn-outline-primary fw-bold me-1"
-                                            onclick="openEditAlbumModal(this)" th:data-id="${album.id}"
-                                            th:data-name="${album.name}" th:data-desc="${album.description}"
-                                            th:data-date="${album.releaseDate}">✏️ Edit</button>
-                                    <form th:action="@{/artist/dashboard/albums/{id}/delete(id=${album.id})}"
-                                          method="post" class="d-inline"
-                                          onsubmit="return confirmAction('WARNING: Deleting this album will remove it. Songs will remain as fast tracks.', this);">
-                                        <button type="submit" class="btn btn-sm btn-outline-danger fw-bold">🗑
-                                            Delete</button>
-                                    </form>
-                                </td>
-                            </tr>
-                            <tr th:if="${#lists.isEmpty(albums)}">
-                                <td colspan="5" class="text-center py-5 text-muted">
-                                    <div style="font-size:3rem;">📀</div>
-                                    <h5 class="mt-2">No albums yet!</h5>
-                                    <button type="button" class="btn btn-primary rounded-pill px-4 mt-2"
-                                            data-bs-toggle="modal" data-bs-target="#createAlbumModal">Create your
-                                        first album</button>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="modal-footer border-0 bg-light">
-                    <button type="button" class="btn btn-primary rounded-pill fw-bold px-4" data-bs-toggle="modal"
-                            data-bs-target="#createAlbumModal">+ Create New Album</button>
-                    <button type="button" class="btn btn-outline-secondary rounded-pill"
-                            data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- =========================================================== -->
-    <!-- MODAL 3: Lifetime Streams — per song breakdown -->
-    <!-- =========================================================== -->
-    <div class="modal fade" id="streamsModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable"
-             style="max-width: min(900px, 96vw);">
-            <div class="modal-content border-0 shadow rounded-4 overflow-hidden">
-                <div class="modal-header border-0 px-4 pt-4 pb-2"
-                     style="background: linear-gradient(135deg, #198754 0%, #20c997 100%);">
-                    <div>
-                        <h4 class="modal-title fw-bold text-white mb-0">📊 Stream Analytics</h4>
-                        <small class="text-white opacity-75">Total: <strong th:text="${totalStreams}">0</strong>
-                            lifetime plays</small>
-                    </div>
-                    <!-- <button type="button" class="btn-close btn-close-white shadow-none"
-                        data-bs-dismiss="modal"></button> -->
-                </div>
-                <div class="modal-body p-4">
-                    <div th:if="${not #lists.isEmpty(songsByStreams)}">
-                        <div class="mb-3 d-flex align-items-center justify-content-between">
-                            <h6 class="fw-bold text-dark mb-0">Per-Song Play Counts <small
-                                    class="text-muted fw-normal">(ranked highest first)</small></h6>
-                            <span class="badge bg-success-subtle text-success border border-success px-3 py-2"
-                                  th:text="${#lists.size(songsByStreams)} + ' tracks'">0 tracks</span>
+        <!-- =========================================================== -->
+        <!-- MODAL 1: Total Songs -->
+        <!-- =========================================================== -->
+        <div class="modal fade" id="songsModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                <div class="modal-content border-0 shadow rounded-4 overflow-hidden">
+                    <div class="modal-header border-0 px-4 pt-4 pb-2"
+                        style="background: linear-gradient(135deg, #FF6600 0%, #FF9900 100%);">
+                        <div>
+                            <h4 class="modal-title fw-bold text-white mb-0">🎵 My Songs</h4>
+                            <small class="text-white opacity-75"
+                                th:text="${#lists.size(songs)} + ' tracks in your catalog'">0 tracks</small>
                         </div>
-                        <!--
+                    </div>
+                    <div class="modal-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="bg-light text-muted small text-uppercase sticky-top">
+                                    <tr>
+                                        <th class="ps-4">Cover</th>
+                                        <th>Song Details</th>
+                                        <th>Album</th>
+                                        <th>Genre</th>
+                                        <th>Duration</th>
+                                        <th>Streams</th>
+                                        <th class="text-center">Audio</th>
+                                        <th class="text-end pe-4">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="song : ${songs}">
+                                        <td class="ps-4">
+                                            <img th:if="${song.coverArtUrl != null}" th:src="@{${song.coverArtUrl}}"
+                                                style="width: 55px; height: 55px; object-fit: cover;"
+                                                class="rounded-3 border shadow-sm">
+                                            <div th:unless="${song.coverArtUrl != null}"
+                                                class="rounded-3 border bg-light d-flex align-items-center justify-content-center"
+                                                style="width: 55px; height: 55px; font-size: 1.4rem;">🎵</div>
+                                        </td>
+                                        <td>
+                                            <h6 class="mb-0 fw-bold text-dark" th:text="${song.title}">Song Title</h6>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-light text-dark border fw-medium"
+                                                th:text="${song.album != null ? song.album.name : 'No Album'}"
+                                                th:classappend="${song.album == null ? 'text-muted' : ''}">—</span>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-secondary" th:text="${song.genre}">Genre</span>
+                                        </td>
+                                        <td class="text-muted fw-medium">
+                                            <span
+                                                th:text="${song.duration / 60} + ':' + ${T(java.lang.String).format('%02d', song.duration % 60)}">0:00</span>
+                                        </td>
+                                        <td>
+                                            <span class="fw-bold text-dark" th:text="${song.playCount}">0</span>
+                                            <small class="text-muted d-block" style="font-size:0.7rem;">plays</small>
+                                        </td>
+                                        <td class="text-center">
+                                            <span th:if="${song.audioUrl != null}"
+                                                class="badge bg-success-subtle text-success border border-success">✔
+                                                Uploaded</span>
+                                            <span th:unless="${song.audioUrl != null}"
+                                                class="badge bg-danger-subtle text-danger border border-danger">✘
+                                                Missing</span>
+                                        </td>
+                                        <td class="text-end pe-4">
+                                            <button type="button" class="btn btn-sm btn-outline-primary fw-bold me-1"
+                                                onclick="openEditSongModal(this)" th:data-id="${song.id}"
+                                                th:data-title="${song.title}" th:data-genre="${song.genre}"
+                                                th:data-album="${song.albumId}" th:data-duration="${song.duration}">✏️
+                                                Edit</button>
+                                            <form th:action="@{/artist/dashboard/songs/{id}/delete(id=${song.id})}"
+                                                method="post" class="d-inline"
+                                                onsubmit="return confirmAction('WARNING: Are you sure you want to completely erase this track?', this);">
+                                                <button type="submit" class="btn btn-sm btn-outline-danger fw-bold">🗑
+                                                    Delete</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    <tr th:if="${#lists.isEmpty(songs)}">
+                                        <td colspan="8" class="text-center py-5 text-muted">
+                                            <div style="font-size:3rem;">🎵</div>
+                                            <h5 class="mt-2">No songs yet!</h5>
+                                            <button type="button" class="btn btn-primary rounded-pill px-4 mt-2"
+                                                data-bs-toggle="modal" data-bs-target="#uploadSongModal">Upload your
+                                                first track</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0 bg-light">
+                        <button type="button" class="btn btn-primary rounded-pill fw-bold px-4" data-bs-toggle="modal"
+                            data-bs-target="#uploadSongModal">+ Upload New Track</button>
+                        <button type="button" class="btn btn-outline-secondary rounded-pill"
+                            data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- =========================================================== -->
+        <!-- MODAL 2: Active Albums -->
+        <!-- =========================================================== -->
+        <div class="modal fade" id="albumsModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+                <div class="modal-content border-0 shadow rounded-4 overflow-hidden">
+                    <div class="modal-header border-0 px-4 pt-4 pb-2"
+                        style="background: linear-gradient(135deg, #6f42c1 0%, #a855f7 100%);">
+                        <div>
+                            <h4 class="modal-title fw-bold text-white mb-0">📀 My Albums</h4>
+                            <small class="text-white opacity-75"
+                                th:text="${#lists.size(albums)} + ' albums in your catalog'">0 albums</small>
+                        </div>
+                        <button type="button" class="btn-close btn-close-white shadow-none"
+                            data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="bg-light text-muted small text-uppercase sticky-top">
+                                    <tr>
+                                        <th class="ps-4">Cover</th>
+                                        <th>Album</th>
+                                        <th>Release Date</th>
+                                        <th>Songs</th>
+                                        <th class="text-end pe-4">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="album : ${albums}">
+                                        <td class="ps-4">
+                                            <img th:if="${album.coverArtUrl != null}" th:src="@{${album.coverArtUrl}}"
+                                                style="width: 55px; height: 55px; object-fit: cover;"
+                                                class="rounded-3 border shadow-sm">
+                                            <div th:unless="${album.coverArtUrl != null}"
+                                                class="rounded-3 border bg-light d-flex align-items-center justify-content-center"
+                                                style="width: 55px; height: 55px; font-size: 1.4rem;">📀</div>
+                                        </td>
+                                        <td>
+                                            <h6 class="mb-0 fw-bold text-dark" th:text="${album.name}">Album Name</h6>
+                                            <small class="text-muted text-truncate d-block" style="max-width:220px;"
+                                                th:text="${album.description}">Description</small>
+                                        </td>
+                                        <td class="text-muted fw-medium"
+                                            th:text="${album.releaseDate != null ? album.releaseDate : '—'}">—</td>
+                                        <td>
+                                            <span
+                                                class="badge bg-primary-subtle text-primary border border-primary fw-bold"
+                                                th:text="${album.songs != null ? album.songs.size() : 0} + ' tracks'">0</span>
+                                        </td>
+                                        <td class="text-end pe-4">
+                                            <button type="button" class="btn btn-sm btn-outline-primary fw-bold me-1"
+                                                onclick="openEditAlbumModal(this)" th:data-id="${album.id}"
+                                                th:data-name="${album.name}" th:data-desc="${album.description}"
+                                                th:data-date="${album.releaseDate}">✏️ Edit</button>
+                                            <form th:action="@{/artist/dashboard/albums/{id}/delete(id=${album.id})}"
+                                                method="post" class="d-inline"
+                                                onsubmit="return confirmAction('WARNING: Deleting this album will remove it. Songs will remain as fast tracks.', this);">
+                                                <button type="submit" class="btn btn-sm btn-outline-danger fw-bold">🗑
+                                                    Delete</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    <tr th:if="${#lists.isEmpty(albums)}">
+                                        <td colspan="5" class="text-center py-5 text-muted">
+                                            <div style="font-size:3rem;">📀</div>
+                                            <h5 class="mt-2">No albums yet!</h5>
+                                            <button type="button" class="btn btn-primary rounded-pill px-4 mt-2"
+                                                data-bs-toggle="modal" data-bs-target="#createAlbumModal">Create your
+                                                first album</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0 bg-light">
+                        <button type="button" class="btn btn-primary rounded-pill fw-bold px-4" data-bs-toggle="modal"
+                            data-bs-target="#createAlbumModal">+ Create New Album</button>
+                        <button type="button" class="btn btn-outline-secondary rounded-pill"
+                            data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- =========================================================== -->
+        <!-- MODAL 3: Lifetime Streams — per song breakdown -->
+        <!-- =========================================================== -->
+        <div class="modal fade" id="streamsModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable"
+                style="max-width: min(900px, 96vw);">
+                <div class="modal-content border-0 shadow rounded-4 overflow-hidden">
+                    <div class="modal-header border-0 px-4 pt-4 pb-2"
+                        style="background: linear-gradient(135deg, #198754 0%, #20c997 100%);">
+                        <div>
+                            <h4 class="modal-title fw-bold text-white mb-0">📊 Stream Analytics</h4>
+                            <small class="text-white opacity-75">Total: <strong th:text="${totalStreams}">0</strong>
+                                lifetime plays</small>
+                        </div>
+                        <!-- <button type="button" class="btn-close btn-close-white shadow-none"
+                        data-bs-dismiss="modal"></button> -->
+                    </div>
+                    <div class="modal-body p-4">
+                        <div th:if="${not #lists.isEmpty(songsByStreams)}">
+                            <div class="mb-3 d-flex align-items-center justify-content-between">
+                                <h6 class="fw-bold text-dark mb-0">Per-Song Play Counts <small
+                                        class="text-muted fw-normal">(ranked highest first)</small></h6>
+                                <span class="badge bg-success-subtle text-success border border-success px-3 py-2"
+                                    th:text="${#lists.size(songsByStreams)} + ' tracks'">0 tracks</span>
+                            </div>
+                            <!--
                           Stream Breakdown List:
                           - Iterates through 'songsByStreams' (provided by Controller, likely sorted by playCount).
                           - iterStat: Used to determine the 'medal' rank (Gold for index 0, Silver for index 1, etc.)
                         -->
-                        <div class="list-group list-group-flush">
-                            <div th:each="song, iterStat : ${songsByStreams}"
-                                 class="list-group-item px-0 py-2 border-bottom d-flex align-items-center gap-2">
-                                <!-- Rank medal/number logic -->
-                                <span class="fw-bold text-center flex-shrink-0"
-                                      style="min-width:24px; font-size:0.85rem;"
-                                      th:text="${iterStat.index == 0 ? '🥇' : (iterStat.index == 1 ? '🥈' : (iterStat.index == 2 ? '🥉' : (iterStat.index + 1) + '.'))}">1.</span>
+                            <div class="list-group list-group-flush">
+                                <div th:each="song, iterStat : ${songsByStreams}"
+                                    class="list-group-item px-0 py-2 border-bottom d-flex align-items-center gap-2">
+                                    <!-- Rank medal/number logic -->
+                                    <span class="fw-bold text-center flex-shrink-0"
+                                        style="min-width:24px; font-size:0.85rem;"
+                                        th:text="${iterStat.index == 0 ? '🥇' : (iterStat.index == 1 ? '🥈' : (iterStat.index == 2 ? '🥉' : (iterStat.index + 1) + '.'))}">1.</span>
 
-                                <img th:if="${song.coverArtUrl != null}" th:src="@{${song.coverArtUrl}}"
-                                     class="rounded-2 border shadow-sm flex-shrink-0"
-                                     style="width:38px; height:38px; object-fit:cover;">
-                                <div class="rounded-2 bg-light border flex-shrink-0 d-flex align-items-center justify-content-center"
-                                     th:unless="${song.coverArtUrl != null}"
-                                     style="width:38px; height:38px; font-size:1rem;">🎵</div>
+                                    <img th:if="${song.coverArtUrl != null}" th:src="@{${song.coverArtUrl}}"
+                                        class="rounded-2 border shadow-sm flex-shrink-0"
+                                        style="width:38px; height:38px; object-fit:cover;">
+                                    <div class="rounded-2 bg-light border flex-shrink-0 d-flex align-items-center justify-content-center"
+                                        th:unless="${song.coverArtUrl != null}"
+                                        style="width:38px; height:38px; font-size:1rem;">🎵</div>
 
-                                <div class="flex-grow-1 overflow-hidden">
-                                    <h6 class="mb-0 fw-bold text-dark text-truncate" style="font-size:0.82rem;"
-                                        th:text="${song.title}">Title</h6>
-                                    <div class="d-flex align-items-center gap-1">
+                                    <div class="flex-grow-1 overflow-hidden">
+                                        <h6 class="mb-0 fw-bold text-dark text-truncate" style="font-size:0.82rem;"
+                                            th:text="${song.title}">Title</h6>
+                                        <div class="d-flex align-items-center gap-1">
                                             <span class="badge bg-secondary-subtle text-secondary border"
-                                                  style="font-size:0.58rem;" th:text="${song.genre}">Genre</span>
-                                        <small class="text-muted" style="font-size:0.68rem;"
-                                               th:text="${song.duration / 60} + ':' + ${T(java.lang.String).format('%02d', song.duration % 60)}">0:00</small>
-                                    </div>
-                                    <!-- Analytical Progress Bar: Visually represents the song's share of total lifetime streams. -->
-                                    <div class="d-flex align-items-center gap-2 mt-1">
-                                        <div class="progress flex-grow-1" style="height:4px; border-radius:2px;">
-                                            <div class="progress-bar"
-                                                 th:classappend="${iterStat.index == 0 ? 'bg-warning' : 'bg-success'}"
-                                                 th:style="'width:' + (${totalStreams > 0 ? (song.playCount * 100 / totalStreams) : 0}) + '%'"
-                                                 style="border-radius:2px;"></div>
+                                                style="font-size:0.58rem;" th:text="${song.genre}">Genre</span>
+                                            <small class="text-muted" style="font-size:0.68rem;"
+                                                th:text="${song.duration / 60} + ':' + ${T(java.lang.String).format('%02d', song.duration % 60)}">0:00</small>
                                         </div>
-                                        <small class="text-muted fw-bold flex-shrink-0"
-                                               style="font-size:0.65rem; min-width:26px;"
-                                               th:text="${totalStreams > 0 ? #numbers.formatDecimal(song.playCount * 100.0 / totalStreams, 1, 0) + '%' : '0%'}">0%</small>
+                                        <!-- Analytical Progress Bar: Visually represents the song's share of total lifetime streams. -->
+                                        <div class="d-flex align-items-center gap-2 mt-1">
+                                            <div class="progress flex-grow-1" style="height:4px; border-radius:2px;">
+                                                <div class="progress-bar"
+                                                    th:classappend="${iterStat.index == 0 ? 'bg-warning' : 'bg-success'}"
+                                                    th:style="'width:' + (${totalStreams > 0 ? (song.playCount * 100 / totalStreams) : 0}) + '%'"
+                                                    style="border-radius:2px;"></div>
+                                            </div>
+                                            <small class="text-muted fw-bold flex-shrink-0"
+                                                style="font-size:0.65rem; min-width:26px;"
+                                                th:text="${totalStreams > 0 ? #numbers.formatDecimal(song.playCount * 100.0 / totalStreams, 1, 0) + '%' : '0%'}">0%</small>
+                                        </div>
+                                    </div>
+
+                                    <div class="text-end flex-shrink-0 pe-3" style="width:60px;">
+                                        <div class="fw-bold lh-1" style="font-size:1.05rem;"
+                                            th:classappend="${iterStat.index == 0 ? 'text-warning' : 'text-success'}"
+                                            th:text="${song.playCount}">0</div>
+                                        <small class="text-muted d-block" style="font-size:0.58rem;">plays</small>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                        <div th:if="${#lists.isEmpty(songsByStreams)}" class="text-center py-5 text-muted">
+                            <div style="font-size:3rem;">📊</div>
+                            <h5 class="mt-2">No data yet</h5>
+                            <p>Upload songs to start tracking streams!</p>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0 bg-light">
+                        <div class="text-muted small me-auto">Total lifetime streams: <strong class="text-success"
+                                th:text="${totalStreams}">0</strong></div>
+                        <button type="button" class="btn btn-outline-secondary rounded-pill"
+                            data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-                                <div class="text-end flex-shrink-0 pe-3" style="width:60px;">
-                                    <div class="fw-bold lh-1" style="font-size:1.05rem;"
-                                         th:classappend="${iterStat.index == 0 ? 'text-warning' : 'text-success'}"
-                                         th:text="${song.playCount}">0</div>
-                                    <small class="text-muted d-block" style="font-size:0.58rem;">plays</small>
+        <!-- =========================================================== -->
+        <!-- MODAL 4: Followers — name & email -->
+        <!-- =========================================================== -->
+        <div class="modal fade" id="followersModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-md modal-dialog-scrollable">
+                <div class="modal-content border-0 shadow rounded-4 overflow-hidden">
+                    <div class="modal-header border-0 px-4 pt-4 pb-2"
+                        style="background: linear-gradient(135deg, #0dcaf0 0%, #6610f2 100%);">
+                        <div>
+                            <h4 class="modal-title fw-bold text-white mb-0">👥 My Followers</h4>
+                            <small class="text-white opacity-75" th:text="${followerCount} + ' people follow you'">0
+                                followers</small>
+                        </div>
+                        <!-- <button type="button" class="btn-close btn-close-white shadow-none"
+                        data-bs-dismiss="modal"></button> -->
+                    </div>
+                    <div class="modal-body p-3">
+                        <div th:if="${not #lists.isEmpty(followers)}" class="list-group list-group-flush">
+                            <div th:each="follower : ${followers}"
+                                class="list-group-item list-group-item-action px-3 py-3 rounded-3 mb-2 border d-flex align-items-center gap-3"
+                                style="background: #fafafa;">
+                                <!-- Avatar -->
+                                <img th:if="${follower.profilePictureUrl != null}"
+                                    th:src="${follower.profilePictureUrl}"
+                                    class="rounded-circle border flex-shrink-0 shadow-sm"
+                                    style="width:46px; height:46px; object-fit:cover;">
+                                <div th:unless="${follower.profilePictureUrl != null}"
+                                    class="rounded-circle border bg-light d-flex align-items-center justify-content-center flex-shrink-0 fw-bold text-primary"
+                                    style="width:46px; height:46px; font-size:1.1rem;"
+                                    th:text="${follower.displayName != null ? #strings.substring(follower.displayName, 0, 1).toUpperCase() : '?'}">
+                                    U</div>
+                                <!-- Info -->
+                                <div class="flex-grow-1 overflow-hidden">
+                                    <h6 class="mb-0 fw-bold text-dark"
+                                        th:text="${follower.displayName != null ? follower.displayName : follower.username}">
+                                        Name</h6>
+                                    <small class="text-muted d-block text-truncate">
+                                        <i class="me-1">@</i><span th:text="${follower.username}">username</span>
+                                    </small>
+                                    <small class="text-muted d-block text-truncate">
+                                        <i class="me-1">✉️</i><span th:text="${follower.email}">email@example.com</span>
+                                    </small>
+                                </div>
+                                <!-- Role badge -->
+                                <span class="badge rounded-pill flex-shrink-0" th:text="${follower.role}"
+                                    style="background: #e8f4fd; color: #0d6efd; border: 1px solid #0d6efd;">USER</span>
+                            </div>
+                        </div>
+                        <div th:if="${#lists.isEmpty(followers)}" class="text-center py-5 text-muted">
+                            <div style="font-size:3rem;">👥</div>
+                            <h5 class="mt-2 fw-bold">No followers yet</h5>
+                            <p class="small">Keep making great music — your fans are coming!</p>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0 bg-light">
+                        <div class="text-muted small me-auto">Total: <strong class="text-info"
+                                th:text="${followerCount}">0</strong> followers</div>
+                        <button type="button" class="btn btn-outline-secondary rounded-pill"
+                            data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- =========================================================== -->
+        <!-- MODAL 5: Edit Song Modal -->
+        <!-- =========================================================== -->
+        <div class="modal fade" id="editSongModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+                    <div class="modal-body p-4 p-md-5">
+                        <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+                            <div>
+                                <h2 class="fw-bold mb-0 text-primary">Manage Track Data</h2>
+                                <p class="text-muted small mb-0">Publish your latest masterpiece to RevPlay</p>
+                            </div>
+                            <button type="button"
+                                class="btn btn-outline-secondary rounded-pill px-3 shadow-sm fw-bold small"
+                                data-bs-dismiss="modal">✕ Cancel</button>
+                        </div>
+                        <form id="editSongForm" method="post" enctype="multipart/form-data">
+                            <div class="row mb-4">
+                                <div class="col-md-7 mb-3 mb-md-0">
+                                    <label for="esTitle" class="form-label fw-bold small text-muted">Track Title <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" id="esTitle" name="title"
+                                        class="form-control rounded-3 border-light shadow-sm" required
+                                        placeholder="Name your masterpiece" />
+                                </div>
+                                <div class="col-md-5">
+                                    <label for="esGenre" class="form-label fw-bold small text-muted">Genre <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" id="esGenre" name="genre"
+                                        class="form-control rounded-3 border-light shadow-sm" required
+                                        placeholder="Pop, Rock, etc." />
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div th:if="${#lists.isEmpty(songsByStreams)}" class="text-center py-5 text-muted">
-                        <div style="font-size:3rem;">📊</div>
-                        <h5 class="mt-2">No data yet</h5>
-                        <p>Upload songs to start tracking streams!</p>
-                    </div>
-                </div>
-                <div class="modal-footer border-0 bg-light">
-                    <div class="text-muted small me-auto">Total lifetime streams: <strong class="text-success"
-                                                                                          th:text="${totalStreams}">0</strong></div>
-                    <button type="button" class="btn btn-outline-secondary rounded-pill"
-                            data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- =========================================================== -->
-    <!-- MODAL 4: Followers — name & email -->
-    <!-- =========================================================== -->
-    <div class="modal fade" id="followersModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-md modal-dialog-scrollable">
-            <div class="modal-content border-0 shadow rounded-4 overflow-hidden">
-                <div class="modal-header border-0 px-4 pt-4 pb-2"
-                     style="background: linear-gradient(135deg, #0dcaf0 0%, #6610f2 100%);">
-                    <div>
-                        <h4 class="modal-title fw-bold text-white mb-0">👥 My Followers</h4>
-                        <small class="text-white opacity-75" th:text="${followerCount} + ' people follow you'">0
-                            followers</small>
-                    </div>
-                    <!-- <button type="button" class="btn-close btn-close-white shadow-none"
-                        data-bs-dismiss="modal"></button> -->
-                </div>
-                <div class="modal-body p-3">
-                    <div th:if="${not #lists.isEmpty(followers)}" class="list-group list-group-flush">
-                        <div th:each="follower : ${followers}"
-                             class="list-group-item list-group-item-action px-3 py-3 rounded-3 mb-2 border d-flex align-items-center gap-3"
-                             style="background: #fafafa;">
-                            <!-- Avatar -->
-                            <img th:if="${follower.profilePictureUrl != null}"
-                                 th:src="${follower.profilePictureUrl}"
-                                 class="rounded-circle border flex-shrink-0 shadow-sm"
-                                 style="width:46px; height:46px; object-fit:cover;">
-                            <div th:unless="${follower.profilePictureUrl != null}"
-                                 class="rounded-circle border bg-light d-flex align-items-center justify-content-center flex-shrink-0 fw-bold text-primary"
-                                 style="width:46px; height:46px; font-size:1.1rem;"
-                                 th:text="${follower.displayName != null ? #strings.substring(follower.displayName, 0, 1).toUpperCase() : '?'}">
-                                U</div>
-                            <!-- Info -->
-                            <div class="flex-grow-1 overflow-hidden">
-                                <h6 class="mb-0 fw-bold text-dark"
-                                    th:text="${follower.displayName != null ? follower.displayName : follower.username}">
-                                    Name</h6>
-                                <small class="text-muted d-block text-truncate">
-                                    <i class="me-1">@</i><span th:text="${follower.username}">username</span>
-                                </small>
-                                <small class="text-muted d-block text-truncate">
-                                    <i class="me-1">✉️</i><span th:text="${follower.email}">email@example.com</span>
-                                </small>
-                            </div>
-                            <!-- Role badge -->
-                            <span class="badge rounded-pill flex-shrink-0" th:text="${follower.role}"
-                                  style="background: #e8f4fd; color: #0d6efd; border: 1px solid #0d6efd;">USER</span>
-                        </div>
-                    </div>
-                    <div th:if="${#lists.isEmpty(followers)}" class="text-center py-5 text-muted">
-                        <div style="font-size:3rem;">👥</div>
-                        <h5 class="mt-2 fw-bold">No followers yet</h5>
-                        <p class="small">Keep making great music — your fans are coming!</p>
-                    </div>
-                </div>
-                <div class="modal-footer border-0 bg-light">
-                    <div class="text-muted small me-auto">Total: <strong class="text-info"
-                                                                         th:text="${followerCount}">0</strong> followers</div>
-                    <button type="button" class="btn btn-outline-secondary rounded-pill"
-                            data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- =========================================================== -->
-    <!-- MODAL 5: Edit Song Modal -->
-    <!-- =========================================================== -->
-    <div class="modal fade" id="editSongModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
-                <div class="modal-body p-4 p-md-5">
-                    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
-                        <div>
-                            <h2 class="fw-bold mb-0 text-primary">Manage Track Data</h2>
-                            <p class="text-muted small mb-0">Publish your latest masterpiece to RevPlay</p>
-                        </div>
-                        <button type="button"
-                                class="btn btn-outline-secondary rounded-pill px-3 shadow-sm fw-bold small"
-                                data-bs-dismiss="modal">✕ Cancel</button>
-                    </div>
-                    <form id="editSongForm" method="post" enctype="multipart/form-data">
-                        <div class="row mb-4">
-                            <div class="col-md-7 mb-3 mb-md-0">
-                                <label for="esTitle" class="form-label fw-bold small text-muted">Track Title <span
-                                        class="text-danger">*</span></label>
-                                <input type="text" id="esTitle" name="title"
-                                       class="form-control rounded-3 border-light shadow-sm" required
-                                       placeholder="Name your masterpiece" />
-                            </div>
-                            <div class="col-md-5">
-                                <label for="esGenre" class="form-label fw-bold small text-muted">Genre <span
-                                        class="text-danger">*</span></label>
-                                <input type="text" id="esGenre" name="genre"
-                                       class="form-control rounded-3 border-light shadow-sm" required
-                                       placeholder="Pop, Rock, etc." />
-                            </div>
-                        </div>
-                        <div class="row mb-4">
-                            <div class="col-md-6 mb-3 mb-md-0">
-                                <label for="esAlbum" class="form-label fw-bold small text-muted">Assign to Album
-                                    (Optional)</label>
-                                <select id="esAlbum" name="albumId"
+                            <div class="row mb-4">
+                                <div class="col-md-6 mb-3 mb-md-0">
+                                    <label for="esAlbum" class="form-label fw-bold small text-muted">Assign to Album
+                                        (Optional)</label>
+                                    <select id="esAlbum" name="albumId"
                                         class="form-select rounded-3 border-light shadow-sm">
-                                    <option value="">-- Standalone Single --</option>
-                                    <option th:each="album : ${albums}" th:value="${album.id}"
+                                        <option value="">-- Standalone Single --</option>
+                                        <option th:each="album : ${albums}" th:value="${album.id}"
                                             th:text="${album.name}"></option>
-                                </select>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="esDur" class="form-label fw-bold small text-muted">Track Duration
+                                        (Seconds) <span class="text-danger">*</span></label>
+                                    <input type="number" id="esDur" name="duration"
+                                        class="form-control rounded-3 border-light shadow-sm bg-light"
+                                        placeholder="Auto-calculated" readonly required min="1" />
+                                </div>
                             </div>
-                            <div class="col-md-6">
-                                <label for="esDur" class="form-label fw-bold small text-muted">Track Duration
-                                    (Seconds) <span class="text-danger">*</span></label>
-                                <input type="number" id="esDur" name="duration"
-                                       class="form-control rounded-3 border-light shadow-sm bg-light"
-                                       placeholder="Auto-calculated" readonly required min="1" />
+                            <div class="p-4 bg-light rounded-4 border border-white mb-4 shadow-sm">
+                                <h6 class="fw-bold mb-3 text-secondary small text-uppercase tracking-wider">Update
+                                    Artwork & Audio</h6>
+                                <div class="mb-3">
+                                    <label for="esAudio" class="form-label fw-bold text-dark">Master Audio File <span
+                                            class="text-secondary small fw-normal">[Re-upload overrides]</span></label>
+                                    <input type="file" id="esAudio" name="audioFile"
+                                        class="form-control border-light shadow-sm" accept="audio/*" />
+                                </div>
+                                <div class="mb-2">
+                                    <label for="esCover" class="form-label fw-bold text-dark">Cover Art (Optional) <span
+                                            class="text-secondary small fw-normal">[Re-upload overrides]</span></label>
+                                    <input type="file" id="esCover" name="coverFile"
+                                        class="form-control border-light shadow-sm" accept="image/*" />
+                                </div>
                             </div>
-                        </div>
-                        <div class="p-4 bg-light rounded-4 border border-white mb-4 shadow-sm">
-                            <h6 class="fw-bold mb-3 text-secondary small text-uppercase tracking-wider">Update
-                                Artwork & Audio</h6>
-                            <div class="mb-3">
-                                <label for="esAudio" class="form-label fw-bold text-dark">Master Audio File <span
-                                        class="text-secondary small fw-normal">[Re-upload overrides]</span></label>
-                                <input type="file" id="esAudio" name="audioFile"
-                                       class="form-control border-light shadow-sm" accept="audio/*" />
+                            <div class="d-grid mt-4">
+                                <button type="submit" class="btn btn-primary btn-lg fw-bold rounded-pill shadow">Save
+                                    Track Changes</button>
                             </div>
-                            <div class="mb-2">
-                                <label for="esCover" class="form-label fw-bold text-dark">Cover Art (Optional) <span
-                                        class="text-secondary small fw-normal">[Re-upload overrides]</span></label>
-                                <input type="file" id="esCover" name="coverFile"
-                                       class="form-control border-light shadow-sm" accept="image/*" />
-                            </div>
-                        </div>
-                        <div class="d-grid mt-4">
-                            <button type="submit" class="btn btn-primary btn-lg fw-bold rounded-pill shadow">Save
-                                Track Changes</button>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- =========================================================== -->
-    <!-- MODAL 6: Edit Album Modal -->
-    <!-- =========================================================== -->
-    <div class="modal fade" id="editAlbumModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
-                <div class="modal-body p-4 p-md-5">
-                    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
-                        <div>
-                            <h2 class="fw-bold mb-0 text-primary">Edit Album</h2>
-                            <p class="text-muted small mb-0">Curate your collection for the world to hear</p>
-                        </div>
-                        <button type="button"
+        <!-- =========================================================== -->
+        <!-- MODAL 6: Edit Album Modal -->
+        <!-- =========================================================== -->
+        <div class="modal fade" id="editAlbumModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+                    <div class="modal-body p-4 p-md-5">
+                        <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+                            <div>
+                                <h2 class="fw-bold mb-0 text-primary">Edit Album</h2>
+                                <p class="text-muted small mb-0">Curate your collection for the world to hear</p>
+                            </div>
+                            <button type="button"
                                 class="btn btn-outline-secondary rounded-pill px-3 shadow-sm fw-bold small"
                                 data-bs-dismiss="modal">✕ Cancel</button>
+                        </div>
+                        <form id="editAlbumForm" method="post" enctype="multipart/form-data">
+                            <div class="mb-4">
+                                <label for="eaName" class="form-label fw-bold small text-muted">Album Title <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" name="name" class="form-control rounded-3 border-light shadow-sm"
+                                    id="eaName" placeholder="E.g. Midnight Melodies" required>
+                            </div>
+                            <div class="mb-4">
+                                <label for="eaDesc" class="form-label fw-bold small text-muted">Description</label>
+                                <textarea name="description" class="form-control rounded-3 border-light shadow-sm"
+                                    id="eaDesc" rows="3"
+                                    placeholder="Tell your fans about this collection..."></textarea>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-md-6 mb-3 mb-md-0">
+                                    <label for="eaDate" class="form-label fw-bold small text-muted">Release Date</label>
+                                    <input type="date" name="releaseDate"
+                                        class="form-control rounded-3 border-light shadow-sm" id="eaDate">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="eaCover" class="form-label fw-bold small text-muted">Album Cover
+                                        Art</label>
+                                    <input type="file" name="coverFile"
+                                        class="form-control rounded-3 border-light shadow-sm" id="eaCover"
+                                        accept="image/*">
+                                </div>
+                            </div>
+                            <div class="d-grid mt-5">
+                                <button type="submit" class="btn btn-primary btn-lg fw-bold rounded-pill shadow">Save
+                                    Album Changes</button>
+                            </div>
+                        </form>
                     </div>
-                    <form id="editAlbumForm" method="post" enctype="multipart/form-data">
-                        <div class="mb-4">
-                            <label for="eaName" class="form-label fw-bold small text-muted">Album Title <span
-                                    class="text-danger">*</span></label>
-                            <input type="text" name="name" class="form-control rounded-3 border-light shadow-sm"
-                                   id="eaName" placeholder="E.g. Midnight Melodies" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="eaDesc" class="form-label fw-bold small text-muted">Description</label>
-                            <textarea name="description" class="form-control rounded-3 border-light shadow-sm"
-                                      id="eaDesc" rows="3"
-                                      placeholder="Tell your fans about this collection..."></textarea>
-                        </div>
-                        <div class="row mb-4">
-                            <div class="col-md-6 mb-3 mb-md-0">
-                                <label for="eaDate" class="form-label fw-bold small text-muted">Release Date</label>
-                                <input type="date" name="releaseDate"
-                                       class="form-control rounded-3 border-light shadow-sm" id="eaDate">
-                            </div>
-                            <div class="col-md-6">
-                                <label for="eaCover" class="form-label fw-bold small text-muted">Album Cover
-                                    Art</label>
-                                <input type="file" name="coverFile"
-                                       class="form-control rounded-3 border-light shadow-sm" id="eaCover"
-                                       accept="image/*">
-                            </div>
-                        </div>
-                        <div class="d-grid mt-5">
-                            <button type="submit" class="btn btn-primary btn-lg fw-bold rounded-pill shadow">Save
-                                Album Changes</button>
-                        </div>
-                    </form>
                 </div>
             </div>
         </div>
-    </div>
 
-    <script>
-        function openEditSongModal(btn) {
-            const id = btn.getAttribute('data-id');
-            const title = btn.getAttribute('data-title');
-            const genre = btn.getAttribute('data-genre');
-            const albumId = btn.getAttribute('data-album');
-            const duration = btn.getAttribute('data-duration');
+        <script>
+            function openEditSongModal(btn) {
+                const id = btn.getAttribute('data-id');
+                const title = btn.getAttribute('data-title');
+                const genre = btn.getAttribute('data-genre');
+                const albumId = btn.getAttribute('data-album');
+                const duration = btn.getAttribute('data-duration');
 
-            const form = document.getElementById('editSongForm');
-            form.action = '/artist/dashboard/songs/' + id + '/edit';
+                const form = document.getElementById('editSongForm');
+                form.action = '/artist/dashboard/songs/' + id + '/edit';
 
-            document.getElementById('esTitle').value = title;
-            document.getElementById('esGenre').value = genre;
-            document.getElementById('esAlbum').value = albumId || '';
-            document.getElementById('esDur').value = duration;
+                document.getElementById('esTitle').value = title;
+                document.getElementById('esGenre').value = genre;
+                document.getElementById('esAlbum').value = albumId || '';
+                document.getElementById('esDur').value = duration;
 
-            // Close parent modal if open (for the "My Songs" list)
-            const songsModalEl = document.getElementById('songsModal');
-            const songsModal = bootstrap.Modal.getInstance(songsModalEl);
-            if (songsModal) songsModal.hide();
+                // Close parent modal if open (for the "My Songs" list)
+                const songsModalEl = document.getElementById('songsModal');
+                const songsModal = bootstrap.Modal.getInstance(songsModalEl);
+                if (songsModal) songsModal.hide();
 
-            const editModal = new bootstrap.Modal(document.getElementById('editSongModal'));
-            editModal.show();
-        }
+                const editModal = new bootstrap.Modal(document.getElementById('editSongModal'));
+                editModal.show();
+            }
 
-        function openEditAlbumModal(btn) {
-            const id = btn.getAttribute('data-id');
-            const name = btn.getAttribute('data-name');
-            const desc = btn.getAttribute('data-desc');
-            const date = btn.getAttribute('data-date');
+            function openEditAlbumModal(btn) {
+                const id = btn.getAttribute('data-id');
+                const name = btn.getAttribute('data-name');
+                const desc = btn.getAttribute('data-desc');
+                const date = btn.getAttribute('data-date');
 
-            const form = document.getElementById('editAlbumForm');
-            form.action = '/artist/dashboard/albums/' + id + '/edit';
+                const form = document.getElementById('editAlbumForm');
+                form.action = '/artist/dashboard/albums/' + id + '/edit';
 
-            document.getElementById('eaName').value = name;
-            document.getElementById('eaDesc').value = desc;
-            document.getElementById('eaDate').value = date || '';
+                document.getElementById('eaName').value = name;
+                document.getElementById('eaDesc').value = desc;
+                document.getElementById('eaDate').value = date || '';
 
-            // Close parent modal if open (for the "My Albums" list)
-            const albumsModalEl = document.getElementById('albumsModal');
-            const albumsModal = bootstrap.Modal.getInstance(albumsModalEl);
-            if (albumsModal) albumsModal.hide();
+                // Close parent modal if open (for the "My Albums" list)
+                const albumsModalEl = document.getElementById('albumsModal');
+                const albumsModal = bootstrap.Modal.getInstance(albumsModalEl);
+                if (albumsModal) albumsModal.hide();
 
-            const editModal = new bootstrap.Modal(document.getElementById('editAlbumModal'));
-            editModal.show();
-        }
+                const editModal = new bootstrap.Modal(document.getElementById('editAlbumModal'));
+                editModal.show();
+            }
 
-        document.getElementById('artistModalPlayAll')?.addEventListener('click', function () {
-            const songs = [];
-            document.querySelectorAll('#songsModal table tbody tr').forEach(tr => {
-                const titleEl = tr.querySelector('h6');
-                const idEl = tr.querySelector('small span');
-                if (!idEl || !titleEl) return;
+            document.getElementById('artistModalPlayAll')?.addEventListener('click', function () {
+                const songs = [];
+                document.querySelectorAll('#songsModal table tbody tr').forEach(tr => {
+                    const titleEl = tr.querySelector('h6');
+                    const idEl = tr.querySelector('small span');
+                    if (!idEl || !titleEl) return;
 
-                const id = idEl.innerText.trim();
-                const title = titleEl.innerText.trim();
-                const cover = tr.querySelector('img')?.src || '/images/default-album.svg';
-                const audioUrl = '/api/media/song/' + id + '/audio';
-                const artist = document.querySelector('h2.text-primary')?.innerText.replace('Artist Dashboard', '').trim() || 'Artist';
+                    const id = idEl.innerText.trim();
+                    const title = titleEl.innerText.trim();
+                    const cover = tr.querySelector('img')?.src || '/images/default-album.svg';
+                    const audioUrl = '/api/media/song/' + id + '/audio';
+                    const artist = document.querySelector('h2.text-primary')?.innerText.replace('Artist Dashboard', '').trim() || 'Artist';
 
-                if (id && title) {
-                    songs.push({ id, title, artist, url: audioUrl, cover });
+                    if (id && title) {
+                        songs.push({ id, title, artist, url: audioUrl, cover });
+                    }
+                });
+
+                if (songs.length > 0 && window.Player) {
+                    window.Player.playSong(songs[0].id, songs);
+                    const m = bootstrap.Modal.getInstance(document.getElementById('songsModal'));
+                    if (m) m.hide();
                 }
             });
 
-            if (songs.length > 0 && window.Player) {
-                window.Player.playSong(songs[0].id, songs);
-                const m = bootstrap.Modal.getInstance(document.getElementById('songsModal'));
-                if (m) m.hide();
+            // Auto-calculate duration logic for Upload Modal
+            const sAudioInput = document.getElementById('sAudio');
+            const sDurInput = document.getElementById('sDur');
+
+            if (sAudioInput && sDurInput) {
+                sAudioInput.addEventListener('change', function (e) {
+                    calculateAudioDuration(e.target.files[0], sDurInput);
+                });
             }
-        });
 
-        // Auto-calculate duration logic for Upload Modal
-        const sAudioInput = document.getElementById('sAudio');
-        const sDurInput = document.getElementById('sDur');
+            // Auto-calculate duration logic for Edit Modal
+            const esAudioInput = document.getElementById('esAudio');
+            const esDurInput = document.getElementById('esDur');
 
-        if (sAudioInput && sDurInput) {
-            sAudioInput.addEventListener('change', function (e) {
-                calculateAudioDuration(e.target.files[0], sDurInput);
-            });
-        }
+            if (esAudioInput && esDurInput) {
+                esAudioInput.addEventListener('change', function (e) {
+                    calculateAudioDuration(e.target.files[0], esDurInput);
+                });
+            }
 
-        // Auto-calculate duration logic for Edit Modal
-        const esAudioInput = document.getElementById('esAudio');
-        const esDurInput = document.getElementById('esDur');
+            function calculateAudioDuration(file, durationInput) {
+                if (file) {
+                    var audio = document.createElement('audio');
+                    var objectUrl = URL.createObjectURL(file);
 
-        if (esAudioInput && esDurInput) {
-            esAudioInput.addEventListener('change', function (e) {
-                calculateAudioDuration(e.target.files[0], esDurInput);
-            });
-        }
+                    audio.addEventListener('loadedmetadata', function () {
+                        var duration = Math.round(audio.duration);
+                        if (duration > 0) {
+                            durationInput.value = duration;
+                        } else {
+                            durationInput.value = '';
+                            alert("Could not determine a valid duration for this file. Duration cannot be zero.");
+                        }
+                        URL.revokeObjectURL(objectUrl);
+                    });
 
-        function calculateAudioDuration(file, durationInput) {
-            if (file) {
-                var audio = document.createElement('audio');
-                var objectUrl = URL.createObjectURL(file);
-
-                audio.addEventListener('loadedmetadata', function () {
-                    var duration = Math.round(audio.duration);
-                    if (duration > 0) {
-                        durationInput.value = duration;
-                    } else {
+                    audio.addEventListener('error', function () {
                         durationInput.value = '';
-                        alert("Could not determine a valid duration for this file. Duration cannot be zero.");
-                    }
-                    URL.revokeObjectURL(objectUrl);
-                });
+                        alert("Error loading audio file. Please ensure it is a valid audio format.");
+                        URL.revokeObjectURL(objectUrl);
+                    });
 
-                audio.addEventListener('error', function () {
+                    audio.src = objectUrl;
+                } else {
                     durationInput.value = '';
-                    alert("Error loading audio file. Please ensure it is a valid audio format.");
-                    URL.revokeObjectURL(objectUrl);
-                });
-
-                audio.src = objectUrl;
-            } else {
-                durationInput.value = '';
+                }
             }
-        }
-    </script>
-</div><!-- /#main-content -->
+        </script>
+    </div><!-- /#main-content -->
 
-<div th:replace="~{fragments/layout :: footer}"></div>
+    <div th:replace="~{fragments/layout :: footer}"></div>
 </body>
 
 </html>
