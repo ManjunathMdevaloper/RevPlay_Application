@@ -61,6 +61,15 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Column(name = "security_question")
+    private String securityQuestion;
+
+    @Column(name = "security_answer")
+    private String securityAnswer;
+
+    @Column(name = "security_hint")
+    private String securityHint;
+
     /**
      * Public-facing branding fields including the user's chosen name and creative
      * biography.

@@ -55,4 +55,12 @@ public class UserRegistrationDto {
      * RevPlay ecosystem.
      */
     private boolean isArtist;
+
+    @NotEmpty(message = "Security question should not be empty")
+    private String securityQuestion;
+
+    @NotEmpty(message = "Security answer should not be empty")
+    private String securityAnswer;
+
+    private String securityHint;
 }

@@ -22,7 +22,7 @@
 <body class="auth-body">
     <div class="container">
         <div class="row w-100 justify-content-center">
-            <div class="col-md-7 col-lg-6">
+            <div class="col-md-10 col-lg-8">
                 <div class="card border-0 auth-card overflow-hidden">
                     <div class="card-body p-3 p-md-4">
 
@@ -40,35 +40,71 @@
                           - th:object="${user}": Binds the form to the UserRegistrationDto object passed from the controller.
                         -->
                         <form method="post" th:action="@{/register/save}" th:object="${user}">
-                            <div class="mb-2">
-                                <label for="username" class="form-label fw-bold small text-muted">Username</label>
-                                <!-- th:field="*{username}": Binds the input to the 'username' property of the 'user' object. -->
-                                <input type="text" id="username" th:field="*{username}"
-                                    class="form-control rounded-2 border-light shadow-sm" placeholder="your_handle"
-                                    required />
-                                <!-- th:if="${#fields.hasErrors('username')}": Shows error message only if validation for username fails. -->
-                                <!-- th:errors="*{username}": Injects the actual validation error text (e.g., "Username already exists"). -->
-                                <p th:if="${#fields.hasErrors('username')}" class="text-danger small mt-1"
-                                    th:errors="*{username}"></p>
+                            <div class="row g-2 mb-2">
+                                <div class="col-md-6">
+                                    <label for="username" class="form-label fw-bold small text-muted">Username</label>
+                                    <!-- th:field="*{username}": Binds the input to the 'username' property of the 'user' object. -->
+                                    <input type="text" id="username" th:field="*{username}"
+                                        class="form-control rounded-2 border-light shadow-sm" placeholder="your_handle"
+                                        required />
+                                    <!-- th:if="${#fields.hasErrors('username')}": Shows error message only if validation for username fails. -->
+                                    <!-- th:errors="*{username}": Injects the actual validation error text (e.g., "Username already exists"). -->
+                                    <p th:if="${#fields.hasErrors('username')}" class="text-danger small mt-1"
+                                        th:errors="*{username}"></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="email" class="form-label fw-bold small text-muted">Email Address</label>
+                                    <!-- th:field="*{email}": Binds to the 'email' property of the DTO. -->
+                                    <input type="email" id="email" th:field="*{email}"
+                                        class="form-control rounded-2 border-light shadow-sm"
+                                        placeholder="name@example.com" required />
+                                    <p th:if="${#fields.hasErrors('email')}" class="text-danger small mt-1"
+                                        th:errors="*{email}"></p>
+                                </div>
                             </div>
-                            <div class="mb-2">
-                                <label for="email" class="form-label fw-bold small text-muted">Email Address</label>
-                                <!-- th:field="*{email}": Binds to the 'email' property of the DTO. -->
-                                <input type="email" id="email" th:field="*{email}"
-                                    class="form-control rounded-2 border-light shadow-sm" placeholder="name@example.com"
-                                    required />
-                                <p th:if="${#fields.hasErrors('email')}" class="text-danger small mt-1"
-                                    th:errors="*{email}"></p>
+
+                            <div class="row g-2 mb-2">
+                                <div class="col-md-6">
+                                    <label for="securityQuestion" class="form-label fw-bold small text-muted">Security
+                                        Question</label>
+                                    <input type="text" id="securityQuestion" th:field="*{securityQuestion}"
+                                        class="form-control rounded-2 border-light shadow-sm"
+                                        placeholder="E.g., What is your mother's maiden name?" required />
+                                    <p th:if="${#fields.hasErrors('securityQuestion')}" class="text-danger small mt-1"
+                                        th:errors="*{securityQuestion}"></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="securityAnswer" class="form-label fw-bold small text-muted">Security
+                                        Answer</label>
+                                    <input type="text" id="securityAnswer" th:field="*{securityAnswer}"
+                                        class="form-control rounded-2 border-light shadow-sm" placeholder="Answer"
+                                        required />
+                                    <p th:if="${#fields.hasErrors('securityAnswer')}" class="text-danger small mt-1"
+                                        th:errors="*{securityAnswer}"></p>
+                                </div>
                             </div>
-                            <div class="mb-2">
-                                <label for="password" class="form-label fw-bold small text-muted">Password</label>
-                                <!-- th:field="*{password}": Binds to the 'password' property; input is masked for security. -->
-                                <input type="password" id="password" th:field="*{password}"
-                                    class="form-control rounded-2 border-light shadow-sm" placeholder="••••••••"
-                                    required pattern="(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z0-9]).{6,}"
-                                    title="Password must be at least 6 characters long and include at least one letter, one number, and one special character." />
-                                <p th:if="${#fields.hasErrors('password')}" class="text-danger small mt-1"
-                                    th:errors="*{password}"></p>
+
+                            <div class="row g-2 mb-2">
+                                <div class="col-md-6">
+                                    <label for="securityHint" class="form-label fw-bold small text-muted">Security Hint
+                                        (Optional)</label>
+                                    <input type="text" id="securityHint" th:field="*{securityHint}"
+                                        class="form-control rounded-2 border-light shadow-sm"
+                                        placeholder="Hint to help you remember" />
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="password" class="form-label fw-bold small text-muted">
+                                        Password <span style="font-size: 0.65rem; font-weight: normal; color: #888;">(6+
+                                            chars: 1 letter, 1 num, 1 special)</span>
+                                    </label>
+                                    <!-- th:field="*{password}": Binds to the 'password' property; input is masked for security. -->
+                                    <input type="password" id="password" th:field="*{password}"
+                                        class="form-control rounded-2 border-light shadow-sm" placeholder="••••••••"
+                                        required pattern="(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z0-9]).{6,}"
+                                        title="Password must be at least 6 characters long and include at least one letter, one number, and one special character." />
+                                    <p th:if="${#fields.hasErrors('password')}" class="text-danger small mt-1"
+                                        th:errors="*{password}"></p>
+                                </div>
                             </div>
                             <div
                                 class="mb-2 form-check bg-light p-2 rounded-4 d-flex align-items-center justify-content-center gap-2 border border-white">

@@ -81,7 +81,7 @@ public class SecurityConfig {
                                                 // logging in
                                                 .requestMatchers("/register", "/register/**", "/login", "/login/**",
                                                                 "/forgot-password", "/forgot-password/**",
-                                                                "/reset-password",
+                                                                "/verify-security-question", "/reset-password",
                                                                 "/css/**", "/js/**",
                                                                 "/images/**", "/uploads/**", "/favicon.ico",
                                                                 "/api/media/**", "/library/like/**", "/library/api/**")
