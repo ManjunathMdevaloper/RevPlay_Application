@@ -142,7 +142,7 @@
 <div th:replace="~{fragments/layout :: footer}"></div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    (function () {
         var audioFileInput = document.getElementById('audioFile');
         var durationInput = document.getElementById('duration');
 
@@ -177,7 +177,7 @@
                 }
             });
         }
-    });
+    })();
 </script>
 </body>
 

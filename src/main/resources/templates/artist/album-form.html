@@ -84,7 +84,8 @@
                                     <label for="releaseDate" class="form-label fw-bold small text-muted">Release
                                         Date</label>
                                     <input type="date" th:field="*{releaseDate}"
-                                        class="form-control rounded-3 border-light shadow-sm" id="releaseDate">
+                                        class="form-control rounded-3 border-light shadow-sm" id="releaseDate"
+                                        min="1800-01-01" max="2099-12-31">
                                 </div>
                                 <div class="col-md-6">
                                     <!-- Cover Art: Binds to a MultipartFile parameter in the Controller. -->

@@ -72,7 +72,8 @@
                                         <label for="albDate" class="form-label fw-bold small text-muted">Release
                                             Date</label>
                                         <input type="date" th:field="*{releaseDate}"
-                                            class="form-control rounded-3 border-light shadow-sm" id="albDate">
+                                            class="form-control rounded-3 border-light shadow-sm" id="albDate"
+                                            min="1800-01-01" max="2099-12-31">
                                     </div>
                                     <div class="col-md-6">
                                         <label for="albCover" class="form-label fw-bold small text-muted">Album Cover
@@ -767,7 +768,8 @@
                                 <div class="col-md-6 mb-3 mb-md-0">
                                     <label for="eaDate" class="form-label fw-bold small text-muted">Release Date</label>
                                     <input type="date" name="releaseDate"
-                                        class="form-control rounded-3 border-light shadow-sm" id="eaDate">
+                                        class="form-control rounded-3 border-light shadow-sm" id="eaDate"
+                                        min="1800-01-01" max="2099-12-31">
                                 </div>
                                 <div class="col-md-6">
                                     <label for="eaCover" class="form-label fw-bold small text-muted">Album Cover
@@ -859,25 +861,26 @@
                 }
             });
 
-            // Auto-calculate duration logic for Upload Modal
-            const sAudioInput = document.getElementById('sAudio');
-            const sDurInput = document.getElementById('sDur');
+            // Auto-calculate duration logic for Upload and Edit Modals
+            (function () {
+                var sAudioInput = document.getElementById('sAudio');
+                var sDurInput = document.getElementById('sDur');
 
-            if (sAudioInput && sDurInput) {
-                sAudioInput.addEventListener('change', function (e) {
-                    calculateAudioDuration(e.target.files[0], sDurInput);
-                });
-            }
+                if (sAudioInput && sDurInput) {
+                    sAudioInput.addEventListener('change', function (e) {
+                        calculateAudioDuration(e.target.files[0], sDurInput);
+                    });
+                }
 
-            // Auto-calculate duration logic for Edit Modal
-            const esAudioInput = document.getElementById('esAudio');
-            const esDurInput = document.getElementById('esDur');
+                var esAudioInput = document.getElementById('esAudio');
+                var esDurInput = document.getElementById('esDur');
 
-            if (esAudioInput && esDurInput) {
-                esAudioInput.addEventListener('change', function (e) {
-                    calculateAudioDuration(e.target.files[0], esDurInput);
-                });
-            }
+                if (esAudioInput && esDurInput) {
+                    esAudioInput.addEventListener('change', function (e) {
+                        calculateAudioDuration(e.target.files[0], esDurInput);
+                    });
+                }
+            })();
 
             function calculateAudioDuration(file, durationInput) {
                 if (file) {
