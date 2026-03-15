@@ -78,7 +78,7 @@ public class DiscoveryController {
     public String home(Model model) {
         log.info("Loading home page (Discovery)");
         model.addAttribute("songs", songService.getAllSongs());
-        model.addAttribute("albums", albumRepository.findAll());
+        model.addAttribute("albums", albumRepository.findAllNonEmpty());
         model.addAttribute("artists", userRepository.findAllArtists());
         model.addAttribute("genres", searchService.getAllGenres());
         model.addAttribute("publicPlaylists", playlistService.getAllPublicPlaylists());

@@ -67,7 +67,7 @@
                                                         style="width: 45px; height: 45px; object-fit: cover;"
                                                         class="rounded border me-3">
                                                     <img th:unless="${song.coverArtUrl != null}"
-                                                        th:src="@{/images/default-album.svg}"
+                                                        th:src="@{/images/default-song.svg}"
                                                         style="width: 45px; height: 45px; object-fit: cover;"
                                                         class="rounded border me-3 bg-light">
                                                     <div class="text-truncate" style="max-width: 200px;">
@@ -90,7 +90,7 @@
                                                     th:if="${song.audioUrl != null}" th:data-song-id="${song.id}"
                                                     th:data-audio-url="${song.audioUrl}" th:data-title="${song.title}"
                                                     th:data-artist="${song.artist != null ? song.artist.displayName : 'Unknown'}"
-                                                    th:data-cover="${song.coverArtUrl != null ? song.coverArtUrl : '/images/default-album.svg'}"
+                                                    th:data-cover="${song.coverArtUrl != null ? song.coverArtUrl : '/images/default-song.svg'}"
                                                     onclick="playGlobalAudio(this.getAttribute('data-song-id'), this.getAttribute('data-audio-url'), this.getAttribute('data-title'), this.getAttribute('data-artist'), this.getAttribute('data-cover'))">
                                                     ▶
                                                 </button>

@@ -110,7 +110,7 @@ public class SearchController {
         // For Person 2 Categories: Browse by artist, album
         model.addAttribute("artists",
                 userRepository.findAll().stream().filter(u -> u.getRole() == Role.ARTIST).collect(Collectors.toList()));
-        model.addAttribute("albums", albumRepository.findAll());
+        model.addAttribute("albums", albumRepository.findAllNonEmpty());
         return "search/categories";
     }
 
@@ -146,7 +146,7 @@ public class SearchController {
         model.addAttribute("genres", searchService.getAllGenres());
         model.addAttribute("artists",
                 userRepository.findAll().stream().filter(u -> u.getRole() == Role.ARTIST).collect(Collectors.toList()));
-        model.addAttribute("albums", albumRepository.findAll());
+        model.addAttribute("albums", albumRepository.findAllNonEmpty());
 
         // Pass back selected values
         model.addAttribute("selectedTitle", title);

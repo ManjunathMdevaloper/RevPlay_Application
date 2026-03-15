@@ -32,7 +32,7 @@
                         <div class="d-flex align-items-center">
                             <img th:if="${song.coverArtUrl != null}" th:src="@{${song.coverArtUrl}}"
                                 style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;" class="me-3">
-                            <img th:unless="${song.coverArtUrl != null}" th:src="@{/images/default-album.svg}"
+                            <img th:unless="${song.coverArtUrl != null}" th:src="@{/images/default-song.svg}"
                                 style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;" class="me-3">
                             <div>
                                 <h5 class="mb-1 text-dark" th:text="${song.title}">Song Title</h5>

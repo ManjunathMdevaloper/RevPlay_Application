@@ -27,8 +27,8 @@
                 <!-- Cover Art: Displays the primary artwork or a generic fallback. -->
                 <img th:if="${song.coverArtUrl != null}" th:src="@{${song.coverArtUrl}}" alt="Album Cover"
                     class="img-fluid rounded border border-light shadow" style="max-height: 350px;">
-                <img th:unless="${song.coverArtUrl != null}" th:src="@{/images/default-album.svg}"
-                    alt="Default Album Cover" class="img-fluid rounded border border-light shadow"
+                <img th:unless="${song.coverArtUrl != null}" th:src="@{/images/default-song.svg}"
+                    alt="Default Song Cover" class="img-fluid rounded border border-light shadow"
                     style="max-height: 350px;">
             </div>
             <div class="col-md-8 ps-md-5 mt-4 mt-md-0">
@@ -95,7 +95,7 @@
                     <button class="btn btn-primary btn-lg fw-bold px-4 shadow" th:if="${song.audioUrl != null}"
                         th:data-song-id="${song.id}" th:data-audio-url="${song.audioUrl}" th:data-title="${song.title}"
                         th:data-artist="${song.artist != null ? (song.artist.displayName ?: song.artist.username) : 'Unknown Artist'}"
-                        th:data-cover="${song.coverArtUrl != null ? song.coverArtUrl : '/images/default-album.svg'}"
+                        th:data-cover="${song.coverArtUrl != null ? song.coverArtUrl : '/images/default-song.svg'}"
                         onclick="playGlobalAudio(this.getAttribute('data-song-id'), this.getAttribute('data-audio-url'), this.getAttribute('data-title'), this.getAttribute('data-artist'), this.getAttribute('data-cover'))">
                         ▶ Play Track
                     </button>

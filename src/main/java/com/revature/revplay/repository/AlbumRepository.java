@@ -36,4 +36,20 @@ public interface AlbumRepository extends JpaRepository<Album, Long> {
      * dashboard.
      */
     List<Album> findByArtist(User artist);
+    
+    /**
+     * Retrieves all albums that have at least one song associated with them.
+     */
+    @org.springframework.data.jpa.repository.Query("SELECT a FROM Album a WHERE a.songs IS NOT EMPTY")
+    List<Album> findAllNonEmpty();
+
+    /**
+     * Finds albums by name matching a keyword, but only if they contain songs.
+     */
+    List<Album> findByNameContainingIgnoreCaseAndSongsIsNotEmpty(String name);
+
+    /**
+     * Retrieves all albums by a specific artist that contain at least one song.
+     */
+    List<Album> findByArtistAndSongsIsNotEmpty(User artist);
 }

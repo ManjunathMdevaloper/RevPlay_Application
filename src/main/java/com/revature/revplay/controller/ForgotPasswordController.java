@@ -69,19 +69,19 @@ public class ForgotPasswordController {
      * password can be changed.
      */
     @PostMapping("/forgot-password")
-    public String processForgotPassword(@RequestParam("username") String username,
+    public String processForgotPassword(@RequestParam("username") String usernameOrEmail,
             Model model) {
-        log.info("Processing forgot password request for user: {}", username);
+        log.info("Processing forgot password request for user: {}", usernameOrEmail);
         try {
-            com.revature.revplay.entity.User user = userService.getUserByUsername(username);
-            log.info("User found, proceeding to security question step for user: {}", username);
-            model.addAttribute("username", username);
+            com.revature.revplay.entity.User user = userService.getUserByUsernameOrEmail(usernameOrEmail);
+            log.info("User found, proceeding to security question step for identifier: {}", usernameOrEmail);
+            model.addAttribute("username", user.getUsername());
             model.addAttribute("securityQuestion", user.getSecurityQuestion());
             model.addAttribute("securityHint", user.getSecurityHint());
             return "auth/forgot-password-question";
         } catch (RuntimeException e) {
-            log.warn("Forgot password verification failed: User not found: {}", username);
-            model.addAttribute("error", "No account found with that username.");
+            log.warn("Forgot password verification failed: User not found: {}", usernameOrEmail);
+            model.addAttribute("error", "No account found with that username or email.");
             return "auth/forgot-password";
         }
     }

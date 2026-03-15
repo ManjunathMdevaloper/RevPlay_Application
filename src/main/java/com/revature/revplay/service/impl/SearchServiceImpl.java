@@ -79,7 +79,7 @@ public class SearchServiceImpl implements SearchService {
             results.setSongs(songRepository.findByTitleContainingIgnoreCase(trimmed));
             results.setArtists(
                     userRepository.findByDisplayNameContainingIgnoreCaseAndRole(trimmed, Role.ARTIST));
-            results.setAlbums(albumRepository.findByNameContainingIgnoreCase(trimmed));
+            results.setAlbums(albumRepository.findByNameContainingIgnoreCaseAndSongsIsNotEmpty(trimmed));
             results.setPlaylists(playlistRepository.findByNameContainingIgnoreCaseAndIsPublicTrue(trimmed));
 
             log.debug("Global search results summary - Songs: {}, Artists: {}, Albums: {}, Playlists: {}",

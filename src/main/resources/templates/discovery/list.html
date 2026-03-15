@@ -67,7 +67,7 @@
         <!-- Left Column: 1 (Songs) & 3 (Artists) -->
         <div class="col-lg-6 d-flex flex-column gap-4">
             <!-- Part 1: All Songs Section -->
-            <div class="card flex-grow-1 border-0 shadow-lg rounded-4 overflow-hidden dashboard-card"
+            <div class="card border-0 shadow-lg rounded-4 overflow-hidden dashboard-card" style="height: 480px;"
                  data-category="song">
                 <div class="card-header bg-white py-3 border-0">
                     <h5 class="mb-0 fw-bold" style="color: var(--primary-color);"><i class="me-2">🎵</i> Songs</h5>
@@ -96,10 +96,10 @@
                                  th:data-artist="${song.artist != null ? (song.artist.displayName ?: song.artist.username) : 'Unknown Artist'}"
                                  th:data-album="${song.album != null ? song.album.name : 'Private Song'}"
                                  th:data-genre="${song.genre}" th:data-duration="${song.duration}"
-                                 th:data-cover="${song.coverArtUrl != null ? song.coverArtUrl : '/images/default-album.svg'}"
+                                 th:data-cover="${song.coverArtUrl != null ? song.coverArtUrl : '/images/default-song.svg'}"
                                  th:data-audio-url="${song.audioUrl}" onclick="showSongDetails(this)">
                                 <div class="position-relative overflow-hidden">
-                                    <img th:src="${song.coverArtUrl != null ? song.coverArtUrl : '/images/default-album.svg'}"
+                                    <img th:src="${song.coverArtUrl != null ? song.coverArtUrl : '/images/default-song.svg'}"
                                          class="card-img-top mx-auto d-block"
                                          style="aspect-ratio: 1/1; object-fit: cover; height: auto;">
                                 </div>
@@ -115,7 +115,7 @@
                                             style="font-size: 0.65rem; height: 18px;" th:data-song-id="${song.id}"
                                             th:data-audio-url="${song.audioUrl}" th:data-title="${song.title}"
                                             th:data-artist="${song.artist != null ? (song.artist.displayName ?: song.artist.username) : 'Unknown Artist'}"
-                                            th:data-cover="${song.coverArtUrl != null ? song.coverArtUrl : '/images/default-album.svg'}"
+                                            th:data-cover="${song.coverArtUrl != null ? song.coverArtUrl : '/images/default-song.svg'}"
                                             onclick="event.stopPropagation(); playGlobalAudio(this.getAttribute('data-song-id'), this.getAttribute('data-audio-url'), this.getAttribute('data-title'), this.getAttribute('data-artist'), this.getAttribute('data-cover'))">
                                         Play
                                     </button>
@@ -131,7 +131,7 @@
             </div>
 
             <!-- Part 3: Artists Section -->
-            <div class="card border-0 shadow-lg rounded-4 overflow-hidden dashboard-card" style="height: 350px;"
+            <div class="card border-0 shadow-lg rounded-4 overflow-hidden dashboard-card" style="height: 480px;"
                  data-category="artist">
                 <div class="card-header bg-white py-3 border-0">
                     <h5 class="mb-0 fw-bold" style="color: var(--primary-color);"><i class="me-2">🎤</i> Featured
@@ -177,7 +177,7 @@
                                     <!-- Hidden loop to store song data for the Play All feature in the artist modal. -->
                                     <div th:each="song : ${artist.songs}" th:data-song-id="${song.id}"
                                          th:data-title="${song.title}" th:data-url="${song.audioUrl}"
-                                         th:data-cover="${song.coverArtUrl != null ? song.coverArtUrl : '/images/default-album.svg'}">
+                                         th:data-cover="${song.coverArtUrl != null ? song.coverArtUrl : '/images/default-song.svg'}">
                                     </div>
                                 </div>
                             </div>
@@ -194,7 +194,7 @@
         <div class="col-lg-6 d-flex flex-column gap-4">
 
             <!-- Part 2: All Albums -->
-            <div class="card flex-grow-1 border-0 shadow-lg rounded-4 overflow-hidden dashboard-card"
+            <div class="card border-0 shadow-lg rounded-4 overflow-hidden dashboard-card" style="height: 480px;"
                  data-category="album">
                 <div class="card-header bg-white py-3 border-0">
                     <h5 class="mb-0 fw-bold" style="color: var(--primary-color);"><i class="me-2">📀</i> Top Albums
@@ -230,7 +230,7 @@
                                          th:data-title="${song.title}"
                                          th:data-artist="${album.artist != null ? (album.artist.displayName ?: album.artist.username) : 'Unknown'}"
                                          th:data-url="${song.audioUrl}"
-                                         th:data-cover="${song.coverArtUrl != null ? song.coverArtUrl : '/images/default-album.svg'}">
+                                         th:data-cover="${song.coverArtUrl != null ? song.coverArtUrl : '/images/default-song.svg'}">
                                     </div>
                                 </div>
                             </div>
@@ -241,7 +241,7 @@
                 </div>
             </div>
             <!-- Part 4: Genres Section -->
-            <div class="card border-0 shadow-lg rounded-4 overflow-hidden dashboard-card" style="height: 350px;"
+            <div class="card border-0 shadow-lg rounded-4 overflow-hidden dashboard-card" style="height: 480px;"
                  data-category="genre">
                 <div class="card-header bg-white py-3 border-0">
                     <h5 class="mb-0 fw-bold" style="color: var(--primary-color);"><i class="me-2">🎸</i> Browse
