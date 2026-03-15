@@ -72,6 +72,12 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
+    @Override
+    public User getUserByUsernameOrEmail(String identifier) {
+        return userRepository.findByUsernameOrEmail(identifier, identifier)
+                .orElseThrow(() -> new RuntimeException("User not found with username or email: " + identifier));
+    }
+
     /**
      * Compiles a comprehensive UserDto containing profile data and engagement
      * stats.

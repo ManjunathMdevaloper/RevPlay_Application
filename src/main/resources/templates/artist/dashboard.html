@@ -269,7 +269,7 @@
                                             style="width: 45px; height: 45px; object-fit: cover;"
                                             class="rounded border">
                                         <img th:unless="${song.coverArtUrl != null}"
-                                            th:src="@{/images/default-album.svg}"
+                                            th:src="@{/images/default-song.svg}"
                                             style="width: 45px; height: 45px; object-fit: cover;"
                                             class="rounded border bg-light">
                                     </td>
@@ -845,7 +845,7 @@
 
                     const id = idEl.innerText.trim();
                     const title = titleEl.innerText.trim();
-                    const cover = tr.querySelector('img')?.src || '/images/default-album.svg';
+                    const cover = tr.querySelector('img')?.src || '/images/default-song.svg';
                     const audioUrl = '/api/media/song/' + id + '/audio';
                     const artist = document.querySelector('h2.text-primary')?.innerText.replace('Artist Dashboard', '').trim() || 'Artist';
 

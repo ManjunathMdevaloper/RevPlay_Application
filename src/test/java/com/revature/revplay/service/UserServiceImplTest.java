@@ -59,6 +59,34 @@ class UserServiceImplTest {
     }
 
     @Test
+    void shouldReturnUserWhenIdentifierIsUsername() {
+        User user = new User();
+        user.setUsername("pooja");
+
+        when(userRepository.findByUsernameOrEmail("pooja", "pooja"))
+                .thenReturn(Optional.of(user));
+
+        User result = userService.getUserByUsernameOrEmail("pooja");
+
+        assertNotNull(result);
+        assertEquals("pooja", result.getUsername());
+    }
+
+    @Test
+    void shouldReturnUserWhenIdentifierIsEmail() {
+        User user = new User();
+        user.setEmail("pooja@gmail.com");
+
+        when(userRepository.findByUsernameOrEmail("pooja@gmail.com", "pooja@gmail.com"))
+                .thenReturn(Optional.of(user));
+
+        User result = userService.getUserByUsernameOrEmail("pooja@gmail.com");
+
+        assertNotNull(result);
+        assertEquals("pooja@gmail.com", result.getEmail());
+    }
+
+    @Test
     void shouldVerifyUserWithValidUsernameAndEmail() {
 
         when(userRepository.findByUsernameAndEmail("pooja", "pooja@gmail.com"))

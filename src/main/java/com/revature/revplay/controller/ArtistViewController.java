@@ -91,7 +91,7 @@ public class ArtistViewController {
                 .orElseThrow(() -> new ResourceNotFoundException("Artist profile not found: " + username));
 
         List<Song> songs = songRepository.findByArtist(artist);
-        List<Album> albums = albumRepository.findByArtist(artist);
+        List<Album> albums = albumRepository.findByArtistAndSongsIsNotEmpty(artist);
         log.debug("Fetched {} songs and {} albums for artist: {}", songs.size(), albums.size(), username);
 
         model.addAttribute("artist", artist);

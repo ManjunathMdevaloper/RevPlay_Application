@@ -28,6 +28,7 @@ public interface UserService {
      * known.
      */
     User getUserByUsername(String username);
+    User getUserByUsernameOrEmail(String identifier);
 
     /**
      * Fetches a lightweight UserDto optimized for display on profile pages.

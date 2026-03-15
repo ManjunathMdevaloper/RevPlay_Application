@@ -65,16 +65,17 @@
                         -->
                         <form method="post" th:action="@{/login}">
                             <div class="mb-3">
-                                <label for="username" class="form-label fw-bold small text-muted">Username</label>
+                                <label for="username" class="form-label fw-bold small text-muted">Username or Email</label>
                                 <!-- name="username": Must match the expected field name in Spring Security config. -->
                                 <input type="text" id="username" name="username"
-                                    class="form-control rounded-2 border-light shadow-sm" required autofocus />
+                                    class="form-control rounded-2 border-light shadow-sm" 
+                                    placeholder="Enter your username or email" required autofocus />
                             </div>
                             <div class="mb-3">
                                 <label for="password" class="form-label fw-bold small text-muted">Password</label>
                                 <!-- name="password": Must match the expected field name in Spring Security config. -->
                                 <input type="password" id="password" name="password"
-                                    class="form-control rounded-2 border-light shadow-sm" required />
+                                    class="form-control rounded-2 border-light shadow-sm" placeholder="Enter your password" required />
                                 <div class="text-end mt-2">
                                     <!-- th:href="@{/forgot-password}": Link to the password recovery workflow. -->
                                     <a th:href="@{/forgot-password}" class="text-decoration-none small fw-bold"
