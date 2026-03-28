@@ -57,9 +57,6 @@ Before running the application, make sure you have:
 ```bash
 # Using the Maven Wrapper to run the application
 ./mvnw spring-boot:run
-
-# If JAVA_HOME is not set to Java 17+, override it:
-$env:JAVA_HOME = 'C:\Program Files\Java\jdk-21'; ./mvnw spring-boot:run
 ```
 
 The application will start at: **http://localhost:8080**
@@ -128,7 +125,7 @@ src/
 
 ## ✨ Enterprise Features
 - **Global Exception Handling**: Custom exceptions with a thematic error return page.
-- **Data URIs**: Profile and banner images are served as Base64 Data URIs directly from the Oracle BLOB store to minimize complex file system management.
+- **Direct BLOB Streaming**: Profile and banner images are served as raw binary streams directly from the Oracle BLOB store via optimized REST endpoints, ensuring high performance and reduced data overhead compared to Base64 encoding.
 - **Role-Based Security**: Spring Security 6 integration using modern lambda-based DSL (`SUBSCRIBER`, `ARTIST`).
 - **Logging**: Integrated **Log4j2** for diagnostics, analytics, and capturing application events in console and persistent log files.
 

@@ -9,3 +9,4 @@ public interface AuthService {
 
     User findByEmail(String email);
 }
+

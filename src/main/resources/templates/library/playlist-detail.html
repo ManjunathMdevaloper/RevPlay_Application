@@ -1,13 +1,4 @@
-<!-- 
-  Playlist Detail View Template
-  This page displays the contents of a specific user-created playlist.
-  Key Features:
-  - Track Listing: Shows all songs added to the collection with metadata.
-  - Playlist Management: Allows owners to remove songs via POST requests.
-  - Playback Integration: Direct 'Play' button for each track using the global audio system.
-  - Secure Access: Uses #authentication checks to ensure only the owner sees 'Remove' actions.
-  Data Source: PlaylistController -> Playlist playlist
--->
+
 
 <!DOCTYPE html>
 
@@ -34,7 +25,7 @@
 
 <p class="text-muted mb-0" th:text="${playlist.description}">Playlist Description</p>
 
-<!-- Followers Count -->
+
 
 <p class="text-muted mb-0">
 Followers: <span id="followersCount">0</span>
@@ -50,7 +41,7 @@ data-bs-toggle="modal"
 data-bs-target="#editPlaylistModal">
 Edit Playlist </button>
 
-<!-- Follow Playlist -->
+
 <form th:if="${#authentication != null and #authentication.principal.username != playlist.user.username}"
       th:action="@{/library/playlists/{id}/follow(id=${playlist.id})}"
       method="post"
@@ -64,7 +55,7 @@ Edit Playlist </button>
 </form>
 
 
-<!-- Unfollow Playlist -->
+
 <form th:if="${#authentication != null and #authentication.principal.username != playlist.user.username}"
       th:action="@{/library/playlists/{id}/unfollow(id=${playlist.id})}"
       method="post"
@@ -219,7 +210,7 @@ this.getAttribute('data-cover')
 
 </div>
 
-<!-- Edit Playlist Modal -->
+
 
 <div class="modal fade"
 id="editPlaylistModal"
@@ -323,13 +314,13 @@ Cancel </button>
 
 <div th:replace="~{fragments/layout :: footer}"></div>
 
-<!-- Followers Count Script -->
+
 
 <script th:inline="javascript">
 
 document.addEventListener("DOMContentLoaded", function () {
 
-const playlistId = /*[[${playlist.id}]]*/ 0;
+const playlistId =  0;
 
 fetch("/library/api/playlists/" + playlistId + "/followers")
 .then(response => response.json())
@@ -350,3 +341,4 @@ element.innerText = data;
 
 </body>
 </html>
+

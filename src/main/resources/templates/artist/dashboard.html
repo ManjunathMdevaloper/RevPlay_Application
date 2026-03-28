@@ -1,24 +1,15 @@
-<!-- 
-  Artist Dashboard View Template
-  This is the central command center for Artists in RevPlay.
-  Key Functionalities:
-  - Catalog Management: Upload new tracks and create albums using multi-part form modals.
-  - Performance Analytics: View lifetime streams, follower counts, and active album stats.
-  - Interactive Modals: Detailed popups for managing songs, albums, streams, and followers.
-  - Quick Overview: A summarized table of all uploaded tracks for rapid editing or deletion.
-  The data is driven by the ArtistDashboardController, which provides 'albumDto', 'songDto', 'songs', 'albums', 'totalStreams', 'followerCount', and 'followers' to the Model.
--->
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
-    <!-- Injects the standard head fragment with the specific page title. -->
+    
     <div th:replace="~{fragments/layout :: head('Artist Dashboard - RevPlay')}"></div>
 </head>
 
 <body>
 
-    <!-- Injects the global navigation bar. -->
+    
     <div th:replace="~{fragments/layout :: navbar}"></div>
 
     <div id="main-content">
@@ -38,7 +29,7 @@
                 </div>
             </div>
 
-            <!-- MODAL: Create New Album -->
+            
             <div class="modal fade" id="createAlbumModal" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-lg">
                     <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
@@ -94,7 +85,7 @@
                 </div>
             </div>
 
-            <!-- MODAL: Upload Fast Track -->
+            
             <div class="modal fade" id="uploadSongModal" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-lg">
                     <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
@@ -189,21 +180,21 @@
                 <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
 
-            <!-- Quick Stats Banner — each card opens a modal popup -->
+            
             <div class="row g-4 mb-5 text-center">
-                <!-- Total Songs Card: Shows how many tracks the artist has. -->
+                
                 <div class="col-md-3">
                     <div class="card shadow-sm border-0 border-top border-primary border-4 py-3 bg-light stat-card"
                         data-bs-toggle="modal" data-bs-target="#songsModal"
                         style="cursor: pointer; transition: all 0.2s;"
                         onmouseenter="this.style.transform='translateY(-3px)'"
                         onmouseleave="this.style.transform='translateY(0)'">
-                        <!-- th:text: Calculates size of 'songs' list provided by the Model. -->
+                        
                         <h1 class="text-primary fw-bold" th:text="${#lists.size(songs)}">0</h1>
                         <p class="text-muted fw-bold mb-0 text-uppercase small">Total Songs</p>
                     </div>
                 </div>
-                <!-- Active Albums Card -->
+                
                 <div class="col-md-3">
                     <div class="card shadow-sm border-0 border-top border-primary border-4 py-3 bg-white stat-card"
                         data-bs-toggle="modal" data-bs-target="#albumsModal"
@@ -214,7 +205,7 @@
                         <p class="text-muted fw-bold mb-0 text-uppercase small">Active Albums</p>
                     </div>
                 </div>
-                <!-- Lifetime Streams Card: Aggregated play count across all songs. -->
+                
                 <div class="col-md-3">
                     <div class="card shadow-sm border-0 border-top border-success border-4 py-3 bg-white stat-card"
                         data-bs-toggle="modal" data-bs-target="#streamsModal"
@@ -225,7 +216,7 @@
                         <p class="text-muted fw-bold mb-0 text-uppercase small">Lifetime Streams</p>
                     </div>
                 </div>
-                <!-- Followers Card: Number of users following this artist. -->
+                
                 <div class="col-md-3">
                     <div class="card shadow-sm border-0 border-top border-info border-4 py-3 bg-white stat-card"
                         data-bs-toggle="modal" data-bs-target="#followersModal"
@@ -238,7 +229,7 @@
                 </div>
             </div>
 
-            <!-- Default view: show tracks table below stats -->
+            
             <div class="card shadow-sm border-light mb-5">
                 <div class="card-header bg-white py-3 border-0 d-flex justify-content-between align-items-center">
                     <h5 class="mb-0 fw-bold text-primary">🎵 My Tracks Overview</h5>
@@ -258,11 +249,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <!--
-                          Main Tracks Loop:
-                          - th:each: Populates the overview table with all songs in the artist's library.
-                          - Displays cover art, title, genre, and play counts.
-                        -->
+                                
                                 <tr th:each="song : ${songs}">
                                     <td class="ps-4">
                                         <img th:if="${song.coverArtUrl != null}" th:src="@{${song.coverArtUrl}}"
@@ -281,13 +268,13 @@
                                         <span class="badge bg-secondary" th:text="${song.genre}">Genre</span>
                                     </td>
                                     <td class="text-muted">
-                                        <!-- Formats seconds into a human-readable MM:SS format. -->
+                                        
                                         <span
                                             th:text="${song.duration / 60} + ':' + ${T(java.lang.String).format('%02d', song.duration % 60)}">0:00</span>
                                     </td>
                                     <td class="fw-bold text-dark" th:text="${song.playCount}">0</td>
                                     <td class="text-end pe-4">
-                                        <!-- Action Buttons: Edit leads to the edit form, Delete triggers a safety confirmation. -->
+                                        
                                         <button type="button" class="btn btn-sm btn-outline-primary"
                                             onclick="openEditSongModal(this)" th:data-id="${song.id}"
                                             th:data-title="${song.title}" th:data-genre="${song.genre}"
@@ -311,9 +298,9 @@
             </div>
         </div>
 
-        <!-- =========================================================== -->
-        <!-- MODAL 1: Total Songs -->
-        <!-- =========================================================== -->
+        
+        
+        
         <div class="modal fade" id="songsModal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
                 <div class="modal-content border-0 shadow rounded-4 overflow-hidden">
@@ -414,9 +401,9 @@
             </div>
         </div>
 
-        <!-- =========================================================== -->
-        <!-- MODAL 2: Active Albums -->
-        <!-- =========================================================== -->
+        
+        
+        
         <div class="modal fade" id="albumsModal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
                 <div class="modal-content border-0 shadow rounded-4 overflow-hidden">
@@ -500,9 +487,9 @@
             </div>
         </div>
 
-        <!-- =========================================================== -->
-        <!-- MODAL 3: Lifetime Streams — per song breakdown -->
-        <!-- =========================================================== -->
+        
+        
+        
         <div class="modal fade" id="streamsModal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable"
                 style="max-width: min(900px, 96vw);">
@@ -514,8 +501,7 @@
                             <small class="text-white opacity-75">Total: <strong th:text="${totalStreams}">0</strong>
                                 lifetime plays</small>
                         </div>
-                        <!-- <button type="button" class="btn-close btn-close-white shadow-none"
-                        data-bs-dismiss="modal"></button> -->
+                        
                     </div>
                     <div class="modal-body p-4">
                         <div th:if="${not #lists.isEmpty(songsByStreams)}">
@@ -525,15 +511,11 @@
                                 <span class="badge bg-success-subtle text-success border border-success px-3 py-2"
                                     th:text="${#lists.size(songsByStreams)} + ' tracks'">0 tracks</span>
                             </div>
-                            <!--
-                          Stream Breakdown List:
-                          - Iterates through 'songsByStreams' (provided by Controller, likely sorted by playCount).
-                          - iterStat: Used to determine the 'medal' rank (Gold for index 0, Silver for index 1, etc.)
-                        -->
+                            
                             <div class="list-group list-group-flush">
                                 <div th:each="song, iterStat : ${songsByStreams}"
                                     class="list-group-item px-0 py-2 border-bottom d-flex align-items-center gap-2">
-                                    <!-- Rank medal/number logic -->
+                                    
                                     <span class="fw-bold text-center flex-shrink-0"
                                         style="min-width:24px; font-size:0.85rem;"
                                         th:text="${iterStat.index == 0 ? '🥇' : (iterStat.index == 1 ? '🥈' : (iterStat.index == 2 ? '🥉' : (iterStat.index + 1) + '.'))}">1.</span>
@@ -554,7 +536,7 @@
                                             <small class="text-muted" style="font-size:0.68rem;"
                                                 th:text="${song.duration / 60} + ':' + ${T(java.lang.String).format('%02d', song.duration % 60)}">0:00</small>
                                         </div>
-                                        <!-- Analytical Progress Bar: Visually represents the song's share of total lifetime streams. -->
+                                        
                                         <div class="d-flex align-items-center gap-2 mt-1">
                                             <div class="progress flex-grow-1" style="height:4px; border-radius:2px;">
                                                 <div class="progress-bar"
@@ -593,9 +575,9 @@
             </div>
         </div>
 
-        <!-- =========================================================== -->
-        <!-- MODAL 4: Followers — name & email -->
-        <!-- =========================================================== -->
+        
+        
+        
         <div class="modal fade" id="followersModal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-md modal-dialog-scrollable">
                 <div class="modal-content border-0 shadow rounded-4 overflow-hidden">
@@ -606,15 +588,14 @@
                             <small class="text-white opacity-75" th:text="${followerCount} + ' people follow you'">0
                                 followers</small>
                         </div>
-                        <!-- <button type="button" class="btn-close btn-close-white shadow-none"
-                        data-bs-dismiss="modal"></button> -->
+                        
                     </div>
                     <div class="modal-body p-3">
                         <div th:if="${not #lists.isEmpty(followers)}" class="list-group list-group-flush">
                             <div th:each="follower : ${followers}"
                                 class="list-group-item list-group-item-action px-3 py-3 rounded-3 mb-2 border d-flex align-items-center gap-3"
                                 style="background: #fafafa;">
-                                <!-- Avatar -->
+                                
                                 <img th:if="${follower.profilePictureUrl != null}"
                                     th:src="${follower.profilePictureUrl}"
                                     class="rounded-circle border flex-shrink-0 shadow-sm"
@@ -624,7 +605,7 @@
                                     style="width:46px; height:46px; font-size:1.1rem;"
                                     th:text="${follower.displayName != null ? #strings.substring(follower.displayName, 0, 1).toUpperCase() : '?'}">
                                     U</div>
-                                <!-- Info -->
+                                
                                 <div class="flex-grow-1 overflow-hidden">
                                     <h6 class="mb-0 fw-bold text-dark"
                                         th:text="${follower.displayName != null ? follower.displayName : follower.username}">
@@ -636,7 +617,7 @@
                                         <i class="me-1">✉️</i><span th:text="${follower.email}">email@example.com</span>
                                     </small>
                                 </div>
-                                <!-- Role badge -->
+                                
                                 <span class="badge rounded-pill flex-shrink-0" th:text="${follower.role}"
                                     style="background: #e8f4fd; color: #0d6efd; border: 1px solid #0d6efd;">USER</span>
                             </div>
@@ -657,9 +638,9 @@
             </div>
         </div>
 
-        <!-- =========================================================== -->
-        <!-- MODAL 5: Edit Song Modal -->
-        <!-- =========================================================== -->
+        
+        
+        
         <div class="modal fade" id="editSongModal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
@@ -735,9 +716,9 @@
             </div>
         </div>
 
-        <!-- =========================================================== -->
-        <!-- MODAL 6: Edit Album Modal -->
-        <!-- =========================================================== -->
+        
+        
+        
         <div class="modal fade" id="editAlbumModal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
@@ -805,7 +786,7 @@
                 document.getElementById('esAlbum').value = albumId || '';
                 document.getElementById('esDur').value = duration;
 
-                // Close parent modal if open (for the "My Songs" list)
+                
                 const songsModalEl = document.getElementById('songsModal');
                 const songsModal = bootstrap.Modal.getInstance(songsModalEl);
                 if (songsModal) songsModal.hide();
@@ -827,7 +808,7 @@
                 document.getElementById('eaDesc').value = desc;
                 document.getElementById('eaDate').value = date || '';
 
-                // Close parent modal if open (for the "My Albums" list)
+                
                 const albumsModalEl = document.getElementById('albumsModal');
                 const albumsModal = bootstrap.Modal.getInstance(albumsModalEl);
                 if (albumsModal) albumsModal.hide();
@@ -861,7 +842,7 @@
                 }
             });
 
-            // Auto-calculate duration logic for Upload and Edit Modals
+            
             (function () {
                 var sAudioInput = document.getElementById('sAudio');
                 var sDurInput = document.getElementById('sDur');
@@ -910,7 +891,7 @@
                 }
             }
         </script>
-    </div><!-- /#main-content -->
+    </div>
 
     <div th:replace="~{fragments/layout :: footer}"></div>
 </body>

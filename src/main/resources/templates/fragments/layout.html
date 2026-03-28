@@ -1,20 +1,6 @@
-<!-- 
-  Layout Fragment Template
-  This file serves as the master structural template for the entire RevPlay application.
-  It utilizes Thymeleaf 'fragments' to define reusable components like the <head>, <nav>, and <footer>.
-  By centralizing these elements, we ensure a consistent branding, navigation, and security.
-  Experience across every page without duplicating code. It also manages the global.
-  Spring Security state to show/hide links based on the user's login status.
--->
 <!DOCTYPE html>
 
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<!-- 
-  Head Fragment: th:fragment="head(title)"
-  - th:fragment: Defines a reusable block named 'head' that accepts a dynamic 'title' parameter.
-  - th:text="${title}": Dynamically sets the <title> tag using the string passed from the calling page.
-  - th:href="@{/icon}": Uses the Thymeleaf URL syntax to correctly resolve the path to the favicon and CSS.
--->
 
 <head th:fragment="head(title)">
     <meta charset="UTF-8">
@@ -27,17 +13,8 @@
 
 <body>
 
-    <!-- 
-      Navbar Fragment: th:fragment="navbar"
-      - th:href="@{/}": Generates a safe context-aware link to the homepage.
-      - th:src="@{/images/logo.png}": Resolves the branding image path.
-      - sec:authorize="isAuthenticated()": Only renders the Favorites, Playlists, and History links if a user is logged in.
-      - sec:authorize="!isAuthenticated()": Only renders Login/Register buttons for anonymous guests.
-      - sec:authorize="hasRole('ARTIST')": Displays the Artist Dashboard link only for users with the 'ARTIST' role.
-    -->
     <nav th:fragment="navbar" class="navbar navbar-expand-lg border-bottom shadow-sm">
         <div class="container">
-            <!-- Brand / Logo -->
             <a class="navbar-brand d-flex align-items-center" th:href="@{/}">
                 <img th:src="@{/images/logo.png}" alt="RevPlay Logo" style="height: 7vh; width: auto;">
             </a>
@@ -65,7 +42,6 @@
                     </li>
                 </ul>
 
-                <!-- Right Side: Profile / Auth -->
                 <div class="gap-3 d-flex align-items-center">
 
                     <div class="d-flex align-items-center" sec:authorize="isAuthenticated()">
@@ -83,7 +59,6 @@
                                     <hr class="dropdown-divider">
                                 </li>
                                 <li>
-                                    <!-- th:action="@{/logout}": Maps the form to the Spring Security logout processor. -->
                                     <form th:action="@{/logout}" method="post" class="dropdown-item p-0">
                                         <button type="submit"
                                             class="btn btn-link dropdown-item text-danger py-2">Logout</button>
@@ -102,11 +77,6 @@
         </div>
     </nav>
 
-    <!-- 
-      Footer Fragment: th:fragment="footer"
-      - th:replace="~{fragments/music-player :: player}": Injects the music player fragment from another file.
-      - th:src="@{/js/player.js}": Includes the essential JavaScript logic for the platform's audio engine.
-    -->
     <footer th:fragment="footer" class="text-center">
         <div sec:authorize="isAuthenticated()" th:replace="~{fragments/music-player :: player}"></div>
         <div class="container pb-3 border-top pt-3 border-light mt-5">
@@ -119,7 +89,6 @@
         <div th:replace="~{::confirmModal}"></div>
     </footer>
 
-    <!-- Global Confirm Modal Fragment: th:fragment="confirmModal" -->
     <div th:fragment="confirmModal" class="modal fade" id="globalConfirmModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
             <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">

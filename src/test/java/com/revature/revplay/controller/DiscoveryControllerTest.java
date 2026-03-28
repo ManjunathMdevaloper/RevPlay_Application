@@ -54,7 +54,7 @@ class DiscoveryControllerTest {
     void shouldLoadHomePage() {
 
         when(songService.getAllSongs()).thenReturn(List.of(new Song()));
-        when(albumRepository.findAll()).thenReturn(List.of());
+        when(albumRepository.findAllNonEmpty()).thenReturn(List.of());
         when(userRepository.findAllArtists()).thenReturn(List.of());
         when(searchService.getAllGenres()).thenReturn(List.of("Rock"));
         when(playlistService.getAllPublicPlaylists()).thenReturn(List.of());

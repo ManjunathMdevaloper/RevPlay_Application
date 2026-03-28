@@ -243,9 +243,9 @@ public boolean isSongLiked(Long songId, String username) {
     return user.getLikedSongs().contains(song);
 }
 
-// ==============================
-// FOLLOW / UNFOLLOW PLAYLIST
-// ==============================
+
+
+
 
 @Override
 @Transactional
@@ -301,3 +301,4 @@ public long getPlaylistFollowerCount(Long playlistId) {
 }
 
 }
+

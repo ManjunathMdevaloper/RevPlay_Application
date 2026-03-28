@@ -1,34 +1,20 @@
-<!-- 
-  User Profile View Template
-  This comprehensive page displays both basic listener profiles and advanced artist profiles.
-  It dynamically adjusts its layout based on the 'role' of the user being viewed.
-  Features include:
-  - Conditional rendering of artist banners and badges.
-  - Profile picture display with a fallback to a default SVG.
-  - Engagement stats showing playlist counts, favorites, and following status.
-  - Interactive 'Edit Profile' modal with file upload support for media updates.
-  The data is powered by the 'UserDto' (userProfile model attribute) fetched from the UserService.
--->
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
-    <!-- Injects the standard head fragment with the profile-specific tab title. -->
+    
     <div th:replace="~{fragments/layout :: head('My Profile - RevPlay')}"></div>
 </head>
 
 <body>
 
-    <!-- Injects the shared navigation bar. -->
+    
     <div th:replace="~{fragments/layout :: navbar}"></div>
 
     <div id="main-content">
 
-        <!-- 
-          Artist Banner Section:
-          - th:if: Only renders if the user has the 'ARTIST' role and a banner image is present.
-          - th:src: Dynamically resolves the banner image path from the Model.
-        -->
+        
         <div th:if="${userProfile.role == 'ARTIST' && userProfile.bannerImageUrl != null}"
             class="position-relative overflow-hidden" style="height: 300px; margin-top: -2rem;">
             <img th:src="@{${userProfile.bannerImageUrl}}" alt="Artist Banner" class="w-100 h-100"
@@ -37,13 +23,13 @@
                 style="background: linear-gradient(transparent, rgba(0,0,0,0.4));"></div>
         </div>
 
-        <!-- Profile Detail Section -->
+        
         <div class="container mt-n5 position-relative" style="z-index: 2;">
             <div class="card shadow-lg border-0 rounded-4 overflow-hidden mb-5">
                 <div class="card-body p-4 p-md-5 text-center">
 
                     <div class="position-relative mb-4 d-inline-block">
-                        <!-- Profile Image Logic: Shows the user's uploaded pic OR a default fallback. -->
+                        
                         <img th:if="${userProfile.profilePictureUrl != null}"
                             th:src="@{${userProfile.profilePictureUrl}}" alt="Profile"
                             class="rounded-circle shadow-lg border border-4 border-white"
@@ -54,18 +40,14 @@
                             style="width: 160px; height: 160px; object-fit: cover;">
                     </div>
 
-                    <!-- 
-                      Name Header: 
-                      - th:text: Uses a ternary operator to decide between 'artistName' and 'displayName' 
-                        depending on the account type.
-                    -->
+                    
                     <h1 class="display-5 fw-bold mb-1"
                         th:text="${userProfile.role == 'ARTIST' ? userProfile.artistName : userProfile.displayName}">
                         Name</h1>
                     <p class="text-muted fs-5 mb-3">@<span th:text="${userProfile.username}">username</span></p>
 
                     <div class="mb-4">
-                        <!-- Role-specific badges fetched from UserDto role field. -->
+                        
                         <span th:if="${userProfile.role == 'ARTIST'}"
                             class="badge bg-orange-soft text-orange px-3 py-2 fs-6 rounded-pill">Artist</span>
                         <span th:if="${userProfile.role == 'ARTIST' && userProfile.genre != null}"
@@ -75,11 +57,11 @@
                             class="badge bg-light text-muted px-3 py-2 fs-6 rounded-pill">Listener</span>
                     </div>
 
-                    <!-- th:text: Injects the user's personal biography text. -->
+                    
                     <p class="lead mx-auto mb-4" style="max-width: 700px;" th:text="${userProfile.bio}">Bio
                         placeholder...</p>
 
-                    <!-- Socials: Each link only renders if the corresponding URL exists in the 'userProfile' object. -->
+                    
                     <div class="d-flex justify-content-center align-items-center mb-5 gap-3 flex-wrap">
                         <div th:if="${not #strings.isEmpty(userProfile.instagramUrl)}" class="small text-muted">
                             <span class="fw-bold">Instagram:</span>
@@ -109,7 +91,7 @@
                     </div>
 
                     <div class="d-flex gap-2 justify-content-center">
-                        <!-- Button triggers the Edit Profile Modal defined later in the file. -->
+                        
                         <button type="button" class="btn btn-primary px-5 rounded-pill shadow" data-bs-toggle="modal"
                             data-bs-target="#editProfileModal">
                             Edit Profile
@@ -119,7 +101,7 @@
                 </div>
             </div>
 
-            <!-- Stats Grid: These numeric values are calculated and passed from UserServiceImpl. -->
+            
             <div class="row g-4 mb-5 justify-content-center">
                 <div class="col-6 col-md-4">
                     <a th:href="@{/library/playlists}" class="text-decoration-none h-100 d-block">
@@ -163,12 +145,7 @@
             </style>
         </div>
 
-        <!-- 
-          Edit Profile Modal 
-          Provides a comprehensive form to update user details.
-          - th:object="${userProfile}": Binds inputs to the UserDto.
-          - enctype="multipart/form-data": Required for processing image uploads (Profile Pic, Artist Banner).
-        -->
+        
         <div class="modal fade" id="editProfileModal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content border-0 shadow-lg rounded-2 overflow-hidden text-start">
@@ -187,7 +164,7 @@
                                     <input type="text" id="mDisplayName" th:field="*{displayName}"
                                         class="form-control rounded-2 border-light shadow-sm" />
                                 </div>
-                                <!-- Conditional inputs for artists only. -->
+                                
                                 <div class="col-md-6" th:if="${userProfile.role == 'ARTIST'}">
                                     <label for="mArtistName" class="form-label fw-bold small text-muted">Artist
                                         Name</label>
@@ -211,20 +188,20 @@
                                 <div class="col-md-6">
                                     <label for="mProfilePic" class="form-label fw-bold small text-muted">Profile
                                         Picture</label>
-                                    <!-- name="profilePic": Mapped to the MultipartFile parameter in ProfileController. -->
+                                    
                                     <input type="file" id="mProfilePic" name="profilePic"
                                         class="form-control rounded-2 border-light shadow-sm" accept="image/*" />
                                 </div>
                                 <div class="col-md-6" th:if="${userProfile.role == 'ARTIST'}">
                                     <label for="mBannerPic" class="form-label fw-bold small text-muted">Banner
                                         Image</label>
-                                    <!-- name="bannerPic": Mapped to the MultipartFile parameter in ProfileController. -->
+                                    
                                     <input type="file" id="mBannerPic" name="bannerPic"
                                         class="form-control rounded-2 border-light shadow-sm" accept="image/*" />
                                 </div>
                             </div>
 
-                            <!-- Artist-specific social link inputs. -->
+                            
                             <div class="card bg-light mb-4 border-0" th:if="${userProfile.role == 'ARTIST'}">
                                 <div class="card-header border-0 bg-transparent text-primary fw-bold pb-0">
                                     Artist Socials</div>
@@ -270,7 +247,7 @@
             </div>
         </div>
 
-        <!-- Following Modal -->
+        
         <div class="modal fade" id="followingModal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
@@ -303,9 +280,9 @@
                 </div>
             </div>
         </div>
-    </div><!-- /#main-content -->
+    </div>
 
-    <!-- Injects the standard footer fragment. -->
+    
     <div th:replace="~{fragments/layout :: footer}"></div>
 
 </body>

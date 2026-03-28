@@ -1,23 +1,11 @@
-<!-- 
-  Album Detail View Template
-  This page provides an in-depth view of a specific music album.
-  It showcases:
-  - High-quality album cover art with fallback handling.
-  - Comprehensive metadata including artist name, release year, and track count.
-  - A scrollable tracklist with play counts and formatted durations.
-  The data is sourced from an 'Album' entity and its associated 'Song' collection, 
-  passed to the Model as 'album' and 'songs' respectively.
--->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <!-- Injects the global head fragment from the layout template. -->
     <div th:replace="~{fragments/layout :: head('Album Details - RevPlay')}"></div>
 </head>
 
 <body>
-    <!-- Injects the global navigation bar. -->
     <div th:replace="~{fragments/layout :: navbar}"></div>
 
     <div id="main-content">
@@ -25,12 +13,6 @@
         <div class="container mb-5 mt-5">
             <div class="row align-items-center bg-light p-4 rounded shadow-sm border border-light">
                 <div class="col-md-4 text-center text-md-start mb-4 mb-md-0 position-relative">
-                    <!-- 
-                  Album Art Rendering:
-                  - th:if/th:unless: Handles the display of the album's custom cover art 
-                    versus a default SVG placeholder if no image exists.
-                  - th:src: Maps to the Absolute URL of the media resource.
-                -->
                     <img th:if="${album.coverArtUrl != null}" th:src="@{${album.coverArtUrl}}" alt="Album Cover"
                         class="img-fluid rounded border border-secondary shadow-lg w-100" style="object-fit: cover;">
                     <img th:unless="${album.coverArtUrl != null}" th:src="@{/images/default-album.svg}"
@@ -39,27 +21,18 @@
                 </div>
                 <div class="col-md-8 ps-md-5 mt-4 mt-md-0 align-self-end">
                     <p class="text-uppercase text-secondary fw-bold small mb-1 tracking-wider">Album</p>
-                    <!-- th:text="${album.name}": Dynamically injects the official title of the album. -->
                     <h1 class="display-4 fw-bold text-dark mb-1" th:text="${album.name}">Album Name</h1>
                     <h4 class="text-muted mb-3">
-                        <!-- th:href: Dynamically constructs the link to the artist's public profile page using their username. -->
                         <a th:href="@{/artists/{username}(username=${album.artist.username})}"
                             class="text-decoration-none text-primary hover-underline">
-                            <!-- th:text: Displays the artist's chosen display name. -->
                             <span th:text="${album.artist.displayName}">Artist Name</span>
                         </a>
                     </h4>
 
                     <div class="d-flex align-items-center mb-4 gap-2">
-                        <!-- 
-                      Release Date Formatting:
-                      - th:if: Checks if a release date is stored in the database.
-                      - #temporals.format: Extracts only the 'yyyy' (Year) from the LocalDate object.
-                    -->
                         <span th:if="${album.releaseDate != null}" class="text-muted fw-bold">Released: <span
                                 th:text="${#temporals.format(album.releaseDate, 'yyyy')}">Year</span></span>
                         <span th:if="${album.releaseDate != null}" class="text-muted">|</span>
-                        <!-- #lists.size(songs): Calculates the number of tracks directly in the template. -->
                         <span class="text-muted fw-bold" th:text="${#lists.size(songs)}">0</span> <span
                             class="text-muted">songs</span>
                     </div>
@@ -70,7 +43,7 @@
                 </div>
             </div>
 
-            <!-- Tracklist Section -->
+            
             <div class="row mt-5">
                 <div class="col-12 px-4 py-3 bg-white rounded shadow-sm">
                     <div class="d-flex border-bottom border-light pb-2 mb-3 px-3">
@@ -80,15 +53,7 @@
                         <div class="text-secondary fw-bold col-2 text-end">Time</div>
                     </div>
 
-                    <!-- 
-                  th:if: Ensures we only try to render tracks if they exist for this album.
-                -->
                     <div th:if="${not #lists.isEmpty(songs)}" class="list-group list-group-flush pt-2">
-                        <!-- 
-                      th:each="song, iterStat : ${songs}":
-                      - song: The current track object.
-                      - iterStat: A Thymeleaf status object used here for 'count' (record number).
-                    -->
                         <a th:each="song, iterStat : ${songs}" th:href="@{/song/{id}(id=${song.id})}"
                             class="list-group-item list-group-item-action d-flex align-items-center py-3 px-3 border-0 rounded track-item">
                             <div class="text-muted col-1 fw-bold fs-6" th:text="${iterStat.count}">1</div>
@@ -98,17 +63,11 @@
                                         Name</span></small>
                             </div>
                             <div class="col-3 text-center text-muted" th:text="${song.playCount}">0</div>
-                            <!-- 
-                          Duration Formatting:
-                          - Calculates minutes using integer division (song.duration / 60).
-                          - Formats seconds using Java's String.format via the T() syntax to ensure leading zeros (e.g., 03).
-                        -->
                             <div class="col-2 text-end text-muted"
                                 th:text="${song.duration / 60} + ':' + ${T(java.lang.String).format('%02d', song.duration % 60)}">
                                 0:00</div>
                         </a>
                     </div>
-                    <!-- Fallback UI for albums without tracks. -->
                     <div th:if="${#lists.isEmpty(songs)}" class="alert alert-light text-center py-5">
                         <p class="text-muted mb-0">No songs have been added to this album yet.</p>
                     </div>
@@ -134,7 +93,7 @@
                 text-decoration: underline !important;
             }
         </style>
-    </div><!-- /#main-content -->
+    </div>
 
     <div th:replace="~{fragments/layout :: footer}"></div>
 </body>

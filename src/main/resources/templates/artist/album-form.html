@@ -1,23 +1,14 @@
-<!-- 
-  Album Management / Publication Form
-  This page allows artists to define a new multi-track collection or update an existing one.
-  Key Features:
-  - Contextual UI: Dynamically adjusts labels and actions based on 'albumId' presence.
-  - Data Capture: Binds to 'AlbumDto' via 'th:object' for standardized server-side processing.
-  - Media Handling: Supports direct cover art file uploads using 'multipart/form-data'.
-  - Validation: Requires at least a name for the collection to be registered in the system.
-  Data Source: ArtistController -> AlbumDto albumDto, Long albumId (null for new).
--->
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <!-- Injects the standard head fragment for page-specific metadata. -->
+    
     <div th:replace="~{fragments/layout :: head('Create Album - RevPlay')}"></div>
 </head>
 
 <body>
-    <!-- Injects the global navigation bar. -->
+    
     <div th:replace="~{fragments/layout :: navbar}"></div>
 
     <style>
@@ -42,7 +33,7 @@
                     <div class="card-body p-4 p-md-5">
                         <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
                             <div>
-                                <!-- Dynamic Title: Adjusts text according to whether we are Editing or Creating. -->
+                                
                                 <h2 class="fw-bold mb-0 text-primary"
                                     th:text="${albumId != null ? 'Edit Album' : 'Publish New Album'}">Publish New Album
                                 </h2>
@@ -52,13 +43,7 @@
                                 class="btn btn-outline-secondary rounded-pill px-3 shadow-sm fw-bold small">✕ Cancel</a>
                         </div>
 
-                        <!-- 
-                          Album Form:
-                          - th:action: Resolves the target endpoint dynamically based on albumId.
-                          - th:object: Binds input fields to the 'albumDto' model attribute.
-                          - method="post": Required for state-changing operations.
-                          - enctype: Allows binary data (images) to be sent via the 'coverFile' input.
-                        -->
+                        
                         <form
                             th:action="@{${albumId != null ? '/artist/dashboard/albums/' + albumId + '/edit' : '/artist/dashboard/albums/create'}}"
                             th:object="${albumDto}" method="post" enctype="multipart/form-data">
@@ -66,7 +51,7 @@
                             <div class="mb-4">
                                 <label for="name" class="form-label fw-bold small text-muted">Album Title <span
                                         class="text-danger">*</span></label>
-                                <!-- th:field: Linked to albumDto.name -->
+                                
                                 <input type="text" th:field="*{name}"
                                     class="form-control rounded-3 border-light shadow-sm" id="name"
                                     placeholder="E.g. Midnight Melodies" required>
@@ -88,7 +73,7 @@
                                         min="1800-01-01" max="2099-12-31">
                                 </div>
                                 <div class="col-md-6">
-                                    <!-- Cover Art: Binds to a MultipartFile parameter in the Controller. -->
+                                    
                                     <label for="coverFile" class="form-label fw-bold small text-muted">Album Cover
                                         Art</label>
                                     <input type="file" name="coverFile"
@@ -108,7 +93,7 @@
         </div>
     </div>
 
-    <!-- Injects the global layout footer. -->
+    
     <div th:replace="~{fragments/layout :: footer}"></div>
 </body>
 
