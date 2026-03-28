@@ -1,13 +1,11 @@
-<!-- Global Music Player UI
-     Bottom fixed player containing song info, playback controls,
-     progress bar, playlist actions, and volume control. -->
+
 
 <div th:fragment="player" id="global-music-player"
     class="fixed-bottom shadow-lg border-top border-primary border-4 bg-white" style="display: none; z-index: 1050;">
     <div class="container px-2 px-md-4 py-2 py-md-3">
         <div class="row align-items-center player-controls-row">
 
-            <!-- 1. Song Info (Left) -->
+            
             <div class="col-6 col-md-3 d-flex align-items-center text-truncate">
                 <div class="position-relative player-img-container">
                     <img id="player-cover" src="/images/default-song.svg" class="rounded shadow-sm border border-light"
@@ -21,10 +19,10 @@
                 </div>
             </div>
 
-            <!-- 2. Controls & Seek Bar (Middle) -->
+            
             <div
                 class="col-12 col-md-6 order-3 order-md-2 flex-column d-flex align-items-center mt-2 mt-md-0 player-middle-column">
-                <!-- Playback Buttons -->
+                
                 <div class="d-flex align-items-center mb-1">
                     <button id="player-shuffle" class="btn btn-link p-1 text-decoration-none hide-on-mobile"
                         title="Shuffle" onclick="Player.toggleShuffle()" style="color:#888;font-size:1rem;">🔀</button>
@@ -45,7 +43,7 @@
                         title="Repeat" onclick="Player.toggleRepeat()" style="color:#888;font-size:1rem;">🔁</button>
                 </div>
 
-                <!-- Seek Bar -->
+                
                 <div class="d-flex align-items-center w-100 px-1 px-md-3">
                     <span id="player-current-time" class="small text-muted"
                         style="min-width: 35px; font-size: 0.7rem;">0:00</span>
@@ -58,14 +56,14 @@
                 <audio id="native-audio-player" preload="metadata" style="display: none;"></audio>
             </div>
 
-            <!-- 3. Actions (Right) -->
+            
             <div class="col-6 col-md-3 order-2 order-md-3 d-flex align-items-center justify-content-end gap-2 gap-md-3">
-                <!-- Favorite -->
+                
                 <button id="player-like" class="btn btn-link p-0 text-decoration-none" title="Add to Favorites">
                     <span id="like-icon" class="text-muted player-action-icon">♡</span>
                 </button>
 
-                <!-- Add to Playlist -->
+                
                 <div class="dropup">
                     <button id="player-add-playlist"
                         class="btn btn-link p-0 text-decoration-none dropdown-toggle-no-caret" data-bs-toggle="dropdown"
@@ -86,7 +84,7 @@
                     </ul>
                 </div>
 
-                <!-- Volume -->
+                
                 <div class="d-flex align-items-center ms-2 d-none d-lg-flex" style="width: 90px;">
                     <span id="player-mute-btn" class="text-muted me-2"
                         style="font-size: 1.1rem; cursor: pointer; transition: transform 0.2s;"
@@ -95,7 +93,7 @@
                         value="0.8" step="0.05">
                 </div>
 
-                <!-- Close Player -->
+                
                 <button class="btn btn-link p-0 ms-2 text-decoration-none text-muted" title="Close Player"
                     onclick="Player.close()">
                     <span style="font-size: 1.2rem; font-weight: bold;">✕</span>

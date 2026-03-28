@@ -24,3 +24,4 @@ public class PlaylistFollow {
     @JoinColumn(name="playlist_id")
     private Playlist playlist;
 }
+

@@ -71,7 +71,7 @@ class SearchControllerTest {
 
         when(searchService.getAllGenres()).thenReturn(List.of("Rock", "Pop"));
         when(userRepository.findAll()).thenReturn(List.of(artist));
-        when(albumRepository.findAll()).thenReturn(List.of());
+        when(albumRepository.findAllNonEmpty()).thenReturn(List.of());
 
         String view = controller.browseCategories(model);
 
@@ -94,7 +94,7 @@ class SearchControllerTest {
 
         when(userRepository.findAll()).thenReturn(List.of());
 
-        when(albumRepository.findAll()).thenReturn(List.of());
+        when(albumRepository.findAllNonEmpty()).thenReturn(List.of());
 
         String view = controller.filterSongs(
                 "song",

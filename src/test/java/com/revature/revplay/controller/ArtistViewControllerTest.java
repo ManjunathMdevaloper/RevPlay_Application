@@ -67,8 +67,7 @@ class ArtistViewControllerTest {
         when(songRepository.findByArtist(artist))
                 .thenReturn(List.of(new Song()));
 
-        when(albumRepository.findByArtist(artist))
-                .thenReturn(List.of(new Album()));
+        when(albumRepository.findByArtistAndSongsIsNotEmpty(artist)).thenReturn(List.of(new Album()));
 
         when(socialService.getFollowerCount(1L))
                 .thenReturn(10L);

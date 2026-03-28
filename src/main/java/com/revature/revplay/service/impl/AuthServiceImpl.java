@@ -53,7 +53,7 @@ public class AuthServiceImpl implements AuthService {
             throw new RuntimeException("Security answer is required");
         }
 
-        user.setSecurityAnswer(securityAnswer.toLowerCase()); // lower case for easier compare
+        user.setSecurityAnswer(securityAnswer.toLowerCase()); 
         user.setSecurityHint(registrationDto.getSecurityHint());
         user.setRole(registrationDto.isArtist() ? Role.ARTIST : Role.USER);
         user.setDisplayName(registrationDto.getUsername());

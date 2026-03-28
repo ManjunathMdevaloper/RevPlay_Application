@@ -13,15 +13,15 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(org.apache.catalina.connector.ClientAbortException.class)
     public void handleClientAbort(org.apache.catalina.connector.ClientAbortException ex) {
-        // Silently handle client disconnections (common in media streaming)
+        
         log.debug("Client aborted connection: {}", ex.getMessage());
     }
 
     @ExceptionHandler(org.springframework.web.servlet.resource.NoResourceFoundException.class)
     @ResponseStatus(org.springframework.http.HttpStatus.NOT_FOUND)
     public void handleNoResourceFound(org.springframework.web.servlet.resource.NoResourceFoundException ex) {
-        // Silently handle 404s for static resources or missing handlers to avoid log
-        // noise
+        
+        
         log.debug("Resource not found: {}", ex.getResourcePath());
     }
 

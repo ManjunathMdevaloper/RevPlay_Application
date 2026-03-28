@@ -1,22 +1,14 @@
-<!-- 
-  Liked Songs / Favorites Template
-  This page serves as a private collection for tracks the user has marked with a 'Like'.
-  Key Features:
-  - Personalized Library: Retrieves and displays only tracks favorited by the current session user.
-  - Quick Actions: Direct 'Unlike' trigger and instant playback via the global audio player.
-  - Dynamic Table: Renders track metadata, artist links, and genre badges.
-  Data Source: LibraryController -> List<Song> songs
--->
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
-    <!-- Injects the standard head fragment with the specific page title. -->
+    
     <div th:replace="~{fragments/layout :: head('Liked Songs - RevPlay')}"></div>
 </head>
 
 <body>
-    <!-- Injects the global navigation bar. -->
+    
     <div th:replace="~{fragments/layout :: navbar}"></div>
 
     <div id="main-content">
@@ -24,14 +16,14 @@
         <div class="container mb-5 mt-4">
             <h2 class="text-primary fw-bold mb-4 border-bottom pb-2">Your Liked Tracks</h2>
 
-            <!-- th:if: Conditional UI displayed ONLY when the user's favorites list is empty. -->
+            
             <div th:if="${#lists.isEmpty(songs)}" class="alert alert-light text-center py-5 border">
                 <h4 class="text-secondary fw-bold mb-3">No Liked Songs Yet</h4>
                 <p class="text-muted">Start browsing and click the like button to save your favorites here.</p>
                 <a th:href="@{/discovery}" class="btn btn-primary mt-3 px-4">Discover Music</a>
             </div>
 
-            <!-- Track Table: Rendered ONLY if the 'songs' collection contains data. -->
+            
             <div th:unless="${#lists.isEmpty(songs)}" class="card shadow-sm border-light">
                 <div class="card-body p-0">
                     <div class="table-responsive">
@@ -46,10 +38,10 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <!-- th:each: Iterates through the list of liked Song entities. -->
+                                
                                 <tr th:each="song : ${songs}">
                                     <td class="ps-4">
-                                        <!-- Image Display with Dynamic Fallback. -->
+                                        
                                         <img th:if="${song.coverArtUrl != null}" th:src="@{${song.coverArtUrl}}"
                                             style="width: 45px; height: 45px; object-fit: cover;"
                                             class="rounded border">
@@ -71,20 +63,12 @@
                                         <span class="badge bg-secondary" th:text="${song.genre}">Genre</span>
                                     </td>
                                     <td class="text-end pe-4 d-flex justify-content-end align-items-center">
-                                        <!-- 
-                                          Unlike Button:
-                                          - th:data-id: Binds the song ID for AJAX removal.
-                                          - Handled via client-side fetch script (inherited or global).
-                                        -->
+                                        
                                         <button class="btn btn-outline-danger btn-sm me-2 like-btn"
                                             th:data-id="${song.id}" th:id="'like-btn-' + ${song.id}">
                                             Unlike
                                         </button>
-                                        <!-- 
-                                          Global Play Button:
-                                          - th:data-*: Passes metadata to the site-wide player.
-                                          - onclick: Triggers playGlobalAudio() for instant streaming.
-                                        -->
+                                        
                                         <button th:if="${song.audioUrl != null}"
                                             class="btn btn-sm btn-primary fw-bold me-1 text-white shadow"
                                             th:data-song-id="${song.id}" th:data-audio-url="${song.audioUrl}"
@@ -103,10 +87,7 @@
             </div>
         </div>
         <script th:inline="javascript">
-            /**
-             * Library Like System
-             * Handles the 'Unlike' action asynchronously to avoid page refresh.
-             */
+            
             document.addEventListener('DOMContentLoaded', function () {
                 const likeBtns = document.querySelectorAll('.like-btn');
                 likeBtns.forEach(btn => {
@@ -115,7 +96,7 @@
                         fetch(`/library/like/${songId}`, { method: 'POST' })
                             .then(res => res.json())
                             .then(isLiked => {
-                                // If removed (isLiked === false), we hide the row for immediate feedback.
+                                
                                 if (!isLiked) {
                                     const row = btn.closest('tr');
                                     row.classList.add('fade-out');
@@ -132,9 +113,9 @@
                 transition: opacity 0.3s ease;
             }
         </style>
-    </div><!-- /#main-content -->
+    </div>
 
-    <!-- Injects the layout's global footer. -->
+    
     <div th:replace="~{fragments/layout :: footer}"></div>
 </body>
 

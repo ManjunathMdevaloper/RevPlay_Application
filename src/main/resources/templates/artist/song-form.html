@@ -1,24 +1,15 @@
-<!-- 
-  Song Management / Creation Form
-  This template provides the interface for artists to upload new music or edit existing track metadata.
-  Key Features:
-  - Dual Mode Support: Dynamically switches between 'Create' and 'Edit' modes based on the presence of a 'songId'.
-  - DTO Binding: Uses 'th:object' linked to 'SongDto' for structured data capture.
-  - Media Uploads: Configured with 'enctype="multipart/form-data"' to handle binary audio and image files.
-  - Relational Mapping: Populates a dropdown to link the song to an existing album owned by the user.
-  Data Source: ArtistController -> SongDto songDto, List<Album> albums, Long songId (null for new).
--->
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <!-- Injects the standard head fragment for page-specific metadata. -->
+    
     <div th:replace="~{fragments/layout :: head('Manage Track - RevPlay')}"></div>
 </head>
 
 <body>
 
-<!-- Injects the global navigation bar. -->
+
 <div th:replace="~{fragments/layout :: navbar}"></div>
 
 <style>
@@ -43,7 +34,7 @@
                 <div class="card-body p-4 p-md-5">
                     <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
                         <div>
-                            <!-- Header: Conditional text display based on the operation mode. -->
+                            
                             <h2 class="fw-bold mb-0 text-primary"
                                 th:text="${songId == null ? 'Upload New Track' : 'Manage Track Data'}">Dashboard
                                 Mode</h2>
@@ -53,22 +44,17 @@
                            class="btn btn-outline-secondary rounded-pill px-3 shadow-sm fw-bold small">✕ Cancel</a>
                     </div>
 
-                    <!--
-                      Song Management Form:
-                      - th:action: Dynamically routes to 'create' or 'edit' endpoints.
-                      - th:object: Maps form inputs to the fields of a SongDto.
-                      - enctype: ESSENTIAL for 'multipart/form-data' to transmit files to the server.
-                    -->
+                    
                     <form method="post"
                           th:action="@{${songId == null ? '/artist/dashboard/songs/create' : '/artist/dashboard/songs/' + songId + '/edit'}}"
                           th:object="${songDto}" enctype="multipart/form-data">
 
-                        <!-- Title & Genre -->
+                        
                         <div class="row mb-4">
                             <div class="col-md-7 mb-3 mb-md-0">
                                 <label for="title" class="form-label fw-bold small text-muted">Track Title <span
                                         class="text-danger">*</span></label>
-                                <!-- th:field: Sets 'name', 'id', and 'value' attributes based on the DTO. -->
+                                
                                 <input type="text" id="title" th:field="*{title}"
                                        class="form-control rounded-3 border-light shadow-sm" required
                                        placeholder="Name your masterpiece" />
@@ -82,7 +68,7 @@
                             </div>
                         </div>
 
-                        <!-- Album Assignment & Duration -->
+                        
                         <div class="row mb-4">
                             <div class="col-md-6 mb-3 mb-md-0">
                                 <label for="albumId" class="form-label fw-bold small text-muted">Assign to Album
@@ -90,7 +76,7 @@
                                 <select id="albumId" th:field="*{albumId}"
                                         class="form-select rounded-3 border-light shadow-sm">
                                     <option value="" th:text="'-- Standalone Single --'"></option>
-                                    <!-- th:each: Iterates through albums available for this artist. -->
+                                    
                                     <option th:each="album : ${albums}" th:value="${album.id}"
                                             th:text="${album.name}"></option>
                                 </select>
@@ -104,12 +90,12 @@
                             </div>
                         </div>
 
-                        <!-- Media Upload Section -->
+                        
                         <div class="p-4 bg-light rounded-4 border border-white mb-4 shadow-sm">
                             <h6 class="fw-bold mb-3 text-secondary small text-uppercase tracking-wider">Media
                                 Uploads</h6>
 
-                            <!-- File Input (New Tracking ONLY): Audio is required for initial publication. -->
+                            
                             <div class="mb-4" th:if="${songId == null}">
                                 <label for="audioFile" class="form-label fw-bold text-primary">Master Audio File
                                     (.mp3, .wav) <span class="text-danger">*</span></label>
@@ -117,7 +103,7 @@
                                        class="form-control border-primary shadow-sm" accept="audio/*" required />
                             </div>
 
-                            <!-- Cover File (Optional): Used to override or set custom song artwork. -->
+                            
                             <div class="mb-2">
                                 <label for="coverFile" class="form-label fw-bold text-dark">Cover Art (Optional)
                                     <span class="text-secondary small fw-normal"
@@ -138,7 +124,7 @@
     </div>
 </div>
 
-<!-- Injects the global footer. -->
+
 <div th:replace="~{fragments/layout :: footer}"></div>
 
 <script>
@@ -172,7 +158,7 @@
 
                     audio.src = objectUrl;
                 } else {
-                    // Clear if user cancels file selection and no duration was loaded
+                    
                     durationInput.value = '';
                 }
             });

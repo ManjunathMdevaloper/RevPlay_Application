@@ -1,35 +1,26 @@
-<!-- 
-  Explore Community Playlists Template
-  This page serves as a discovery hub for public playlists shared by the community.
-  Features:
-  - Search/Filter: Real-time search for public collections via keywords.
-  - Playlist Grid: Card-based layout displaying owner details and track counts.
-  - Eager Loading: Track data is pre-populated in hidden divs by Thymeleaf for instant modal rendering.
-  - Interactive Modal: Populates dynamically using JS to show song lists and 'Play All' functionality.
-  Data Source: PlaylistController -> List<Playlist> publicPlaylists.
--->
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <!-- Injects head fragment with the specific page title. -->
+    
     <div th:replace="~{fragments/layout :: head('Explore Playlists - RevPlay')}"></div>
 </head>
 
 <body>
-    <!-- Injects global navigation bar. -->
+    
     <div th:replace="~{fragments/layout :: navbar}"></div>
 
     <div id="main-content">
         <div class="container py-5">
-            <!-- Header & Search -->
+            
             <div class="mb-5 text-center">
                 <h2 class="fw-bold text-dark mb-4">Discover Community Playlists</h2>
                 <form th:action="@{/discovery}" method="get" class="row g-2 justify-content-center">
                     <div class="col-md-8">
                         <div class="shadow-sm rounded-pill overflow-hidden border d-flex align-items-center px-4 bg-white"
                             style="height: 50px;">
-                            <!-- th:value="${query}": Retains the search term in the input box after submission. -->
+                            
                             <input type="text" name="q" class="form-control border-0 bg-white" th:value="${query}"
                                 placeholder="Search for playlists..." style="box-shadow: none;">
                         </div>
@@ -43,25 +34,21 @@
                 </form>
             </div>
 
-            <!-- Public Playlists Grid -->
+            
             <div>
-                <!-- th:if/th:unless: Changes the heading based on whether the user is searching or just browsing. -->
+                
                 <h4 class="fw-bold mb-4 text-dark" th:if="${query == null}"><i class="me-2 text-primary">📂</i> Trending
                     Community Playlists</h4>
                 <h4 class="fw-bold mb-4 text-dark" th:unless="${query == null}">
                     <i class="me-2 text-primary">🔍</i> Search Results for "<span th:text="${query}">query</span>"
                 </h4>
 
-                <!-- th:if: Wraps the grid to handle cases with no results. -->
+                
                 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4"
                     th:if="${not #lists.isEmpty(publicPlaylists)}">
-                    <!-- th:each: Iterates through the list of public Playlist entities. -->
+                    
                     <div class="col" th:each="playlist : ${publicPlaylists}">
-                        <!-- 
-                          Playlist Card:
-                          - th:data-*: Binds metadata (id, name, owner) for the showPlaylistDetails() JS function.
-                          - onclick: Triggers the modal view for this specific playlist.
-                        -->
+                        
                         <div class="card h-100 border-0 shadow-sm rounded-4 playlist-card overflow-hidden transition-all hover-transform"
                             style="cursor: pointer;" th:data-id="${playlist.id}" th:data-name="${playlist.name}"
                             th:data-desc="${playlist.description}" th:data-owner="${playlist.user.displayName}"
@@ -71,7 +58,7 @@
                                 <div class="d-flex align-items-center justify-content-between mb-2">
                                     <h5 class="fw-bold text-dark mb-0 text-truncate" th:text="${playlist.name}">Playlist
                                         Name</h5>
-                                    <!-- Displays the number of tracks directly in a badge. -->
+                                    
                                     <span class="badge bg-light text-primary border rounded-pill small"
                                         th:text="${playlist.songs.size()}">0</span>
                                 </div>
@@ -79,7 +66,7 @@
                                     th:text="${playlist.description}">Description</p>
                                 <div class="d-flex align-items-center justify-content-between mt-auto">
                                     <div class="d-flex align-items-center">
-                                        <!-- Displays the curator's profile picture or default. -->
+                                        
                                         <img th:src="${playlist.user.profilePictureUrl != null ? playlist.user.profilePictureUrl : '/images/default-profile.svg'}"
                                             class="rounded-circle me-2 border" width="24" height="24">
                                         <small class="text-secondary fw-bold"
@@ -89,11 +76,7 @@
                                         style="background: #FF6600; font-size: 0.75rem;">Explore</span>
                                 </div>
 
-                                <!-- 
-                                  Hidden Data Storage:
-                                  - Why: Eagerly loads track details into the DOM so the modal can populate instantly.
-                                  - This avoids secondary fetch calls for every playlist clicked.
-                                -->
+                                
                                 <div class="playlist-songs-data d-none">
                                     <div th:each="song : ${playlist.songs}" th:data-song-id="${song.id}"
                                         th:data-title="${song.title}"
@@ -107,7 +90,7 @@
                     </div>
                 </div>
 
-                <!-- Fallback UI for empty results or empty catalog. -->
+                
                 <div class="text-center py-5" th:if="${#lists.isEmpty(publicPlaylists)}">
                     <div class="display-1 opacity-25 mb-4">📂</div>
                     <h3 class="text-dark fw-bold">No public playlists found</h3>
@@ -121,7 +104,7 @@
             </div>
         </div>
 
-        <!-- Details Modal: Content is managed via vanilla JS based on the attributes of the clicked card. -->
+        
         <div class="modal fade" id="playlistDetailsModal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-md">
                 <div class="modal-content border-0 shadow-2xl rounded-5 overflow-hidden glass-card">
@@ -145,7 +128,7 @@
                             <p class="text-muted small mb-3">
 Followers: <span id="modalFollowersCount">0</span>
 </p>
-                            <!-- Follow Playlist Button -->
+                            
 <div class="mb-3 text-end">
     <form id="followPlaylistForm" method="post" onsubmit="return followPlaylist(event,this)">
         <button class="btn btn-success btn-sm rounded-pill px-3 fw-bold shadow-sm">
@@ -161,7 +144,7 @@ Followers: <span id="modalFollowersCount">0</span>
                         </div>
                         <div id="modalPlaylistSongsList" class="container-scroll pe-2"
                             style="max-height: 280px; overflow-y: auto;">
-                            <!-- Populated dynamically via showPlaylistDetails() script below. -->
+                            
                         </div>
                     </div>
                 </div>
@@ -183,14 +166,11 @@ Followers: <span id="modalFollowersCount">0</span>
             }
         </style>
        <script th:inline="javascript">
-    const loggedUser = /*[[${#authentication.principal.username}]]*/ "";
+    const loggedUser =  "";
 </script>
         <script>
         
-            /**
-             * Populates and triggers the Playlist details modal.
-             * Reads data from the clicked card's data attributes and the hidden eager-loaded track storage.
-             */
+            
              function showPlaylistDetails(element) {
             	    const name = element.getAttribute('data-name');
             	    const desc = element.getAttribute('data-desc');
@@ -227,7 +207,7 @@ Followers: <span id="modalFollowersCount">0</span>
             	        followForm.action = "/library/playlists/" + playlistId + "/follow";
             	    }
 
-            	    /* ADDED: Hide follow button if playlist owner */
+            	    
             	    const followContainer = document.getElementById("followPlaylistForm").parentElement;
             	    if (loggedUser === owner) {
             	        followContainer.style.display = "none";
@@ -321,7 +301,7 @@ Followers: <span id="modalFollowersCount">0</span>
 
             	    if(response.ok){
 
-            	        /* toggle button text */
+            	        
             	        if(isFollowing){
 
             	            btn.innerText = "Follow";
@@ -336,7 +316,7 @@ Followers: <span id="modalFollowersCount">0</span>
 
             	        }
 
-            	        /* update followers count */
+            	        
             	        const playlistId = form.action.split("/").slice(-2)[0];
 
             	        fetch("/library/api/playlists/" + playlistId + "/followers")
@@ -357,7 +337,7 @@ Followers: <span id="modalFollowersCount">0</span>
             	}
         </script>
 
-    </div><!-- /#main-content -->
+    </div>
 
     <div th:replace="~{fragments/layout :: footer}"></div>
     </script>

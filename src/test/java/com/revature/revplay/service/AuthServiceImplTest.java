@@ -98,7 +98,7 @@ class AuthServiceImplTest {
 
         assertEquals("pooja", capturedUser.getUsername());
         assertEquals("encoded123", capturedUser.getPassword());
-        assertEquals("mypet", capturedUser.getSecurityAnswer()); // lowercase check
+        assertEquals("mypet", capturedUser.getSecurityAnswer()); 
 
         verify(artistProfileRepository, never()).save(any());
     }

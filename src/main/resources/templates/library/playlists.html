@@ -1,22 +1,14 @@
-<!-- 
-This page allows users to manage their personal audio collections.
-Features:
-- Create New Playlist: Uses a modal with form-backing bean (PlaylistDto) support.
-- Playlist Grid: Displays all playlists belonging to the logged-in user.
-- Visibility Control: Shows 'PUBLIC' or 'PRIVATE' status dynamically.
-- Quick Stats: Displays the number of songs within each collection.
-Data Source: PlaylistController -> List<Playlist> playlists, PlaylistDto playlistDto
-    -->
+
     <!DOCTYPE html>
     <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
     <head>
-        <!-- Injects the head fragment with the specific page title. -->
+        
         <div th:replace="~{fragments/layout :: head('Your Playlists - RevPlay')}"></div>
     </head>
 
     <body>
-        <!-- Injects the global navigation bar. -->
+        
         <div th:replace="~{fragments/layout :: navbar}"></div>
 
         <div id="main-content">
@@ -24,7 +16,7 @@ Data Source: PlaylistController -> List<Playlist> playlists, PlaylistDto playlis
             <div class="container mb-5 mt-4">
                 <h2 class="text-primary fw-bold mb-4 border-bottom pb-2">Your Audio Playlists</h2>
 
-                <!-- th:if: Displays an alert if the controller adds a 'successMessage' to the RedirectAttributes. -->
+                
                 <div th:if="${successMessage}" class="alert alert-success mt-3 shadow-sm" th:text="${successMessage}">
                     Success!
                 </div>
@@ -37,7 +29,7 @@ Data Source: PlaylistController -> List<Playlist> playlists, PlaylistDto playlis
                     </button>
                 </div>
 
-                <!-- Create Playlist Modal: Binds inputs to 'playlistDto' in the Model. -->
+                
                 <div class="modal fade" id="createPlaylistModal" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
@@ -50,7 +42,7 @@ Data Source: PlaylistController -> List<Playlist> playlists, PlaylistDto playlis
                                 <form method="post" th:action="@{/library/playlists/create}" th:object="${playlistDto}">
                                     <div class="mb-4">
                                         <label class="form-label fw-bold">Playlist Name</label>
-                                        <!-- th:field: Connects to the 'name' field of the PlaylistDto bean. -->
+                                        
                                         <input type="text" th:field="*{name}"
                                             class="form-control border-primary shadow-sm"
                                             placeholder="E.g. Daily Drive, Gym Focus" required>
@@ -62,7 +54,7 @@ Data Source: PlaylistController -> List<Playlist> playlists, PlaylistDto playlis
                                     </div>
                                     <div class="mb-4">
                                         <div class="form-check form-switch card p-3 bg-light border-0">
-                                            <!-- th:field: Handles checkbox/boolean mapping for privacy settings. -->
+                                            
                                             <input class="form-check-input" type="checkbox" th:field="*{public}"
                                                 id="isPublic">
                                             <label class="form-check-label fw-bold text-dark" for="isPublic">
@@ -84,7 +76,7 @@ Data Source: PlaylistController -> List<Playlist> playlists, PlaylistDto playlis
                     </div>
                 </div>
 
-                <!-- th:if: Conditional UI if the user has zero playlists. -->
+                
                 <div th:if="${#lists.isEmpty(playlists)}" class="text-center py-5">
                     <h4 class="text-secondary fw-bold mb-3">No Playlists Found</h4>
                     <p class="text-muted">Generate a new empty collection above, then load it dynamically by browsing
@@ -92,7 +84,7 @@ Data Source: PlaylistController -> List<Playlist> playlists, PlaylistDto playlis
                     </p>
                 </div>
 
-                <!-- Playlist Grid: Iterates through the collection of Playlists. -->
+                
                 <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-2" th:unless="${#lists.isEmpty(playlists)}">
                     <div class="col" th:each="p : ${playlists}">
                         <div class="card h-100 border-0 shadow-sm glass-card rounded-4 overflow-hidden transition-all hover-lift"
@@ -107,22 +99,22 @@ Data Source: PlaylistController -> List<Playlist> playlists, PlaylistDto playlis
                                 <h6 class="fw-bold text-dark mb-0 text-truncate" th:text="${p.name}"
                                     style="font-size: 0.75rem;">Playlist Title</h6>
                                 <div class="mb-1">
-                                    <!-- Visibility Badges: Condition based on 'public' boolean flag. -->
+                                    
                                     <span th:if="${p.public}" class="fw-bold"
                                         style="font-size: 0.55rem; letter-spacing: 0.5px; color: #FF6600;">PUBLIC</span>
                                     <span th:unless="${p.public}" class="text-muted fw-bold"
                                         style="font-size: 0.55rem; letter-spacing: 0.5px;">PRIVATE</span>
                                 </div>
                                 <p class="text-muted mb-2" style="font-size: 0.55rem;">
-                                    <!-- #lists.size(p.songs): Dynamically calculates the track count for each card. -->
+                                    
                                     <span th:text="${#lists.size(p.songs)}">0</span> Tracks
                                 </p>
                                 <div class="mt-auto d-flex flex-column gap-1">
-                                    <!-- Manage Button: Leads to the detail view for sorting and removing tracks. -->
+                                    
                                     <a th:href="@{/library/playlists/{id}(id=${p.id})}"
                                         class="btn btn-primary btn-sm rounded-pill py-0 fw-bold border-0 shadow-sm"
                                         style="font-size: 0.6rem; background: var(--primary-color);">Manage</a>
-                                    <!-- Delete Action: Submits a POST request to remove the entire playlist entity. -->
+                                    
                                     <form th:action="@{/library/playlists/{id}/delete(id=${p.id})}" method="post"
                                         onsubmit="return confirmAction('Delete?', this);" class="w-100">
                                         <button type="submit"
@@ -135,9 +127,9 @@ Data Source: PlaylistController -> List<Playlist> playlists, PlaylistDto playlis
                     </div>
                 </div>
             </div>
-        </div><!-- /#main-content -->
+        </div>
 
-        <!-- Injects the global footer fragment. -->
+        
         <div th:replace="~{fragments/layout :: footer}"></div>
     </body>
 

@@ -53,7 +53,7 @@ public class FileStorageServiceImpl implements FileStorageService {
         }
 
         try {
-            // Strip the preceding paths if someone saved the entire route
+            
             String strippedName = fileName;
             if (strippedName.contains("/")) {
                 strippedName = strippedName.substring(strippedName.lastIndexOf("/") + 1);

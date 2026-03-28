@@ -8,32 +8,32 @@
         class="d-flex align-items-center flex-wrap gap-2 py-3 border-top border-bottom mt-4 mb-4">
         <span class="fw-bold text-muted small text-uppercase me-2">Share On:</span>
 
-        <!-- Copy to Clipboard -->
+        
         <button class="btn btn-sm btn-outline-secondary copy-link-btn" th:data-url="${url}" id="copyShareBtn">
             📋 Copy Link
         </button>
 
-        <!-- Twitter/X -->
+        
         <a th:href="'https://twitter.com/intent/tweet?text=Check out ' + ${title} + ' on RevPlay!&url=' + ${url}"
             target="_blank" class="btn btn-sm btn-outline-info">
             𝕏 Share
         </a>
 
-        <!-- WhatsApp -->
+        
         <a th:href="'https://api.whatsapp.com/send?text=Check out ' + ${title} + ' on RevPlay! ' + ${url}"
             target="_blank" class="btn btn-sm btn-outline-success">
             💬 WhatsApp
         </a>
     </div>
 
-    <!-- JS Utility -->
+    
     <script th:fragment="share-scripts">
         document.addEventListener('DOMContentLoaded', function () {
             const copyBtn = document.getElementById('copyShareBtn');
             if (copyBtn) {
                 copyBtn.addEventListener('click', function () {
                     const url = this.getAttribute('data-url');
-                    // Workaround for some browsers
+                    
                     const fullUrl = window.location.origin + url;
 
                     navigator.clipboard.writeText(fullUrl).then(() => {

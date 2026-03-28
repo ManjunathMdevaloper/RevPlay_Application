@@ -1,4 +1,4 @@
-<!-- Reusable History Table Fragment -->
+
 <div th:fragment="historyTable(historyList, type)" xmlns:th="http://www.thymeleaf.org">
     <div class="card shadow-sm border-0 rounded-4 overflow-hidden bg-white">
         <div class="card-body p-0">
@@ -13,7 +13,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- th:each: Iterates through the list of History objects. -->
+                        
                         <tr th:each="entry : ${historyList}" class="history-row">
                             <td class="ps-4">
                                 <div class="d-flex align-items-center py-2">
@@ -59,7 +59,7 @@
                             </td>
                         </tr>
 
-                        <!-- Empty State UI -->
+                        
                         <tr th:if="${#lists.isEmpty(historyList)}">
                             <td colspan="4" class="text-center py-5">
                                 <div class="empty-history-icon mb-3">

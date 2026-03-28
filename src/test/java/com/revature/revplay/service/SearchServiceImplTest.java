@@ -50,7 +50,7 @@ class SearchServiceImplTest {
 
         when(songRepository.findByTitleContainingIgnoreCase(keyword)).thenReturn(songs);
         when(userRepository.findByDisplayNameContainingIgnoreCaseAndRole(keyword, Role.ARTIST)).thenReturn(artists);
-        when(albumRepository.findByNameContainingIgnoreCase(keyword)).thenReturn(List.of());
+        when(albumRepository.findByNameContainingIgnoreCaseAndSongsIsNotEmpty(keyword)).thenReturn(List.of());
         when(playlistRepository.findByNameContainingIgnoreCaseAndIsPublicTrue(keyword)).thenReturn(List.of());
 
         SearchResultDto result = searchService.searchAll(keyword);
